@@ -9,8 +9,11 @@ import MessageCards from "@/components/MessageCards";
 import MouseTrail from "@/components/MouseTrail";
 import Nav from "@/components/Nav";
 import PhotoMarquee, { type Photo } from "@/components/PhotoMarquee";
+import NextSunday from "@/components/NextSunday";
 import SwipeButton from "@/components/SwipeButton";
+import Testimonies from "@/components/Testimonies";
 import TiltCard from "@/components/TiltCard";
+import WelcomeText from "@/components/WelcomeText";
 import { CHURCH, LINKS } from "@/lib/site";
 import Reveal from "@/components/Reveal";
 
@@ -78,6 +81,7 @@ export default function Home() {
               <SwipeButton label="Plan a visit →" href="/location" scheme="primary" />
               <SwipeButton label="Watch a message" href="/messages" scheme="ghost" />
             </div>
+            <NextSunday />
             <a className="scroll-cue" href="#welcome" aria-label="Scroll down">
               <span />
             </a>
@@ -89,13 +93,8 @@ export default function Home() {
           <Reveal as="p" className="eyebrow">
             Welcome
           </Reveal>
-          <Reveal as="h2" className="h-sm" delay={80} data-fish="welcome">
-            We believe God’s Kingdom isn’t just a future promise, <br className="desktop-only" />
-            it’s something being built here, now, in this city.
-            <br className="desktop-only" />
-            In homes, workplaces, and neighbourhoods.
-            <br className="desktop-only" />
-            <span className="accent">Evergreen City Community </span>is where that work starts.
+          <Reveal className="welcome-wrap" delay={80}>
+            <WelcomeText />
           </Reveal>
         </section>
 
@@ -126,6 +125,8 @@ export default function Home() {
             </div>
           </Reveal>
         </section>
+
+        <Testimonies />
 
         <section className="sunday">
           <Reveal as="div" className="sunday__head">

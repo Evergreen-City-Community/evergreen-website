@@ -27,6 +27,7 @@ const SLOTS = [
 
 export default function FishFlock() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -59,6 +60,25 @@ export default function FishFlock() {
     });
     const leader = mk(TURQUOISE, 1.25);
     const followers = Array.from({ length: FOLLOWERS }, (_, i) => mk(i === 2 ? TURQUOISE : GREY, 0.85 + (i % 3) * 0.1));
+    // One-time hint so people discover they can catch the fish.
+    const HINT_KEY = "ecc-fish-hint";
+    let hintDone = false;
+    try {
+      hintDone = localStorage.getItem(HINT_KEY) === "1";
+    } catch {
+      /* storage blocked: show it, just don't remember */
+    }
+    let hintShownAt = 0;
+    const finishHint = () => {
+      if (hintDone) return;
+      hintDone = true;
+      hintRef.current?.classList.remove("is-on");
+      try {
+        localStorage.setItem(HINT_KEY, "1");
+      } catch {
+        /* ignore */
+      }
+    };
     // Positions are readable from the console for debugging: window.__fishFlock
     (window as Window & { __fishFlock?: unknown }).__fishFlock = { leader, followers };
 
@@ -158,6 +178,7 @@ export default function FishFlock() {
       if (Math.hypot(e.clientX - leader.x, e.clientY - leader.y) < 28) {
         dragging = true;
         suppressClick = true;
+        finishHint();
         e.preventDefault();
         canvas.style.pointerEvents = "auto";
         try {
@@ -316,6 +337,20 @@ export default function FishFlock() {
         integrate(f, dt, 520);
       });
 
+      const hint = hintRef.current;
+      if (hint && !hintDone) {
+        const parked = Math.hypot(target.x - leader.x, target.y - leader.y) < 30;
+        if (!hintShownAt && parked && active?.name === "welcome") {
+          hintShownAt = now;
+          hint.classList.add("is-on");
+        }
+        if (hintShownAt) {
+          const left = Math.min(vw - 230, Math.max(12, leader.x + 18));
+          hint.style.transform = `translate(${left.toFixed(0)}px, ${(leader.y - 54).toFixed(0)}px)`;
+          if (now - hintShownAt > 7000 || active?.name !== "welcome") finishHint();
+        }
+      }
+
       ctx.clearRect(0, 0, vw, vh);
       const all = [...followers, leader];
       const anyVisible = all.some((f) => f.y < vh + 40 && f.y > -40);
@@ -337,5 +372,12 @@ export default function FishFlock() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fish-flock" aria-hidden />;
+  return (
+    <>
+      <canvas ref={canvasRef} className="fish-flock" aria-hidden />
+      <div ref={hintRef} className="fish-hint" aria-hidden>
+        psst — try catching a fish
+      </div>
+    </>
+  );
 }
