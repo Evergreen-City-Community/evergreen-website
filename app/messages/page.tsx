@@ -16,11 +16,16 @@ export const metadata: Metadata = {
 };
 
 const SPOTIFY_SHOW_ID = "2rcUdvCFUuTLzLPr24cR33";
+// "Jam sessions Episode 2 | That's Who I Praise". Change or clear to un-pin.
+const FEATURED_VIDEO_ID = "Z9Xv9PXLs5c";
 
 export default async function Messages() {
   const videos = await getRecentVideos(12);
   // Sermons and services first, then worship covers and shorts.
   const ordered = [...videos.filter(isMessage), ...videos.filter((v) => !isMessage(v))];
+  // Pin a chosen video as the big featured one; whatever was featured takes its place.
+  const pin = ordered.findIndex((v) => v.id === FEATURED_VIDEO_ID);
+  if (pin > 0) [ordered[0], ordered[pin]] = [ordered[pin], ordered[0]];
   const [featured, ...rest] = ordered;
 
   return (
