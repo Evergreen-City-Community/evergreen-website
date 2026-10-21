@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LINKS } from "@/lib/site";
+import { CHURCH, LINKS } from "@/lib/site";
 import Logo from "./Logo";
 
 type Item = { label: string; href?: string; external?: boolean };
@@ -9,7 +9,8 @@ const COLUMNS: { title: string; items: Item[] }[] = [
     title: "NAVIGATE",
     items: [
       { label: "Home", href: "/" },
-      { label: "Location", href: "/location" },
+      { label: "About", href: "/about" },
+      { label: "Plan a visit", href: "/location" },
       { label: "Messages", href: "/messages" },
     ],
   },
@@ -26,7 +27,7 @@ const COLUMNS: { title: string; items: Item[] }[] = [
     items: [
       { label: "YouTube", href: LINKS.youtube, external: true },
       { label: "Spotify", href: LINKS.spotify, external: true },
-      { label: "Find Us", href: LINKS.maps, external: true },
+      { label: "Find us", href: LINKS.maps, external: true },
     ],
   },
 ];
@@ -34,34 +35,43 @@ const COLUMNS: { title: string; items: Item[] }[] = [
 export default function Footer() {
   return (
     <footer className="footer">
-      <Logo className="footer__logo" />
-      <div className="footer__spacer" />
-      {COLUMNS.map((col) => (
-        <div className="footer__col" key={col.title}>
-          <p className="footer__title">{col.title}</p>
-          {col.items.map((item) =>
-            !item.href ? (
-              <span className="footer__link" key={item.label}>
-                {item.label}
-              </span>
-            ) : item.external ? (
-              <a
-                className="footer__link"
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {item.label}
-              </a>
-            ) : (
-              <Link className="footer__link" key={item.label} href={item.href}>
-                {item.label}
-              </Link>
-            )
-          )}
+      <div className="footer__main">
+        <div className="footer__brand">
+          <Logo className="footer__logo" />
+          <p className="footer__name">{CHURCH.name}</p>
+          <p className="footer__meta">
+            {CHURCH.serviceDay} · {CHURCH.serviceTime}
+            <br />
+            {CHURCH.venue}
+            <br />
+            {CHURCH.area}
+          </p>
         </div>
-      ))}
+        <div className="footer__spacer" />
+        {COLUMNS.map((col) => (
+          <div className="footer__col" key={col.title}>
+            <p className="footer__title">{col.title}</p>
+            {col.items.map((item) =>
+              !item.href ? (
+                <span className="footer__link" key={item.label}>
+                  {item.label}
+                </span>
+              ) : item.external ? (
+                <a className="footer__link" key={item.label} href={item.href} target="_blank" rel="noopener noreferrer">
+                  {item.label}
+                </a>
+              ) : (
+                <Link className="footer__link" key={item.label} href={item.href}>
+                  {item.label}
+                </Link>
+              )
+            )}
+          </div>
+        ))}
+      </div>
+      <p className="footer__bottom">
+        © {CHURCH.year} {CHURCH.name} · {CHURCH.entity} · In Keralam as it is in Heaven
+      </p>
     </footer>
   );
 }

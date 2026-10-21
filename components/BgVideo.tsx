@@ -4,6 +4,7 @@ export default function BgVideo({ className }: { className?: string }) {
     <video
       className={`bg-video ${className ?? ""}`}
       src="/video/hero.mp4"
+      poster="/video/hero-poster.jpg"
       autoPlay
       muted
       loop
