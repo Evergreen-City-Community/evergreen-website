@@ -77,7 +77,7 @@ export default function About() {
           </div>
         </section>
 
-        <CheckOut time="10 AM" />
+        <CheckOut time="10:30 AM" />
       </main>
     </>
   );
