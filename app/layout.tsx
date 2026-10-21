@@ -38,6 +38,8 @@ export const metadata: Metadata = {
       { url: "/favicon-dark.png", media: "(prefers-color-scheme: dark)" },
     ],
   },
+  // Demo copies (DEMO_SITE=1) stay out of search results.
+  robots: process.env.DEMO_SITE === "1" ? { index: false, follow: false } : undefined,
 };
 
 export const viewport: Viewport = {

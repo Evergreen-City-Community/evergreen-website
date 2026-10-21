@@ -40,6 +40,7 @@ export const TESTIMONIES: Testimony[] = [
 
 /** Entries to show in the current environment. */
 export function visibleTestimonies(): Testimony[] {
-  const live = process.env.VERCEL_ENV === "production";
+  // DEMO_SITE=1 marks a shareable demo copy: show samples there too.
+  const live = process.env.VERCEL_ENV === "production" && process.env.DEMO_SITE !== "1";
   return live ? TESTIMONIES.filter((t) => !t.sample) : TESTIMONIES;
 }
