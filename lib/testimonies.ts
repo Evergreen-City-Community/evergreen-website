@@ -1,33 +1,45 @@
 // Short words from people in the community, shown on the home page.
 //
-// THESE ARE PLACEHOLDERS. Replace each with a real quote (with the person's
-// permission) and set `placeholder: false`. While any entry is a placeholder,
-// the card shows a visible "Placeholder" label so it can't go live by mistake.
+// THE ENTRIES BELOW ARE SAMPLES written to show the design. They are not real
+// people. Replace each with a real quote (with the person's permission) and
+// set `sample: false`.
+//
+// Safeguard: entries with `sample: true` are hidden on the live site
+// (Vercel production). They still show locally and on Vercel preview links.
 
 export type Testimony = {
   quote: string;
   name: string;
-  detail: string; // e.g. "Member since 2023"
-  placeholder: boolean;
+  detail: string; // e.g. "Part of ECC since 2023"
+  sample: boolean;
 };
 
 export const TESTIMONIES: Testimony[] = [
   {
-    quote: "Placeholder — a one or two sentence story about what someone found at ECC.",
-    name: "First name",
-    detail: "Member since 20XX",
-    placeholder: true,
+    quote:
+      "I walked in not knowing a single person. By the end of the first Sunday three people had asked my name, and one of them still texts me every week.",
+    name: "Anjali",
+    detail: "Part of ECC since 2023",
+    sample: true,
   },
   {
-    quote: "Placeholder — ideally from someone who came in burned out on church, or new to faith.",
-    name: "First name",
-    detail: "Came for the first time in 20XX",
-    placeholder: true,
+    quote:
+      "I'd stopped going to church for years. Nobody here made me feel like I had to explain that. I just got to come back, slowly, at my own pace.",
+    name: "Rahul",
+    detail: "Came back to faith in 2024",
+    sample: true,
   },
   {
-    quote: "Placeholder — a parent, a student, or someone new to Trivandrum.",
-    name: "First name",
-    detail: "Serves on the welcome team",
-    placeholder: true,
+    quote:
+      "We moved to Trivandrum for work with two small kids and no family nearby. ECC became the people we call when something goes wrong, and when something goes right.",
+    name: "Merin & Joel",
+    detail: "Parents of two, Technopark",
+    sample: true,
   },
 ];
+
+/** Entries to show in the current environment. */
+export function visibleTestimonies(): Testimony[] {
+  const live = process.env.VERCEL_ENV === "production";
+  return live ? TESTIMONIES.filter((t) => !t.sample) : TESTIMONIES;
+}
