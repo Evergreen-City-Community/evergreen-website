@@ -55,6 +55,9 @@ export default function PhotoMarquee({ photos }: { photos: Photo[] }) {
       v = (dx / dtm) * 1000;
       lastX = e.clientX;
       lastT = e.timeStamp;
+      // Follow the finger immediately rather than waiting for the next frame.
+      if (half > 0) x = ((x % half) - half) % half;
+      track.style.transform = `translate3d(${x.toFixed(2)}px,0,0)`;
     };
     const onUp = () => {
       if (!dragging) return;

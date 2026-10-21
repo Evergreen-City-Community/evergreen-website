@@ -1,7 +1,7 @@
 "use client";
 
-// A small flock of fish that lives on the home page. One leader swims from the
-// hero ring up to "Welcome", then on to whichever section is on screen,
+// A small flock of fish that lives on the home page. One leader swims down
+// from the hero ring to "Welcome", then on to whichever section is on screen,
 // touring the four Sunday steps when the timeline is in view. The others
 // follow in loose formation. Move the cursor near them and they scatter;
 // grab the leader and drop it somewhere and the rest come along.
@@ -49,10 +49,10 @@ export default function FishFlock() {
 
     const mk = (color: string, scale: number): Fish => ({
       x: vw / 2 + (Math.random() - 0.5) * 60,
-      y: vh + 60 + Math.random() * 40,
+      y: -60 - Math.random() * 40,
       vx: 0,
       vy: 0,
-      a: -Math.PI / 2,
+      a: Math.PI / 2,
       phase: Math.random() * 7,
       color,
       scale,
@@ -78,7 +78,8 @@ export default function FishFlock() {
     let tourIndex = 0;
     let tourAt = 0;
     let entering = false; // first leg: cross the text from its left edge
-    let target = { x: vw / 2, y: vh + 120 };
+    const OFF = () => ({ x: vw / 2, y: -120 }); // out of sight above, where the ring is
+    let target = OFF();
 
     const pointFor = (r: DOMRect, side: "left" | "right") => {
       const margin = 26;
@@ -91,7 +92,7 @@ export default function FishFlock() {
       // Stay out of sight while the hero fills the screen.
       if (window.scrollY < vh * 0.35) {
         active = null;
-        target = { x: vw / 2, y: vh + 120 };
+        target = OFF();
         return;
       }
       let best: Anchor | null = null;
@@ -106,9 +107,9 @@ export default function FishFlock() {
         }
       }
       if (!best) {
-        // Nothing to visit: idle off the bottom edge.
+        // Nothing to visit: slip out of sight above.
         active = null;
-        target = { x: vw / 2, y: vh + 120 };
+        target = OFF();
         return;
       }
       if (best !== active) {
