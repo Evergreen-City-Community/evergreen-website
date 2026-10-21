@@ -10,10 +10,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const SRC = "/audio/ecc-intro.m4a";
-const FADE_IN = 5; // seconds
+const FADE_IN = 5; // seconds, first time on the site
+const FADE_RESUME = 1.5; // seconds, picking up again after a refresh
 const FADE_OUT = 0.8; // seconds
 const LEVEL = 1; // full volume once faded in
 const PREF_KEY = "ecc-music";
+const POS_KEY = "ecc-music-pos"; // where the song was, for this browser tab
 
 type Status = "idle" | "playing" | "paused";
 
@@ -43,14 +45,23 @@ export default function BgMusic() {
     const audio = audioRef.current;
     if (!audio) return;
     const graph = ensureGraph();
+    // After a refresh, carry on from where the song was in this tab.
+    let resumeAt = 0;
+    try {
+      resumeAt = Number(sessionStorage.getItem(POS_KEY)) || 0;
+    } catch {
+      /* storage blocked */
+    }
+    const fade = resumeAt > 0 ? FADE_RESUME : FADE_IN;
     try {
       if (graph) {
         await graph.ctx.resume();
         const now = graph.ctx.currentTime;
         graph.gain.gain.cancelScheduledValues(now);
         graph.gain.gain.setValueAtTime(0, now);
-        graph.gain.gain.linearRampToValueAtTime(LEVEL, now + FADE_IN);
+        graph.gain.gain.linearRampToValueAtTime(LEVEL, now + fade);
       }
+      if (resumeAt > 0 && audio.currentTime < 0.5) audio.currentTime = resumeAt;
       await audio.play();
       setStatus("playing");
     } catch {
@@ -73,6 +84,25 @@ export default function BgMusic() {
       audio.pause();
     }
     setStatus("paused");
+  }, []);
+
+  // Remember the position (this tab only) so a refresh doesn't restart the song.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const save = () => {
+      try {
+        if (!audio.paused) sessionStorage.setItem(POS_KEY, audio.currentTime.toFixed(1));
+      } catch {
+        /* storage blocked */
+      }
+    };
+    const id = setInterval(save, 1000);
+    window.addEventListener("pagehide", save);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener("pagehide", save);
+    };
   }, []);
 
   // Start on the first interaction anywhere, unless the visitor turned music off before.

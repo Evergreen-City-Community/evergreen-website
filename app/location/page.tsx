@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import AddToCalendar from "@/components/AddToCalendar";
 import CopyButton from "@/components/CopyButton";
 import FAQ, { type QA } from "@/components/FAQ";
@@ -80,9 +81,9 @@ const QUESTIONS: QA[] = [
     a: (
       <>
         Of course. Every Sunday message goes up on YouTube and Spotify.{" "}
-        <a className="inline-link" href="/messages">
+        <Link className="inline-link" href="/messages">
           Start with a message →
-        </a>
+        </Link>
       </>
     ),
   },
