@@ -2727,3 +2727,285 @@ a.footer__link--accent:hover {
     display: none;
   }
 }
+
+/* =====================================================================
+   v2.3 — About page
+   ===================================================================== */
+
+.about-hero__content {
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+}
+.about-hero__title {
+  font-size: 56px;
+}
+.about-hero__lead {
+  width: 560px;
+  max-width: 100%;
+  color: var(--ink);
+}
+.about-hero .who__signature {
+  width: 130px;
+  margin-top: 4px;
+}
+@media (max-width: 1199.98px) {
+  .about-hero__title {
+    font-size: 44px;
+  }
+}
+@media (max-width: 809.98px) {
+  .about-hero__title {
+    font-size: 36px;
+  }
+}
+
+/* Why Evergreen — three phrases */
+.identity {
+  width: 1200px;
+  max-width: 100%;
+  padding: 230px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+.identity__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.identity__list {
+  list-style: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.identity__item {
+  padding: 32px 28px 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.identity__item + .identity__item {
+  padding-left: 28px;
+  border-left: 1px solid var(--line);
+}
+.identity__num {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.identity__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--turquoise);
+}
+.identity__title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.identity__text {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+@media (max-width: 1199.98px) {
+  .identity__list {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+  }
+  .identity__item,
+  .identity__item + .identity__item {
+    padding: 28px 0 24px;
+    border-left: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+@media (max-width: 809.98px) {
+  .identity {
+    padding: 180px 24px 60px;
+  }
+}
+
+/* Pastors */
+.pastors {
+  width: 1200px;
+  max-width: 100%;
+  padding: 60px 40px;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 64px;
+  align-items: center;
+}
+.pastors__photo-wrap {
+  order: 2;
+  display: flex;
+  justify-content: center;
+}
+.pastors__photo {
+  width: 360px;
+  height: 360px;
+}
+.pastors__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 540px;
+  justify-self: end;
+}
+.pastors__body .eyebrow,
+.pastors__title,
+.pastors__body .story__text {
+  text-align: left;
+}
+@media (max-width: 1199.98px) {
+  .pastors {
+    grid-template-columns: 1fr 300px;
+    gap: 40px;
+  }
+  .pastors__photo {
+    width: 280px;
+    height: 280px;
+  }
+}
+@media (max-width: 809.98px) {
+  .pastors {
+    grid-template-columns: 1fr;
+    padding: 40px 24px;
+    gap: 28px;
+  }
+  .pastors__photo-wrap {
+    order: 0;
+  }
+  .pastors__photo {
+    width: 260px;
+    height: 260px;
+  }
+  .pastors__body {
+    justify-self: center;
+    align-items: center;
+  }
+  .pastors__body .eyebrow,
+  .pastors__title,
+  .pastors__body .story__text {
+    text-align: center;
+  }
+}
+
+/* Vision video */
+.vision {
+  width: 1000px;
+  max-width: 100%;
+  padding: 80px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+.vision__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.vision__video {
+  width: 100%;
+}
+
+/* Beliefs — sticky heading + clean list */
+.creed {
+  width: 1200px;
+  max-width: 100%;
+  padding: 80px 40px;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 64px;
+  align-items: start;
+}
+.creed__aside {
+  align-self: stretch;
+}
+.creed__sticky {
+  position: sticky;
+  top: 110px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.creed__eyebrow,
+.creed__title,
+.creed__intro {
+  text-align: left;
+}
+.creed__list {
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.creed__item {
+  display: flex;
+  gap: 24px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+}
+.creed__num {
+  flex: none;
+  width: 28px;
+  padding-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--turquoise);
+}
+.creed__name {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.creed__text {
+  max-width: 560px;
+}
+@media (max-width: 1199.98px) {
+  .creed {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    width: 720px;
+    max-width: 100%;
+  }
+  .creed__sticky {
+    position: static;
+    align-items: center;
+  }
+  .creed__eyebrow,
+  .creed__title,
+  .creed__intro {
+    text-align: center;
+  }
+}
+@media (max-width: 809.98px) {
+  .creed {
+    padding: 60px 24px;
+  }
+  .creed__item {
+    gap: 16px;
+  }
+}
+
+/* The ring is wider than the screen on purpose; clip it at the page edge so
+   phones don't get a sideways scroll. `clip` (not `hidden`) keeps sticky
+   elements working. */
+.page {
+  overflow-x: clip;
+}
