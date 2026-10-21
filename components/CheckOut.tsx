@@ -12,7 +12,7 @@ export default function CheckOut() {
       <div className="checkout__fade checkout__fade--bottom" />
       <Reveal as="div" className="checkout__content">
         <div className="stack-10">
-          <h2 className="h-xl">
+          <h2 className="h-xl" data-fish="checkout">
             <span className="accent">Ready</span> <span className="muted">to check it out?</span>
           </h2>
           <p className="lead checkout__lead">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import BgVideo from "@/components/BgVideo";
 import ChatIcon from "@/components/ChatIcon";
+import FishFlock from "@/components/FishFlock";
 import CheckOut from "@/components/CheckOut";
 import LivingRing from "@/components/LivingRing";
 import MessageCards from "@/components/MessageCards";
@@ -59,6 +60,7 @@ export default function Home() {
     <>
       <Nav mode="fixed" />
       <MouseTrail />
+      <FishFlock />
       <main className="page">
         <section className="hero">
           <BgVideo />
@@ -76,18 +78,18 @@ export default function Home() {
               <SwipeButton label="Plan a visit →" href="/location" scheme="primary" />
               <SwipeButton label="Watch a message" href="/messages" scheme="ghost" />
             </div>
+            <a className="scroll-cue" href="#welcome" aria-label="Scroll down">
+              <span />
+            </a>
           </div>
           <LivingRing />
-          <a className="scroll-cue" href="#welcome" aria-label="Scroll down">
-            <span />
-          </a>
         </section>
 
         <section className="tagline" id="welcome">
           <Reveal as="p" className="eyebrow">
             Welcome
           </Reveal>
-          <Reveal as="h2" className="h-sm" delay={80}>
+          <Reveal as="h2" className="h-sm" delay={80} data-fish="welcome">
             We believe God’s Kingdom isn’t just a future promise, <br className="desktop-only" />
             it’s something being built here, now, in this city.
             <br className="desktop-only" />
@@ -100,7 +102,7 @@ export default function Home() {
         <section className="us">
           <Reveal as="div" className="us__head">
             <p className="eyebrow">This is us</p>
-            <h2 className="h-lg">
+            <h2 className="h-lg" data-fish="us">
               Real people. <span className="accent">Real Sundays.</span>
             </h2>
           </Reveal>
@@ -132,7 +134,7 @@ export default function Home() {
               Here’s what a <span className="accent">Sunday</span> looks like
             </h2>
           </Reveal>
-          <ol className="timeline">
+          <ol className="timeline" data-fish="tour">
             {SUNDAY.map((item, i) => (
               <Reveal as="li" className="timeline__step" key={item.title} delay={i * 100}>
                 <span className="timeline__time">{item.time}</span>
@@ -169,7 +171,7 @@ export default function Home() {
           </Reveal>
           <Reveal as="div" className="leadership__text" delay={120}>
             <p className="eyebrow">Presty Varghese &amp; Sheba Mathew · Lead Pastors</p>
-            <h2 className="leadership__title">Come as you are. We mean it.</h2>
+            <h2 className="leadership__title" data-fish="leadership">Come as you are. We mean it.</h2>
             <p className="body-15">
               <span className="white">Presty and Sheba started Evergreen in {CHURCH.founded}</span>
               <span className="muted">
@@ -190,14 +192,14 @@ export default function Home() {
             “Evergreens will grow in place of thorn bushes; <br className="desktop-only" />
             they will be a monument to the Lord.”
           </p>
-          <p className="verse__ref">Isaiah 55:13</p>
+          <p className="verse__ref" data-fish="verse">Isaiah 55:13</p>
         </Reveal>
 
         <section className="messages-teaser">
           <div className="messages-teaser__main">
             <Reveal as="div" className="stack-10">
               <p className="eyebrow">Messages</p>
-              <h2 className="h-xl">
+              <h2 className="h-xl" data-fish="messages">
                 Every week, a message
                 <br />
                 rooted in <span className="accent">Christ</span>
