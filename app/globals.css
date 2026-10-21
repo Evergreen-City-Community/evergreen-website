@@ -3978,3 +3978,91 @@ a.footer__link--accent:hover {
   padding-top: 8px;
   text-align: center;
 }
+
+/* =====================================================================
+   Background music pill
+   ===================================================================== */
+
+.music {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 16px 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+.music:hover {
+  border-color: var(--turquoise);
+  color: var(--white);
+}
+.music--on {
+  color: var(--white);
+  border-color: rgba(0, 201, 177, 0.5);
+}
+.music__bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+.music__bars span {
+  width: 3px;
+  height: 4px;
+  border-radius: 1px;
+  background: currentColor;
+  opacity: 0.7;
+}
+.music--on .music__bars span {
+  background: var(--turquoise);
+  opacity: 1;
+  animation: eq 1s ease-in-out infinite;
+}
+.music--on .music__bars span:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.music--on .music__bars span:nth-child(3) {
+  animation-delay: -0.6s;
+}
+.music--on .music__bars span:nth-child(4) {
+  animation-delay: -0.15s;
+}
+@keyframes eq {
+  0%,
+  100% {
+    height: 4px;
+  }
+  50% {
+    height: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .music--on .music__bars span {
+    animation: none;
+    height: 10px;
+  }
+}
+@media (max-width: 809.98px) {
+  .music {
+    right: 14px;
+    bottom: 14px;
+    height: 38px;
+    padding: 0 12px;
+  }
+  .music__label {
+    display: none;
+  }
+}

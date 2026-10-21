@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import BgMusic from "@/components/BgMusic";
 import Footer from "@/components/Footer";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
@@ -56,6 +57,7 @@ export default function RootLayout({
       <body>
         {children}
         <Footer />
+        <BgMusic />
       </body>
     </html>
   );
