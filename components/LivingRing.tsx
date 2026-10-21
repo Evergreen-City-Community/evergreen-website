@@ -59,10 +59,12 @@ export default function LivingRing({
   const [pathLen, setPathLen] = useState(0);
   const [extPathD, setExtPathD] = useState("");
   const [inView, setInView] = useState(true);
+  const [cut, setCut] = useState(0); // hero bottom, in ring coordinates
 
   const visPathId = useId();
   const extPathId = useId();
   const maskId = useId();
+  const clipId = useId();
 
   const tileLen = widths.a + FISH_GAP + widths.b + BOAT_GAP;
   const bgStrokeWidth = FONT_SIZE * 0.96 + BG_PADDING * 2;
@@ -72,11 +74,15 @@ export default function LivingRing({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(([e]) => {
-      const { width, height } = e.contentRect;
-      if (width > 0 && height > 0) setSize({ w: width, h: height });
-    });
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) setSize({ w: r.width, h: r.height });
+      const host = el.parentElement?.getBoundingClientRect();
+      if (host) setCut(host.bottom - r.top);
+    };
+    const ro = new ResizeObserver(measure);
     ro.observe(el);
+    if (el.parentElement) ro.observe(el.parentElement);
     const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting));
     io.observe(el);
     return () => {
@@ -265,6 +271,9 @@ export default function LivingRing({
           <defs>
             <path ref={visPathRef} id={visPathId} d={pathD} />
             <path ref={extPathRef} id={extPathId} d={extPathD || pathD} />
+            <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
+              <rect x={-w} y={-h} width={w * 3} height={h + (cut || h)} />
+            </clipPath>
             <mask id={maskId} maskUnits="userSpaceOnUse">
               <rect x={-w} y={-h} width={w * 3} height={h * 3} fill="black" />
               <path d={pathD} fill="none" stroke="white" strokeWidth={maskStrokeWidth} strokeLinecap="round" />
@@ -278,6 +287,12 @@ export default function LivingRing({
             {textB}
           </text>
 
+          {/* Everything under the arch is solid, so the hero video ends at the curve. */}
+          <path
+            d={`${pathD} L ${(w * 0.99).toFixed(1)} ${(h * 3).toFixed(1)} L ${(w * 0.01).toFixed(1)} ${(h * 3).toFixed(1)} Z`}
+            fill={bg}
+            clipPath={`url(#${clipId})`}
+          />
           <path d={pathD} fill="none" stroke={bg} strokeWidth={bgStrokeWidth} strokeLinecap="round" />
 
           <text ref={textRef} dy={FONT_SIZE * 0.23} style={textStyle} fill={fill} mask={`url(#${maskId})`}>
