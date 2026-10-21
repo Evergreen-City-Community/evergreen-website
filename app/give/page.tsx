@@ -45,7 +45,7 @@ export default function Give() {
 
           <Reveal as="div" className="bank" delay={100}>
             <figure className="bank__qr-wrap">
-              <Image src="/images/give-qr.png" alt="Google Pay QR code for Evergreen Legacy Foundation" width={852} height={860} className="bank__qr" unoptimized />
+              <Image src="/images/give-qr.png" alt="Google Pay QR code for Evergreen Legacy Foundation" width={852} height={860} className="bank__qr" unoptimized priority />
               <figcaption>Scan with Google Pay or any UPI app</figcaption>
             </figure>
             <div className="bank__details">
