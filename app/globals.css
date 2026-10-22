@@ -4117,3 +4117,380 @@ a.footer__link--accent:hover {
   white-space: pre-wrap;
   pointer-events: none;
 }
+
+/* =====================================================================
+   Welcome screen (first visit, and again after a few hours away)
+   ===================================================================== */
+
+html:not(.entered) {
+  overflow: hidden;
+}
+html.entered .gate {
+  display: none;
+}
+
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: #000;
+  color: var(--white);
+  overflow: hidden;
+  transition: opacity 1s var(--ease-out), visibility 0s linear 1.1s;
+}
+.gate--leaving {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gate__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.gate__media .bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  filter: grayscale(1) brightness(0.6);
+  transform: scale(1.08);
+  animation: gateDrift 18s ease-out forwards;
+}
+.gate__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 48%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.75) 75%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 30%, transparent 60%, #000);
+}
+@keyframes gateDrift {
+  to {
+    transform: scale(1);
+  }
+}
+.gate--leaving .gate__media .bg-video {
+  transform: scale(1.04);
+  transition: transform 1.1s var(--ease-out);
+}
+
+.gate__top,
+.gate__center,
+.gate__bottom {
+  position: relative;
+  z-index: 1;
+}
+
+.gate__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 28px clamp(16px, 4vw, 48px);
+  font-size: 14px;
+  animation: gateFade 1s 0.1s var(--ease-out) both;
+}
+.gate__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+.gate__logo {
+  width: 20px;
+  height: auto;
+}
+.gate__place {
+  color: var(--ink-soft);
+}
+
+.gate__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 16px 40px;
+}
+.gate__eyebrow {
+  margin: 0 0 22px;
+  animation: gateFade 1s 0.1s var(--ease-out) both;
+}
+.gate__title {
+  margin: 0;
+  font-size: clamp(44px, 8.2vw, 112px);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+.gate__line {
+  display: block;
+}
+.gate__line > span {
+  display: inline-block;
+  animation: gateWord 1.1s var(--ease-out) both;
+}
+.gate__title .accent {
+  color: var(--turquoise);
+}
+@keyframes gateWord {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes gateFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.gate__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-top: 48px;
+  animation: gateFade 1s 1.5s var(--ease-out) both;
+}
+.gate__enter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 64px;
+  padding: 0 34px 0 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--turquoise);
+  color: #000;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  box-shadow: 0 10px 40px rgba(0, 201, 177, 0.35);
+}
+.gate__enter:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 50px rgba(0, 201, 177, 0.5);
+}
+.gate__enter:active {
+  transform: scale(0.98);
+}
+.gate__enter-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--turquoise);
+  animation: gatePulse 2.4s 2.4s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes gatePulse {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35, 1.6);
+  }
+}
+.gate__hint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.gate__quiet {
+  padding: 4px 2px;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+}
+.gate__quiet:hover {
+  color: var(--white);
+  text-decoration-color: var(--turquoise);
+}
+
+.gate__bottom {
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 120px;
+  animation: gateFade 1s 1.8s var(--ease-out) both;
+}
+.gate__sunday {
+  margin: 0;
+}
+
+/* The sea: a slow wave, a boat riding it, a small school of fish below. */
+.gate__sea {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 90px;
+  z-index: 1;
+  animation: gateFade 1.4s 0.6s var(--ease-out) both;
+}
+.gate__wave {
+  fill: rgba(0, 201, 177, 0.07);
+  stroke: rgba(0, 201, 177, 0.45);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+.gate__boat {
+  position: absolute;
+  bottom: 44px;
+  left: 0;
+  z-index: 2;
+  animation: gateSail 38s linear infinite, gateFade 1.4s 0.8s both;
+}
+.gate__boat svg {
+  display: block;
+  animation: gateRock 3.2s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+@keyframes gateSail {
+  from {
+    transform: translateX(-60px);
+  }
+  to {
+    transform: translateX(calc(100vw + 60px));
+  }
+}
+@keyframes gateRock {
+  0%,
+  100% {
+    transform: rotate(-4deg) translateY(0);
+  }
+  50% {
+    transform: rotate(4deg) translateY(-4px);
+  }
+}
+.gate__school {
+  position: absolute;
+  bottom: 14px;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  animation: gateSwim 22s linear infinite;
+  animation-delay: -6s;
+}
+.gate__fish {
+  transform: scaleX(-1);
+  animation: gateBob 1.6s ease-in-out infinite;
+}
+.gate__fish:nth-child(2) {
+  animation-delay: -0.5s;
+  margin-top: 14px;
+}
+.gate__fish:nth-child(3) {
+  animation-delay: -1s;
+  margin-top: -10px;
+}
+.gate__tail {
+  transform-origin: -9px 0;
+  animation: gateTail 0.45s ease-in-out infinite alternate;
+}
+@keyframes gateSwim {
+  from {
+    transform: translateX(80px);
+  }
+  to {
+    transform: translateX(calc(-100vw - 120px));
+  }
+}
+@keyframes gateBob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -5px;
+  }
+}
+@keyframes gateTail {
+  from {
+    transform: skewY(-14deg);
+  }
+  to {
+    transform: skewY(14deg);
+  }
+}
+
+/* The site settles in underneath as the welcome fades. */
+html.entering .page {
+  animation: gateSiteIn 1.1s var(--ease-out) both;
+}
+@keyframes gateSiteIn {
+  from {
+    transform: scale(1.03);
+    filter: blur(6px);
+  }
+  to {
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .gate__top {
+    padding: 20px 16px;
+  }
+  .gate__place {
+    display: none;
+  }
+  .gate__title {
+    font-size: clamp(40px, 12.5vw, 64px);
+  }
+  .gate__actions {
+    margin-top: 36px;
+  }
+  .gate__enter {
+    height: 58px;
+    font-size: 17px;
+  }
+  .gate__bottom {
+    padding-bottom: 104px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gate *,
+  .gate,
+  html.entering .page {
+    animation: none !important;
+    transition-duration: 0.01s !important;
+  }
+  .gate__boat {
+    left: 20%;
+  }
+}

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import BgMusic from "@/components/BgMusic";
 import Footer from "@/components/Footer";
+import Welcome, { WELCOME_SCRIPT } from "@/components/Welcome";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -53,11 +54,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    // suppressHydrationWarning: the welcome script below may add a class to <html> before React loads.
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body>
+        {/* Must run before first paint (next/script defers inline code), so it's a plain tag.
+            React logs a dev-only notice about it; the server HTML runs it as intended. */}
+        <script dangerouslySetInnerHTML={{ __html: WELCOME_SCRIPT }} />
+        <noscript>
+          <style>{`.gate{display:none}html{overflow:auto}`}</style>
+        </noscript>
         {children}
         <Footer />
         <BgMusic />
+        <Welcome />
       </body>
     </html>
   );

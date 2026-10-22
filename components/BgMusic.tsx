@@ -2,12 +2,14 @@
 
 // Background music for the whole site, plus a short spoken welcome.
 //
-// Browsers don't allow sound before the visitor interacts, so everything
-// starts on the first tap, click or key press:
+// Browsers don't allow sound before the visitor interacts. The welcome screen
+// (Welcome.tsx) asks for that tap and sends "ecc:enter":
 //   - music fades in over 5 seconds and loops
-//   - first visit in a browser tab only: 2 seconds in, a voice welcomes the
-//     visitor while the music sits low underneath, then rises back to full
-// A small pill turns it all on and off; "off" is remembered on this device.
+//   - 2 seconds in, a voice welcomes the visitor while the music sits low
+//     underneath, then rises back to full
+// Without the welcome screen (a refresh, a recent visitor), the music alone
+// starts on the first tap, click or key press anywhere.
+// A small pill turns it all on and off; the choice is remembered on this device.
 //
 // Fades run through Web Audio gain nodes because iPhones ignore <audio>.volume.
 // The voice is decoded into a buffer and scheduled on the audio clock, so it
@@ -27,7 +29,6 @@ const DUCK_IN = 2; // seconds to settle the music down (reaches DUCK as the voic
 const DUCK_OUT = 3.5; // seconds to bring the music back up after the voice
 const PREF_KEY = "ecc-music";
 const POS_KEY = "ecc-music-pos"; // where the song was, for this browser tab
-const VOICE_KEY = "ecc-voice"; // set once the welcome has played in this tab
 
 type Status = "idle" | "playing" | "paused" | "blocked";
 
@@ -93,25 +94,24 @@ export default function BgMusic() {
     }
   }, []);
 
-  const play = useCallback(async () => {
+  const play = useCallback(async ({ voice = false } = {}) => {
     const audio = audioRef.current;
     if (!audio) return;
     const graph = ensureGraph();
     // After a refresh, carry on from where the song was in this tab.
     let resumeAt = 0;
-    let voiceDone = false;
     try {
-      resumeAt = Number(sessionStorage.getItem(POS_KEY)) || 0;
-      voiceDone = sessionStorage.getItem(VOICE_KEY) === "1";
+      resumeAt = voice ? 0 : Number(sessionStorage.getItem(POS_KEY)) || 0;
     } catch {
       /* storage blocked */
     }
-    const withVoice = !voiceDone && resumeAt === 0 && !!graph;
+    const withVoice = voice && !!graph;
     const fade = resumeAt > 0 ? FADE_RESUME : FADE_IN;
     try {
       // Safari only accepts play() and resume() made directly inside the tap,
       // so fire both immediately and wait for them afterwards.
-      if (resumeAt > 0 && audio.currentTime < 0.5) audio.currentTime = resumeAt;
+      if (voice) audio.currentTime = 0;
+      else if (resumeAt > 0 && audio.currentTime < 0.5) audio.currentTime = resumeAt;
       const started = audio.play();
       const woke = graph ? graph.ctx.resume() : Promise.resolve();
       if (graph) {
@@ -139,11 +139,6 @@ export default function BgMusic() {
           src.buffer = buffer;
           src.connect(voiceGainRef.current!);
           voiceSrcRef.current = src;
-          try {
-            sessionStorage.setItem(VOICE_KEY, "1");
-          } catch {
-            /* storage blocked */
-          }
           src.onended = () => {
             if (voiceSrcRef.current !== src) return; // stopped early
             voiceSrcRef.current = null;
@@ -219,7 +214,24 @@ export default function BgMusic() {
     };
   }, []);
 
-  // Start on the first interaction anywhere, unless the visitor turned music off before.
+  // The welcome screen's buttons.
+  useEffect(() => {
+    const onEnter = (e: Event) => {
+      const sound = (e as CustomEvent<{ sound: boolean }>).detail?.sound;
+      try {
+        localStorage.setItem(PREF_KEY, sound ? "on" : "off");
+      } catch {
+        /* storage blocked */
+      }
+      if (sound) play({ voice: true });
+      else setStatus("paused");
+    };
+    window.addEventListener("ecc:enter", onEnter);
+    return () => window.removeEventListener("ecc:enter", onEnter);
+  }, [play]);
+
+  // No welcome screen: start on the first interaction anywhere, unless the
+  // visitor chose quiet.
   useEffect(() => {
     let off = false;
     try {
@@ -234,13 +246,21 @@ export default function BgMusic() {
 
     const start = (e: Event) => {
       if ((e.target as Element | null)?.closest?.(".music")) return; // the pill handles itself
+      if (document.querySelector(".gate")) {
+        // The welcome screen decides (and turns this listener off by choosing).
+        return;
+      }
       remove();
       play();
     };
     const events = ["pointerdown", "keydown", "touchend"] as const;
     const remove = () => events.forEach((t) => window.removeEventListener(t, start, true));
     events.forEach((t) => window.addEventListener(t, start, true));
-    return remove;
+    window.addEventListener("ecc:enter", remove);
+    return () => {
+      remove();
+      window.removeEventListener("ecc:enter", remove);
+    };
   }, [play]);
 
   // ?audiodebug on the address shows what the player is doing (for troubleshooting).
@@ -255,13 +275,7 @@ export default function BgMusic() {
           `status: ${status}`,
           `audio paused: ${a?.paused} · time: ${a?.currentTime.toFixed(1)}s · ready: ${a?.readyState} · error: ${a?.error?.code ?? "none"}`,
           `audio context: ${ctx ? ctx.state : "not created"} · music gain: ${g ? g.gain.value.toFixed(2) : "-"}`,
-          `voice playing: ${voiceSrcRef.current ? "yes" : "no"} · voice done this tab: ${(() => {
-            try {
-              return sessionStorage.getItem(VOICE_KEY) === "1" ? "yes" : "no";
-            } catch {
-              return "?";
-            }
-          })()}`,
+          `voice playing: ${voiceSrcRef.current ? "yes" : "no"}`,
           `iOS audio session: ${(navigator as Navigator & { audioSession?: { type: string } }).audioSession?.type ?? "n/a"}`,
           `last error: ${debugRef.current.error ?? "none"}`,
         ].join("\n")
