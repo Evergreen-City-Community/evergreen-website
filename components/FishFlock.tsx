@@ -30,11 +30,16 @@ const SLOTS = [
 export default function FishFlock() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
-  const isHome = usePathname() === "/";
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  // The games need the pointer to themselves, so the flock rests on those pages.
+  const resting = pathname.startsWith("/fishers/");
   const isHomeRef = useRef(isHome);
+  const restingRef = useRef(resting);
   useEffect(() => {
     isHomeRef.current = isHome;
-  }, [isHome]);
+    restingRef.current = resting;
+  }, [isHome, resting]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -190,6 +195,7 @@ export default function FishFlock() {
       }
     };
     const onDown = (e: PointerEvent) => {
+      if (restingRef.current) return;
       pointer.x = e.clientX;
       pointer.y = e.clientY;
       if (Math.hypot(e.clientX - leader.x, e.clientY - leader.y) < 28) {
@@ -307,6 +313,12 @@ export default function FishFlock() {
     let raf = 0;
     let lastChoose = 0;
     const frame = (now: number) => {
+      if (restingRef.current) {
+        ctx.clearRect(0, 0, vw, vh);
+        last = now;
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const t = now / 1000;

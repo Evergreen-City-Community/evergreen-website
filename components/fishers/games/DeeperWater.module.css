@@ -1,0 +1,195 @@
+/* Deeper Water: the canvas draws the sea, these are the two big buttons. */
+
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #02100f;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: 10px;
+  padding: 22px 12px 12px;
+  background: linear-gradient(to top, rgba(1, 6, 12, 0.94) 62%, rgba(1, 6, 12, 0));
+}
+.panel[data-solo="true"] {
+  grid-template-columns: 1fr;
+}
+
+.btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 62px;
+  padding: 6px 10px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  font: inherit;
+  line-height: 1.1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    transform 0.08s ease,
+    opacity 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+.btn:hover:not(:disabled) {
+  border-color: rgba(0, 201, 177, 0.7);
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.btn:disabled {
+  opacity: 0.42;
+  cursor: default;
+}
+
+.label {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+}
+.kbd {
+  display: none;
+  min-width: 18px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  border: 1px solid currentColor;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.3;
+  opacity: 0.6;
+}
+@media (hover: hover) and (pointer: fine) {
+  .kbd {
+    display: inline-block;
+  }
+}
+
+.bank {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.bankSolo {
+  background: #fff;
+  color: #021412;
+  border-color: transparent;
+}
+.bankSolo:hover:not(:disabled) {
+  border-color: transparent;
+  background: rgb(0, 201, 177);
+}
+
+.deeper {
+  background: rgb(0, 201, 177);
+  border-color: transparent;
+  color: #021412;
+  box-shadow: 0 0 26px rgba(0, 201, 177, 0.28);
+}
+.deeper:hover:not(:disabled) {
+  border-color: transparent;
+  background: rgb(26, 222, 198);
+}
+.deeper:disabled {
+  box-shadow: none;
+}
+.risk {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 999px;
+  background: rgba(2, 16, 15, 0.88);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.riskDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.next {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
+.net {
+  background: #fff;
+  color: #021412;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+  animation: pulse 0.7s ease-in-out infinite alternate;
+}
+.calm .net {
+  animation: none;
+}
+@keyframes pulse {
+  from {
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.2);
+  }
+  to {
+    box-shadow: 0 0 36px rgba(0, 201, 177, 0.7);
+  }
+}
+
+@media (max-width: 420px) {
+  .panel {
+    gap: 8px;
+    padding: 22px 10px 10px;
+  }
+  .label {
+    font-size: 16px;
+  }
+}

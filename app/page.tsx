@@ -13,6 +13,7 @@ import SwipeButton from "@/components/SwipeButton";
 import Testimonies from "@/components/Testimonies";
 import TiltCard from "@/components/TiltCard";
 import WelcomeText from "@/components/WelcomeText";
+import { GAMES } from "@/lib/fishers/games";
 import { CHURCH, LINKS } from "@/lib/site";
 import Reveal from "@/components/Reveal";
 
@@ -210,6 +211,31 @@ export default function Home() {
           <Reveal as="div" className="btn-row btn-row--stack-phone">
             <SwipeButton label="Watch on YouTube →" href={LINKS.youtube} scheme="outlineRed" />
             <SwipeButton label="Listen on Spotify →" href={LINKS.spotify} scheme="outlineGreen" />
+          </Reveal>
+        </section>
+
+        <section className="play-teaser">
+          <Reveal as="div" className="stack-10 play-teaser__head">
+            <p className="eyebrow">Play</p>
+            <h2 className="h-xl" data-fish="play">
+              Take a break.
+              <br />
+              <span className="accent">Fish</span> for a while.
+            </h2>
+            <p className="lead play-teaser__lead">Five little games and a scoreboard, with a verse to take home each time.</p>
+          </Reveal>
+          <Reveal as="ul" className="play-teaser__games" delay={80}>
+            {GAMES.map((g) => (
+              <li key={g.slug}>
+                <Link href={`/fishers/${g.slug}`} className="play-chip">
+                  <span>{g.title}</span>
+                  <small>{g.ref}</small>
+                </Link>
+              </li>
+            ))}
+          </Reveal>
+          <Reveal as="div" className="btn-row btn-row--stack-phone" delay={140}>
+            <SwipeButton label="Play Fishers of Men →" href="/fishers" scheme="outlineGreen" />
           </Reveal>
         </section>
 

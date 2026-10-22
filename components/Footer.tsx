@@ -13,6 +13,7 @@ const COLUMNS: { title: string; items: Item[] }[] = [
       { label: "Plan a visit", href: "/location" },
       { label: "Messages", href: "/messages" },
       { label: "Give", href: "/give" },
+      { label: "Play: Fishers of Men", href: "/fishers" },
     ],
   },
   {

@@ -4545,3 +4545,67 @@ html.entering .page {
 .creed__title {
   text-wrap: balance;
 }
+
+/* Home: invitation to the Fishers of Men games */
+.play-teaser {
+  width: 1200px;
+  max-width: 100%;
+  padding: 120px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  text-align: center;
+}
+.play-teaser__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.play-teaser__lead {
+  max-width: 460px;
+}
+.play-teaser__games {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 900px;
+}
+.play-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 14px 22px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--white);
+  text-decoration: none;
+  transition: border-color 0.25s ease, transform 0.35s var(--ease-out);
+}
+.play-chip:hover {
+  border-color: var(--turquoise);
+  transform: translateY(-3px);
+}
+.play-chip span {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.play-chip small {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--turquoise);
+}
+@media (max-width: 809.98px) {
+  .play-teaser {
+    padding: 80px 24px;
+  }
+}
