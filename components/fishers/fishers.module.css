@@ -9,6 +9,13 @@
   align-items: center;
 }
 
+.pageAfterHero {
+  padding-top: 40px;
+}
+#games {
+  scroll-margin-top: 90px;
+}
+
 .eyebrow {
   margin: 0;
   font-size: 12px;

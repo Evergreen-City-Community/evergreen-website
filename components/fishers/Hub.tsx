@@ -78,7 +78,7 @@ export default function Hub() {
         )}
       </ul>
 
-      <div className={s.cards}>
+      <div className={s.cards} id="games">
         {GAMES.map((g) => {
           const best = mine?.best[g.slug] ?? 0;
           const isDaily = g.slug === "daily-catch";

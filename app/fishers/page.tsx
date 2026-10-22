@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import BeyondGames from "@/components/fishers/BeyondGames";
 import Hub from "@/components/fishers/Hub";
 import PoweredByNet from "@/components/fishers/PoweredByNet";
 import Nav from "@/components/Nav";
-import Reveal from "@/components/Reveal";
 import s from "@/components/fishers/fishers.module.css";
 
 export const metadata: Metadata = {
@@ -15,15 +15,8 @@ export default function Fishers() {
     <>
       <Nav mode="fixed" />
       <main className="page">
-        <div className={s.page}>
-          <Reveal className={s.hubHero}>
-            <p className={s.eyebrow}>Play</p>
-            <h1 className="h-xl" data-fish="hero">
-              Fishers of <span className="accent">Men</span>
-            </h1>
-            <p className="lead">Five little games, a scoreboard, and a verse to take home each time. Take a break, play a round.</p>
-            <PoweredByNet />
-          </Reveal>
+        <BeyondGames />
+        <div className={`${s.page} ${s.pageAfterHero}`}>
           <Hub />
           <div className={s.netBlock}>
             <PoweredByNet variant="card" />
