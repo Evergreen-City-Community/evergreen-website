@@ -114,10 +114,13 @@ export async function makeShareCard(input: ShareCardInput): Promise<Blob | null>
 
   ctx.fillStyle = "rgba(255,255,255,0.75)";
   ctx.font = `600 38px ${font}`;
-  ctx.fillText("Evergreen City Community", W / 2, H - 120);
+  ctx.fillText("Evergreen City Community", W / 2, H - 138);
   ctx.fillStyle = "rgba(255,255,255,0.45)";
   ctx.font = `400 30px ${font}`;
-  ctx.fillText("Kazhakootam, Trivandrum · Sundays 10:30 AM", W / 2, H - 70);
+  ctx.fillText("Kazhakootam, Trivandrum · Sundays 10:30 AM", W / 2, H - 94);
+  ctx.fillStyle = "#8db3ff";
+  ctx.font = `600 28px ${font}`;
+  ctx.fillText("Powered by NET · thenet.church", W / 2, H - 46);
 
   return new Promise((resolve) => canvas.toBlob((b) => resolve(b), "image/png"));
 }

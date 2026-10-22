@@ -1,0 +1,75 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: center;
+  padding: 7px 16px 7px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 13px;
+  text-decoration: none;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.chip:hover {
+  border-color: #387bff;
+  color: #fff;
+}
+.chip strong {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.chip small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.chip:hover small {
+  color: #8db3ff;
+}
+.chipIcon {
+  border-radius: 7px;
+  flex: none;
+}
+
+.card {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 34px 28px 30px;
+  border: 1px solid rgba(56, 123, 255, 0.4);
+  border-radius: 28px;
+  background: linear-gradient(160deg, rgba(56, 123, 255, 0.12), rgba(255, 255, 255, 0.02) 60%);
+  text-align: center;
+}
+.cardIcon {
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(56, 123, 255, 0.35);
+}
+.eyebrow {
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8db3ff;
+}
+.title {
+  margin: 0;
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+.text {
+  margin: 0;
+  max-width: 500px;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}

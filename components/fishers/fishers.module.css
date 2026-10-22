@@ -241,6 +241,11 @@
   letter-spacing: -0.02em;
 }
 
+.netBlock {
+  width: 100%;
+  margin-top: 28px;
+}
+
 .about {
   width: 100%;
   max-width: 640px;

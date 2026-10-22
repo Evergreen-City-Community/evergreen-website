@@ -13,6 +13,7 @@ import SwipeButton from "@/components/SwipeButton";
 import Testimonies from "@/components/Testimonies";
 import TiltCard from "@/components/TiltCard";
 import WelcomeText from "@/components/WelcomeText";
+import PoweredByNet from "@/components/fishers/PoweredByNet";
 import { GAMES } from "@/lib/fishers/games";
 import { CHURCH, LINKS } from "@/lib/site";
 import Reveal from "@/components/Reveal";
@@ -236,6 +237,9 @@ export default function Home() {
           </Reveal>
           <Reveal as="div" className="btn-row btn-row--stack-phone" delay={140}>
             <SwipeButton label="Play Fishers of Men →" href="/fishers" scheme="outlineGreen" />
+          </Reveal>
+          <Reveal as="div" delay={200}>
+            <PoweredByNet />
           </Reveal>
         </section>
 

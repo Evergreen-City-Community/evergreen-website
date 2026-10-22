@@ -13,6 +13,7 @@ import { dailyDone, readStore, recordDaily, recordRun, streakOf, type RunRecord 
 import { createSfx } from "@/lib/fishers/sfx";
 import { verseFor, type Verse } from "@/lib/fishers/verses";
 import Leaderboard from "./Leaderboard";
+import PoweredByNet from "./PoweredByNet";
 import { GAME_COMPONENTS } from "./registry";
 import ResultCard from "./ResultCard";
 import type { RunResult } from "./types";
@@ -191,6 +192,8 @@ export default function GameShell({ slug }: { slug: GameSlug }) {
       {phase === "result" && result && (
         <ResultCard game={game} result={result} record={record} breath={breath} finishedForToday={slug === "daily-catch" && doneToday} onAgain={start} />
       )}
+
+      <PoweredByNet />
     </section>
   );
 }
