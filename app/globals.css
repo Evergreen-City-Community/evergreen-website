@@ -4066,3 +4066,36 @@ a.footer__link--accent:hover {
     display: none;
   }
 }
+
+/* Before the first tap the pill invites a tap instead of claiming "off". */
+.music--idle {
+  color: var(--white);
+  border-color: rgba(0, 201, 177, 0.55);
+  animation: musicInvite 2.4s ease-out infinite;
+}
+.music--idle .music__bars span {
+  background: var(--turquoise);
+  opacity: 1;
+}
+@keyframes musicInvite {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 201, 177, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(0, 201, 177, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 201, 177, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .music--idle {
+    animation: none;
+  }
+}
+@media (max-width: 809.98px) {
+  /* On phones keep the words while it's still waiting for a tap. */
+  .music--idle .music__label {
+    display: inline;
+  }
+}

@@ -46,6 +46,13 @@ export default function BgMusic() {
     if (!ctxRef.current) {
       const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!Ctx) return null;
+      // iOS 17+: treat this as media playback so the ringer/silent switch doesn't mute it.
+      try {
+        const nav = navigator as Navigator & { audioSession?: { type: string } };
+        if (nav.audioSession) nav.audioSession.type = "playback";
+      } catch {
+        /* not supported */
+      }
       const ctx = new Ctx();
       const gain = ctx.createGain();
       gain.gain.value = 0;
@@ -212,7 +219,10 @@ export default function BgMusic() {
     } catch {
       /* storage blocked */
     }
-    if (off) return;
+    if (off) {
+      queueMicrotask(() => setStatus("paused"));
+      return;
+    }
 
     const start = (e: Event) => {
       if ((e.target as Element | null)?.closest?.(".music")) return; // the pill handles itself
@@ -237,16 +247,18 @@ export default function BgMusic() {
   };
 
   const on = status === "playing";
+  const idle = status === "idle";
+  const label = on ? "Music on" : idle ? "Tap for sound" : "Music off";
 
   return (
     <>
       <audio ref={audioRef} src={SRC} loop preload="none" />
       <button
         type="button"
-        className={`music${on ? " music--on" : ""}`}
+        className={`music${on ? " music--on" : ""}${idle ? " music--idle" : ""}`}
         onClick={toggle}
         aria-pressed={on}
-        aria-label={on ? "Turn music off" : "Turn music on"}
+        aria-label={on ? "Turn music off" : idle ? "Play music and welcome message" : "Turn music on"}
       >
         <span className="music__bars" aria-hidden>
           <span />
@@ -254,7 +266,7 @@ export default function BgMusic() {
           <span />
           <span />
         </span>
-        <span className="music__label">{on ? "Music on" : "Music off"}</span>
+        <span className="music__label">{label}</span>
       </button>
     </>
   );
