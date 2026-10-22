@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ game: str
   const info = GAME_BY_SLUG[game];
   return {
     title: `${info.title} · Fishers of Men · Evergreen City Community`,
-    description: `${info.tagline} ${info.ref}. Powered by NET (thenet.church).`,
+    description: `${info.tagline} ${info.ref}. Powered by The NET (thenet.church).`,
   };
 }
 

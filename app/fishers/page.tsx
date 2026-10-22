@@ -7,7 +7,7 @@ import s from "@/components/fishers/fishers.module.css";
 
 export const metadata: Metadata = {
   title: "Fishers of Men · Play · Evergreen City Community",
-  description: "Five little games with a scripture to take away each time, powered by NET (thenet.church). Cast the net, go deeper, follow the leader, feed the crowd, and catch today's verse.",
+  description: "Five little games with a scripture to take away each time, powered by The NET (thenet.church). Cast the net, go deeper, follow the leader, feed the crowd, and catch today's verse.",
 };
 
 export default function Fishers() {

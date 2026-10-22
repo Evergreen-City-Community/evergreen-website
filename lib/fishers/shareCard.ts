@@ -120,7 +120,7 @@ export async function makeShareCard(input: ShareCardInput): Promise<Blob | null>
   ctx.fillText("Kazhakootam, Trivandrum · Sundays 10:30 AM", W / 2, H - 94);
   ctx.fillStyle = "#8db3ff";
   ctx.font = `600 28px ${font}`;
-  ctx.fillText("Powered by NET · thenet.church", W / 2, H - 46);
+  ctx.fillText("Powered by The NET · thenet.church", W / 2, H - 46);
 
   return new Promise((resolve) => canvas.toBlob((b) => resolve(b), "image/png"));
 }
