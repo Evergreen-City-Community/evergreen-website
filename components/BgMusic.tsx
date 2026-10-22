@@ -29,7 +29,7 @@ const PREF_KEY = "ecc-music";
 const POS_KEY = "ecc-music-pos"; // where the song was, for this browser tab
 const VOICE_KEY = "ecc-voice"; // set once the welcome has played in this tab
 
-type Status = "idle" | "playing" | "paused";
+type Status = "idle" | "playing" | "paused" | "blocked";
 
 export default function BgMusic() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -39,6 +39,8 @@ export default function BgMusic() {
   const voiceSrcRef = useRef<AudioBufferSourceNode | null>(null);
   const voiceBufferRef = useRef<Promise<AudioBuffer | null> | null>(null);
   const [status, setStatus] = useState<Status>("idle");
+  const debugRef = useRef<{ error?: string }>({});
+  const [debugText, setDebugText] = useState("");
 
   const ensureGraph = useCallback(() => {
     const audio = audioRef.current;
@@ -107,8 +109,12 @@ export default function BgMusic() {
     const withVoice = !voiceDone && resumeAt === 0 && !!graph;
     const fade = resumeAt > 0 ? FADE_RESUME : FADE_IN;
     try {
+      // Safari only accepts play() and resume() made directly inside the tap,
+      // so fire both immediately and wait for them afterwards.
+      if (resumeAt > 0 && audio.currentTime < 0.5) audio.currentTime = resumeAt;
+      const started = audio.play();
+      const woke = graph ? graph.ctx.resume() : Promise.resolve();
       if (graph) {
-        await graph.ctx.resume();
         const { ctx, gain } = graph;
         const now = ctx.currentTime;
         gain.gain.cancelScheduledValues(now);
@@ -120,8 +126,7 @@ export default function BgMusic() {
           gain.gain.linearRampToValueAtTime(LEVEL, now + fade);
         }
       }
-      if (resumeAt > 0 && audio.currentTime < 0.5) audio.currentTime = resumeAt;
-      await audio.play();
+      await Promise.all([started, woke]);
       setStatus("playing");
 
       if (withVoice && graph) {
@@ -156,9 +161,12 @@ export default function BgMusic() {
           gain.gain.linearRampToValueAtTime(LEVEL, t + FADE_RESUME);
         }
       }
-    } catch {
-      // Blocked or failed to load: stay quiet, the pill still works later.
-      setStatus("paused");
+    } catch (err) {
+      // The browser refused (or the file failed to load): say so, and let a
+      // second tap retry. Details go to the console for debugging.
+      console.warn("[ecc-music] could not start:", err);
+      debugRef.current.error = String(err);
+      setStatus("blocked");
     }
   }, [ensureGraph, loadVoice]);
 
@@ -235,6 +243,33 @@ export default function BgMusic() {
     return remove;
   }, [play]);
 
+  // ?audiodebug on the address shows what the player is doing (for troubleshooting).
+  useEffect(() => {
+    if (!new URLSearchParams(location.search).has("audiodebug")) return;
+    const id = setInterval(() => {
+      const a = audioRef.current;
+      const ctx = ctxRef.current;
+      const g = gainRef.current;
+      setDebugText(
+        [
+          `status: ${status}`,
+          `audio paused: ${a?.paused} · time: ${a?.currentTime.toFixed(1)}s · ready: ${a?.readyState} · error: ${a?.error?.code ?? "none"}`,
+          `audio context: ${ctx ? ctx.state : "not created"} · music gain: ${g ? g.gain.value.toFixed(2) : "-"}`,
+          `voice playing: ${voiceSrcRef.current ? "yes" : "no"} · voice done this tab: ${(() => {
+            try {
+              return sessionStorage.getItem(VOICE_KEY) === "1" ? "yes" : "no";
+            } catch {
+              return "?";
+            }
+          })()}`,
+          `iOS audio session: ${(navigator as Navigator & { audioSession?: { type: string } }).audioSession?.type ?? "n/a"}`,
+          `last error: ${debugRef.current.error ?? "none"}`,
+        ].join("\n")
+      );
+    }, 500);
+    return () => clearInterval(id);
+  }, [status]);
+
   const toggle = () => {
     const turningOn = status !== "playing";
     try {
@@ -248,17 +283,19 @@ export default function BgMusic() {
 
   const on = status === "playing";
   const idle = status === "idle";
-  const label = on ? "Music on" : idle ? "Tap for sound" : "Music off";
+  const blocked = status === "blocked";
+  const label = on ? "Music on" : idle ? "Tap for sound" : blocked ? "Sound blocked, tap to retry" : "Music off";
 
   return (
     <>
       <audio ref={audioRef} src={SRC} loop preload="none" />
+      {debugText && <pre className="music-debug">{debugText}</pre>}
       <button
         type="button"
-        className={`music${on ? " music--on" : ""}${idle ? " music--idle" : ""}`}
+        className={`music${on ? " music--on" : ""}${idle || blocked ? " music--idle" : ""}`}
         onClick={toggle}
         aria-pressed={on}
-        aria-label={on ? "Turn music off" : idle ? "Play music and welcome message" : "Turn music on"}
+        aria-label={on ? "Turn music off" : idle || blocked ? "Play music and welcome message" : "Turn music on"}
       >
         <span className="music__bars" aria-hidden>
           <span />
