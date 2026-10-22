@@ -3,11 +3,9 @@
 // "Beyond Games": the hub's hero. A live sea behind the title.
 //
 //  - Fish dart about, some leap out of the water, and a couple tow sailboats.
-//  - Two net portals sit at the edges. Whatever swims or sails into one comes
-//    out of the other, still going the same way.
 //  - Press and hold anywhere to stir up a whirlwind that pulls everything in.
 //    Let go early and it dies down, spitting out what it caught. If it
-//    swallows everything, the portals pour it all back out.
+//    swallows everything, they all swim back in from the edges.
 //  - Now and then a fish says "let's play" and points at a game.
 //
 // It's decoration: the canvas is hidden from screen readers, and with reduced
@@ -44,7 +42,7 @@ type Ent = {
   tower: Ent | null; // for a boat: the fish towing it
   isTower: boolean;
   free: boolean; // boat lifted off the water
-  st: 0 | 1 | 2; // 0 live, 1 swallowed, 2 waiting at a portal
+  st: 0 | 1 | 2; // 0 live, 1 swallowed, 2 waiting to swim back in
   emergeAt: number;
   imm: number; // seconds the whirlwind can't grab it
   pulled: number; // 0..1 how strongly it is being pulled right now
@@ -88,7 +86,7 @@ export default function BeyondGames() {
     const calm = reduced ? 0.3 : 1;
 
     // ---- geometry -----------------------------------------------------
-    const g = { W: 0, H: 0, waterY: 0, PL: 0, PR: 0, ringCY: 0, ringRY: 0, yMin: 0, yMax: 0, rMax: 260 };
+    const g = { W: 0, H: 0, waterY: 0, PL: 0, PR: 0, yMin: 0, yMax: 0, rMax: 260 };
     const layout = () => {
       const r = hero.getBoundingClientRect();
       g.W = r.width;
@@ -99,13 +97,11 @@ export default function BeyondGames() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const narrow = g.W < 640;
       g.waterY = g.H * (narrow ? 0.68 : 0.65);
-      g.PL = narrow ? 22 : Math.max(36, g.W * 0.04);
+      // creatures turn round at these edges
+      g.PL = narrow ? 26 : 56;
       g.PR = g.W - g.PL;
-      const depth = g.H - g.waterY;
-      g.ringCY = g.waterY + depth * 0.3;
-      g.ringRY = depth * 0.62 + 24;
       g.yMin = g.waterY + 24;
-      g.yMax = Math.min(g.H - 24, g.ringCY + g.ringRY - 16);
+      g.yMax = g.H - 24;
       g.rMax = Math.min(260, g.W * 0.46);
     };
     layout();
@@ -199,7 +195,6 @@ export default function BeyondGames() {
     // ---- the whirlwind -------------------------------------------------
     const vortex = { held: false, x: 0, y: 0, s: 0, heldT: 0, locked: false, collapseAt: 0, collapsing: false, rot: 0 };
     let hintDone = false;
-    const portalFlash = { l: 0, r: 0 };
 
     // Reach grows with strength, then keeps growing the longer it is held,
     // until after a few seconds it can pull in the whole sea.
@@ -233,7 +228,7 @@ export default function BeyondGames() {
 
     const emerge = (e: Ent) => {
       const left = Math.random() < 0.5;
-      e.x = left ? g.PL : g.PR;
+      e.x = left ? -30 : g.W + 30;
       e.dir = left ? 1 : -1;
       e.vx = e.dir * (e.kind === "fish" ? rand(170, 260) : e.speed);
       e.vy = 0;
@@ -244,8 +239,6 @@ export default function BeyondGames() {
       e.y = e.kind === "fish" ? rand(g.yMin, g.yMax) : g.waterY;
       e.tx = e.x + e.dir * 220;
       e.ty = e.y;
-      if (left) portalFlash.l = 1;
-      else portalFlash.r = 1;
     };
 
     // ---- speech bubble --------------------------------------------------
@@ -284,8 +277,6 @@ export default function BeyondGames() {
     window.addEventListener("pointercancel", up);
 
     // ---- drawing helpers -----------------------------------------------------
-    const portalScale = (x: number) => smooth(Math.min(Math.abs(x - g.PL), Math.abs(x - g.PR)) / 52);
-
     const drawFish = (e: Ent, t: number, mul: number) => {
       const sp = Math.hypot(e.vx, e.vy);
       const wag = Math.sin(t * (9 + Math.min(sp, 320) / 22) + e.phase) * (0.22 + Math.min(sp, 320) / 800);
@@ -356,62 +347,6 @@ export default function BeyondGames() {
       ctx.restore();
     };
 
-    const drawPortal = (px: number, flash: number, t: number) => {
-      const rx = 20;
-      const ry = g.ringRY;
-      const cy = g.ringCY;
-      ctx.save();
-      const grad = ctx.createRadialGradient(px, cy, 4, px, cy, ry);
-      grad.addColorStop(0, `rgba(0,201,177,${0.28 + flash * 0.3})`);
-      grad.addColorStop(1, "rgba(0,201,177,0)");
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.ellipse(px, cy, rx * 3.2, ry, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(px, cy, rx, ry, 0, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0,201,177,${0.1 + flash * 0.18})`;
-      ctx.fill();
-      ctx.clip();
-      // the mesh
-      ctx.strokeStyle = `rgba(0,201,177,${0.38 + flash * 0.4})`;
-      ctx.lineWidth = 1;
-      for (let i = -5; i <= 5; i++) {
-        const y = cy + (i / 5) * ry;
-        ctx.beginPath();
-        ctx.moveTo(px - rx, y);
-        ctx.quadraticCurveTo(px, y + Math.sin(t * 1.6 + i) * 5, px + rx, y);
-        ctx.stroke();
-      }
-      for (const f of [0.35, 0.7]) {
-        ctx.beginPath();
-        ctx.ellipse(px, cy, rx * f, ry, 0, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-      ctx.beginPath();
-      ctx.moveTo(px, cy - ry);
-      ctx.lineTo(px, cy + ry);
-      ctx.stroke();
-      ctx.restore();
-      ctx.save();
-      ctx.shadowColor = TURQ;
-      ctx.shadowBlur = 14 + flash * 18;
-      ctx.strokeStyle = TURQ;
-      ctx.lineWidth = 2.2;
-      ctx.beginPath();
-      ctx.ellipse(px, cy, rx, ry, 0, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
-      // sparks drifting round the rim
-      ctx.fillStyle = "rgba(255,255,255,0.8)";
-      for (let i = 0; i < 6; i++) {
-        const a = t * 0.9 + i * 1.047;
-        ctx.beginPath();
-        ctx.arc(px + Math.cos(a) * rx, cy + Math.sin(a) * ry, 1.6, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    };
-
     const wavePath = (t: number, offset: number, phase: number, amp: number) => {
       ctx.beginPath();
       ctx.moveTo(0, g.H);
@@ -472,15 +407,18 @@ export default function BeyondGames() {
     });
     ro.observe(hero);
 
-    const wrapPortals = (e: Ent) => {
-      if (e.vx < 0 && e.x <= g.PL) {
-        e.x = g.PR;
-        portalFlash.l = 1;
-        portalFlash.r = 1;
-      } else if (e.vx > 0 && e.x >= g.PR) {
-        e.x = g.PL;
-        portalFlash.l = 1;
-        portalFlash.r = 1;
+    // turn round at the edges (a towing fish takes its boat with it)
+    const turnAtEdges = (e: Ent) => {
+      let flipTo = 0;
+      if (e.vx < 0 && e.x <= g.PL) flipTo = 1;
+      else if (e.vx > 0 && e.x >= g.PR) flipTo = -1;
+      if (!flipTo) return;
+      if (e.kind === "boat" && e.tower && e.tower.st === 0) return; // follows its fish
+      e.dir = flipTo;
+      e.vx = Math.abs(e.vx || e.speed) * flipTo;
+      e.tx = e.x + flipTo * 220;
+      if (e.isTower) {
+        for (const b of ents) if (b.kind === "boat" && b.tower === e) b.dir = flipTo;
       }
     };
 
@@ -511,8 +449,6 @@ export default function BeyondGames() {
         vortex.collapsing = true;
         pour(t);
       }
-      portalFlash.l = Math.max(0, portalFlash.l - dt * 1.4);
-      portalFlash.r = Math.max(0, portalFlash.r - dt * 1.4);
 
       // creatures
       const Rv = R();
@@ -582,7 +518,7 @@ export default function BeyondGames() {
             if (e.retarget <= 0) {
               e.retarget = rand(0.9, 2.8);
               if (Math.random() < 0.3) e.dir *= -1;
-              e.tx = Math.min(g.PR + 30, Math.max(g.PL - 30, e.x + e.dir * rand(140, 420)));
+              e.tx = Math.min(g.PR, Math.max(g.PL, e.x + e.dir * rand(140, 420)));
               e.ty = rand(g.yMin, g.yMax);
               if (Math.random() < 0.35) e.burst = 0.45;
             }
@@ -620,7 +556,7 @@ export default function BeyondGames() {
           }
           // a bubble now and then
           if (!e.air && Math.random() < dt * 1.2) puff(e.x, e.y - 4, 1, 1, 0.3);
-          wrapPortals(e);
+          turnAtEdges(e);
         } else {
           const surf = surfaceY(e.x, t);
           if (e.free) {
@@ -646,7 +582,7 @@ export default function BeyondGames() {
             e.y = surf - 3;
             e.tilt += (slopeAt(e.x, t) * 0.9 + Math.sin(t * 1.8 + e.phase) * 0.05 - e.tilt) * Math.min(1, dt * 5);
           }
-          wrapPortals(e);
+          turnAtEdges(e);
         }
       }
 
@@ -738,9 +674,6 @@ export default function BeyondGames() {
       }
       ctx.restore();
 
-      drawPortal(g.PL, portalFlash.l, t);
-      drawPortal(g.PR, portalFlash.r, t);
-
       // tow ropes (under the creatures)
       ctx.strokeStyle = "rgba(255,255,255,0.55)";
       ctx.lineWidth = 1.2;
@@ -754,7 +687,7 @@ export default function BeyondGames() {
         ctx.stroke();
       }
 
-      const scaleOf = (e: Ent) => portalScale(e.x) * (1 - e.pulled * 0.55);
+      const scaleOf = (e: Ent) => 1 - e.pulled * 0.55;
       for (const e of ents) if (e.st === 0 && e.kind === "fish" && !e.air) drawFish(e, t, scaleOf(e));
       for (const e of ents) if (e.st === 0 && e.kind === "boat") drawBoat(e, scaleOf(e));
       for (const e of ents) if (e.st === 0 && e.kind === "fish" && e.air) drawFish(e, t, scaleOf(e));
