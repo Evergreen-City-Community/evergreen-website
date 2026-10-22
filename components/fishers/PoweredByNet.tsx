@@ -18,8 +18,8 @@ export default function PoweredByNet({ variant = "chip" }: { variant?: "chip" | 
           churches. It runs on connection and collaboration, so a local church can help people take their next step with Jesus, and keep walking with
           them.
         </p>
-        <a className="pill pill--solid" href={NET_URL} target="_blank" rel="noopener noreferrer">
-          Visit thenet.church →
+        <a className={`pill ${s.visit}`} href={NET_URL} target="_blank" rel="noopener noreferrer">
+          Visit The NET →
         </a>
       </section>
     );

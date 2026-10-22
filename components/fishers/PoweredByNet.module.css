@@ -73,3 +73,19 @@
   font-size: 15px;
   line-height: 1.6;
 }
+
+/* The button wears NET's own blue, not the church's turquoise. */
+.visit {
+  background: #387bff;
+  border-color: #387bff;
+  color: #fff;
+  box-shadow: 0 8px 28px rgba(56, 123, 255, 0.35);
+  transition: background-color 0.2s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.visit:hover {
+  background: #5890ff;
+  border-color: #5890ff;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px rgba(56, 123, 255, 0.5);
+}
