@@ -79,8 +79,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 26px 24px 22px;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: 24px;
   background: linear-gradient(160deg, rgba(0, 201, 177, 0.08), rgba(255, 255, 255, 0.02) 55%);
@@ -92,6 +91,24 @@
 .card:hover {
   transform: translateY(-4px);
   border-color: rgba(0, 201, 177, 0.5);
+}
+.cardArt {
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+.cardArt > * {
+  transition: transform 0.6s var(--ease-out);
+}
+.card:hover .cardArt > * {
+  transform: scale(1.05);
+}
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  padding: 20px 24px 22px;
 }
 .card h3 {
   margin: 0;
