@@ -40,8 +40,6 @@ export default function BgMusic() {
   const voiceSrcRef = useRef<AudioBufferSourceNode | null>(null);
   const voiceBufferRef = useRef<Promise<AudioBuffer | null> | null>(null);
   const [status, setStatus] = useState<Status>("idle");
-  const debugRef = useRef<{ error?: string }>({});
-  const [debugText, setDebugText] = useState("");
 
   const ensureGraph = useCallback(() => {
     const audio = audioRef.current;
@@ -160,7 +158,6 @@ export default function BgMusic() {
       // The browser refused (or the file failed to load): say so, and let a
       // second tap retry. Details go to the console for debugging.
       console.warn("[ecc-music] could not start:", err);
-      debugRef.current.error = String(err);
       setStatus("blocked");
     }
   }, [ensureGraph, loadVoice]);
@@ -263,27 +260,6 @@ export default function BgMusic() {
     };
   }, [play]);
 
-  // ?audiodebug on the address shows what the player is doing (for troubleshooting).
-  useEffect(() => {
-    if (!new URLSearchParams(location.search).has("audiodebug")) return;
-    const id = setInterval(() => {
-      const a = audioRef.current;
-      const ctx = ctxRef.current;
-      const g = gainRef.current;
-      setDebugText(
-        [
-          `status: ${status}`,
-          `audio paused: ${a?.paused} · time: ${a?.currentTime.toFixed(1)}s · ready: ${a?.readyState} · error: ${a?.error?.code ?? "none"}`,
-          `audio context: ${ctx ? ctx.state : "not created"} · music gain: ${g ? g.gain.value.toFixed(2) : "-"}`,
-          `voice playing: ${voiceSrcRef.current ? "yes" : "no"}`,
-          `iOS audio session: ${(navigator as Navigator & { audioSession?: { type: string } }).audioSession?.type ?? "n/a"}`,
-          `last error: ${debugRef.current.error ?? "none"}`,
-        ].join("\n")
-      );
-    }, 500);
-    return () => clearInterval(id);
-  }, [status]);
-
   const toggle = () => {
     const turningOn = status !== "playing";
     try {
@@ -303,7 +279,6 @@ export default function BgMusic() {
   return (
     <>
       <audio ref={audioRef} src={SRC} loop preload="none" />
-      {debugText && <pre className="music-debug">{debugText}</pre>}
       <button
         type="button"
         className={`music${on ? " music--on" : ""}${idle || blocked ? " music--idle" : ""}`}
