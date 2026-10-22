@@ -33,6 +33,13 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+/* `clip` hides sideways overflow without turning <body> into a scroll
+   container, which would stop `position: sticky` working in Safari. */
+@supports (overflow: clip) {
+  body {
+    overflow-x: clip;
+  }
+}
 
 h1,
 h2,
@@ -4475,4 +4482,66 @@ html.entering .page {
   .gate__boat {
     left: 20%;
   }
+}
+
+/* Beliefs: the heading stays pinned while the list scrolls past it */
+.creed__sticky {
+  top: 130px;
+}
+.creed__count {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.creed__count-now {
+  color: var(--turquoise);
+}
+.creed__count-bar {
+  position: relative;
+  width: 96px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.creed__count-bar span {
+  position: absolute;
+  inset: 0;
+  background: var(--turquoise);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-out);
+}
+@media (min-width: 1200px) {
+  .creed .creed__item[data-in] {
+    transition: opacity 0.5s var(--ease-out), transform 0.9s var(--ease-out), border-color 0.5s var(--ease-out);
+  }
+  .creed .creed__item[data-in]:not([data-active]) {
+    opacity: 0.5;
+  }
+  .creed .creed__item[data-active] {
+    border-bottom-color: rgba(0, 201, 177, 0.45);
+  }
+  .creed__item[data-active] .creed__name {
+    color: var(--white);
+  }
+}
+@media (max-width: 1199.98px) {
+  .creed__count {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .creed .creed__item[data-in],
+  .creed__count-bar span {
+    transition: none;
+  }
+}
+.creed__title {
+  text-wrap: balance;
 }

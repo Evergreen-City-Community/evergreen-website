@@ -1,3 +1,4 @@
+import CreedScroll from "@/components/CreedScroll";
 import type { Metadata } from "next";
 import Image from "next/image";
 import BgVideo from "@/components/BgVideo";
@@ -173,6 +174,7 @@ export default function About() {
               <p className="story__text creed__intro">
                 The foundations under everything we do on a Sunday and through the week.
               </p>
+              <CreedScroll total={BELIEFS.length} />
             </Reveal>
           </div>
           <ol className="creed__list">
