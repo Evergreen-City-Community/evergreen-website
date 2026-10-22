@@ -36,7 +36,7 @@ export default async function Messages() {
         <section className="msgs-hero">
           <Reveal className="msgs-hero__content">
             <p className="eyebrow">Messages</p>
-            <h1 className="h-xl msgs-hero__title">
+            <h1 data-fish="hero" className="h-xl msgs-hero__title">
               Listen <span className="accent">before</span> you visit
             </h1>
             <p className="lead msgs-hero__lead">
@@ -53,7 +53,7 @@ export default async function Messages() {
         <section className="picks">
           <Reveal className="picks__head">
             <p className="eyebrow">Start here</p>
-            <h2 className="h-lg">
+            <h2 data-fish="picks" className="h-lg">
               Three good <span className="accent">first listens</span>
             </h2>
           </Reveal>
@@ -65,7 +65,7 @@ export default async function Messages() {
           <section className="latest">
             <Reveal className="latest__head">
               <p className="eyebrow">Watch</p>
-              <h2 className="h-section">From our YouTube</h2>
+              <h2 data-fish="latest" className="h-section">From our YouTube</h2>
             </Reveal>
             <Reveal className="latest__featured" delay={80}>
               <VideoCard {...featured} featured />
@@ -91,7 +91,7 @@ export default async function Messages() {
         <section className="podcast">
           <Reveal className="podcast__body">
             <p className="eyebrow">Listen</p>
-            <h2 className="h-section podcast__title">On the go, on Spotify</h2>
+            <h2 data-fish="podcast" className="h-section podcast__title">On the go, on Spotify</h2>
             <p className="story__text">
               Messages from Ps. Presty and the ECC team as a podcast. Press play here, or follow the show and keep it
               for the commute.
@@ -109,7 +109,7 @@ export default async function Messages() {
         <section className="heads-up">
           <Reveal className="heads-up__card">
             <p className="eyebrow">Rather hear it in the room?</p>
-            <h2 className="h-lg heads-up__title">
+            <h2 data-fish="room" className="h-lg heads-up__title">
               Every Sunday, <span className="accent">10:30 AM.</span> Come as you are.
             </h2>
             <p className="lead heads-up__lead">No sign-up, no pressure. Just show up — we’d love to meet you.</p>

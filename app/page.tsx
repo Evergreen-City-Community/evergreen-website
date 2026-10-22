@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import BgVideo from "@/components/BgVideo";
 import ChatIcon from "@/components/ChatIcon";
-import FishFlock from "@/components/FishFlock";
 import CheckOut from "@/components/CheckOut";
 import LivingRing from "@/components/LivingRing";
 import MessageCards from "@/components/MessageCards";
@@ -63,7 +62,6 @@ export default function Home() {
     <>
       <Nav mode="fixed" />
       <MouseTrail />
-      <FishFlock />
       <main className="page">
         <section className="hero">
           <BgVideo />

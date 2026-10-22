@@ -99,7 +99,7 @@ export default function Location() {
           <WavyGrid />
           <Reveal className="visit-hero__content">
             <p className="eyebrow">Plan a visit</p>
-            <h1 className="h-xl visit-hero__title">
+            <h1 data-fish="hero" className="h-xl visit-hero__title">
               Your first Sunday, <span className="accent">sorted.</span>
             </h1>
             <p className="lead visit-hero__lead">
@@ -138,7 +138,7 @@ export default function Location() {
           <div className="morning__body">
             <Reveal className="morning__head">
               <p className="eyebrow">What to expect</p>
-              <h2 className="h-section">Your morning, step by step</h2>
+              <h2 data-fish="morning" className="h-section">Your morning, step by step</h2>
             </Reveal>
             <ol className="morning__steps">
               {MORNING.map((s, i) => (
@@ -158,7 +158,7 @@ export default function Location() {
         <section className="getting-here" id="map">
           <Reveal className="getting-here__head">
             <p className="eyebrow">Getting here</p>
-            <h2 className="h-section">Find us in Kazhakootam</h2>
+            <h2 data-fish="map" className="h-section">Find us in Kazhakootam</h2>
           </Reveal>
           <Reveal className="getting-here__map" delay={80}>
             <iframe
@@ -186,7 +186,7 @@ export default function Location() {
         <section className="faq-section" id="faq">
           <Reveal className="faq-section__head">
             <p className="eyebrow">First time?</p>
-            <h2 className="h-section">Good questions</h2>
+            <h2 data-fish="faq" className="h-section">Good questions</h2>
           </Reveal>
           <Reveal delay={100}>
             <FAQ items={QUESTIONS} />
@@ -197,7 +197,7 @@ export default function Location() {
         <section className="heads-up">
           <Reveal className="heads-up__card">
             <p className="eyebrow">Coming this Sunday?</p>
-            <h2 className="h-lg heads-up__title">
+            <h2 data-fish="heads-up" className="h-lg heads-up__title">
               Tell us, and someone will <span className="accent">look out for you.</span>
             </h2>
             <p className="lead heads-up__lead">

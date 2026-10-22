@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import BgMusic from "@/components/BgMusic";
+import FishFlock from "@/components/FishFlock";
 import Footer from "@/components/Footer";
 import Welcome, { WELCOME_SCRIPT } from "@/components/Welcome";
 import { SITE_URL } from "@/lib/site";
@@ -65,6 +66,7 @@ export default function RootLayout({
         </noscript>
         {children}
         <Footer />
+        <FishFlock />
         <BgMusic />
         <Welcome />
       </body>

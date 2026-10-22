@@ -81,7 +81,7 @@ export default function About() {
           <BgVideo />
           <Reveal className="hero__content about-hero__content">
             <p className="eyebrow">About ECC</p>
-            <h1 className="h-xl about-hero__title">
+            <h1 data-fish="hero" className="h-xl about-hero__title">
               Raising <span className="accent">Generations.</span>
               <br />
               Transforming <span className="accent">Communities.</span>
@@ -98,7 +98,7 @@ export default function About() {
         <section className="identity">
           <Reveal className="identity__head">
             <p className="eyebrow">Who we are</p>
-            <h2 className="h-lg">
+            <h2 data-fish="who" className="h-lg">
               Three phrases <span className="accent">explain us</span>
             </h2>
           </Reveal>
@@ -121,7 +121,7 @@ export default function About() {
           </Reveal>
           <Reveal className="story__body" delay={120}>
             <p className="eyebrow">Our story · Since {CHURCH.founded}</p>
-            <h2 className="h-section story__title">A church that feels like home first</h2>
+            <h2 data-fish="story" className="h-section story__title">A church that feels like home first</h2>
             <p className="story__text">
               Evergreen City Community was founded in {CHURCH.founded} by Presty Varghese and Sheba Mathew with a simple
               conviction: the church should feel like home before it feels like church.
@@ -140,7 +140,7 @@ export default function About() {
           </Reveal>
           <Reveal className="pastors__body" delay={120}>
             <p className="eyebrow">Lead pastors</p>
-            <h2 className="h-section pastors__title">Presty Varghese &amp; Sheba Mathew</h2>
+            <h2 data-fish="pastors" className="h-section pastors__title">Presty Varghese &amp; Sheba Mathew</h2>
             <p className="story__text">
               Presty and Sheba serve as the lead pastors of Evergreen City Community, guiding the church with vision and
               compassion. Their journey is marked by a commitment to faithfulness and transformation.
@@ -156,7 +156,7 @@ export default function About() {
         <section className="vision">
           <Reveal className="vision__head">
             <p className="eyebrow">Hear it from us</p>
-            <h2 className="h-lg">
+            <h2 data-fish="vision" className="h-lg">
               The <span className="accent">ECC vision</span>, in a few minutes
             </h2>
           </Reveal>
@@ -170,7 +170,7 @@ export default function About() {
           <div className="creed__aside">
             <Reveal className="creed__sticky">
               <p className="eyebrow creed__eyebrow">What we believe</p>
-              <h2 className="h-section creed__title">Seven things we hold to</h2>
+              <h2 data-fish="creed" className="h-section creed__title">Seven things we hold to</h2>
               <p className="story__text creed__intro">
                 The foundations under everything we do on a Sunday and through the week.
               </p>
@@ -194,7 +194,7 @@ export default function About() {
         <section className="life">
           <Reveal className="life__head">
             <p className="eyebrow">Life at ECC</p>
-            <h2 className="h-section">Sundays, up close</h2>
+            <h2 data-fish="life" className="h-section">Sundays, up close</h2>
           </Reveal>
           <div className="life__grid">
             {LIFE.map((p, i) => (

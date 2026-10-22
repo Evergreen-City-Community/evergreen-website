@@ -1,15 +1,17 @@
 "use client";
 
-// A small flock of fish that lives on the home page. One leader swims down
-// from the hero ring to "Welcome", then on to whichever section is on screen,
-// touring the four Sunday steps when the timeline is in view. The others
-// follow in loose formation. Move the cursor near them and they scatter;
+// A small flock of fish that lives on every page. On the home page one leader
+// swims down from the hero ring to "Welcome"; on the other pages it drops in
+// beside the first heading. Then it moves on to whichever section is on
+// screen, touring the four Sunday steps when that timeline is in view. The
+// others follow in loose formation. Move the cursor near them and they scatter;
 // grab the leader and drop it somewhere and the rest come along.
 //
 // Sections opt in with data-fish="<name>" on the element the fish should
 // visit. data-fish="tour" marks a list whose .timeline__dot children are
 // visited one after another.
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 type Fish = { x: number; y: number; vx: number; vy: number; a: number; phase: number; color: string; scale: number };
@@ -28,6 +30,11 @@ const SLOTS = [
 export default function FishFlock() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
+  const isHome = usePathname() === "/";
+  const isHomeRef = useRef(isHome);
+  useEffect(() => {
+    isHomeRef.current = isHome;
+  }, [isHome]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -86,7 +93,8 @@ export default function FishFlock() {
     type Anchor = { el: HTMLElement; name: string; dots: HTMLElement[] };
     let anchors: Anchor[] = [];
     const collect = () => {
-      anchors = Array.from(document.querySelectorAll<HTMLElement>("[data-fish]")).map((el) => ({
+      // Only page content: the ring's own SVG fish also carry data-fish.
+      anchors = Array.from(document.querySelectorAll<HTMLElement>("[data-fish]:not(svg *)")).map((el) => ({
         el,
         name: el.dataset.fish || "",
         dots: el.dataset.fish === "tour" ? Array.from(el.querySelectorAll<HTMLElement>(".timeline__dot")) : [],
@@ -101,16 +109,25 @@ export default function FishFlock() {
     const OFF = () => ({ x: vw / 2, y: -120 }); // out of sight above, where the ring is
     let target = OFF();
 
+    // The box around the words themselves. A centred heading's element spans
+    // the whole column, so use the text range to park the fish beside the text.
+    const range = document.createRange();
+    const textRect = (el: HTMLElement): DOMRect => {
+      range.selectNodeContents(el);
+      const r = range.getBoundingClientRect();
+      return r.width > 0 && r.height > 0 ? r : el.getBoundingClientRect();
+    };
+
     const pointFor = (r: DOMRect, side: "left" | "right") => {
       const margin = 26;
       if (side === "left") return { x: Math.max(margin, r.left - 22), y: r.top + r.height * 0.4 };
-      if (r.right + 30 > vw - margin) return { x: Math.min(vw - margin, r.right - 10), y: Math.max(70, r.top - 16) };
-      return { x: r.right + 24, y: r.top + r.height * 0.35 };
+      if (r.right + 62 > vw - margin) return { x: Math.min(vw - margin, r.right - 10), y: Math.max(70, r.top - 16) };
+      return { x: r.right + 56, y: r.top + r.height * 0.35 };
     };
 
     const chooseTarget = (now: number) => {
-      // Stay out of sight while the hero fills the screen.
-      if (window.scrollY < vh * 0.35) {
+      // Home only: stay out of sight while the hero ring fills the screen.
+      if (isHomeRef.current && window.scrollY < vh * 0.35) {
         active = null;
         target = OFF();
         return;
@@ -138,7 +155,7 @@ export default function FishFlock() {
         tourIndex = 0;
         tourAt = now;
       }
-      const r = active.el.getBoundingClientRect();
+      const r = active.dots.length ? active.el.getBoundingClientRect() : textRect(active.el);
       if (active.dots.length) {
         // Tour: visit each step's dot in turn.
         if (now - tourAt > 1700) {

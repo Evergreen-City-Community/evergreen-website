@@ -64,7 +64,7 @@ export default function Give() {
           <MeshBackground className="give__mesh" />
           <Reveal className="give-hero__content">
             <p className="eyebrow">Give</p>
-            <h1 className="h-xl give-hero__title">
+            <h1 data-fish="hero" className="h-xl give-hero__title">
               <span className="accent">Partner</span> in what God is doing here
             </h1>
             <p className="lead give-hero__lead">
@@ -135,7 +135,7 @@ export default function Give() {
         <section className="impact">
           <Reveal className="impact__head">
             <p className="eyebrow">Where it goes</p>
-            <h2 className="h-lg">
+            <h2 data-fish="impact" className="h-lg">
               Three things your giving <span className="accent">keeps alive</span>
             </h2>
           </Reveal>
@@ -153,7 +153,7 @@ export default function Give() {
         <section className="faq-section">
           <Reveal className="faq-section__head">
             <p className="eyebrow">Good to know</p>
-            <h2 className="h-section">Questions about giving</h2>
+            <h2 data-fish="faq" className="h-section">Questions about giving</h2>
           </Reveal>
           <Reveal delay={100}>
             <FAQ items={QUESTIONS} />
