@@ -7,6 +7,8 @@ import s from "./next.module.css";
 
 // A short, phone-sized page for the QR code shown at the end of the service.
 // Keep the address (/next) stable: it is printed on cards and shown on screen.
+// The button sends people to ECC's Google Form: paste the form's link into
+// NEXT_STEPS.formUrl in lib/site.ts when ECC sends it.
 export const metadata: Metadata = {
   title: "Your next step · Evergreen City Community",
   description:
@@ -14,15 +16,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/** A docs.google.com form can sit inside the page; a forms.gle short link cannot. */
-function embedUrl(url: string): string | null {
-  if (!/^https:\/\/docs\.google\.com\/forms\//.test(url)) return null;
-  return url + (url.includes("?") ? "&" : "?") + "embedded=true";
-}
-
 export default function NextSteps() {
   const { formUrl, followUpWithin } = NEXT_STEPS;
-  const embed = formUrl ? embedUrl(formUrl) : null;
 
   return (
     <>
@@ -40,38 +35,28 @@ export default function NextSteps() {
           </p>
 
           {formUrl ? (
-            <>
-              {embed && (
-                <div className={s.form}>
-                  <iframe
-                    src={embed}
-                    title="Next steps sign-up form"
-                    loading="eager"
-                  >
-                    Loading…
-                  </iframe>
-                </div>
-              )}
-              <a
-                className={`pill pill--solid ${s.open}`}
-                href={formUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {embed
-                  ? "Trouble with the form? Open it in a new tab"
-                  : "Open the sign-up form"}
-              </a>
-            </>
+            <a
+              className={`pill pill--solid ${s.open}`}
+              href={formUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open the sign-up form →
+            </a>
           ) : SHOW_PLACEHOLDERS ? (
-            <div className={s.placeholder}>
-              <b>Placeholder</b>
-              <p>
-                The sign-up form goes here. Paste the Google Form link into{" "}
-                <code>NEXT_STEPS.formUrl</code> in <code>lib/site.ts</code> and
-                it appears on this page.
+            <>
+              {/* Until ECC sends the Google Form link, previews show the button switched off. */}
+              <span
+                className={`pill pill--solid ${s.open} ${s.off}`}
+                aria-disabled="true"
+              >
+                Open the sign-up form →
+              </span>
+              <p className={s.hint}>
+                Placeholder: this button opens ECC’s Google Form once its link
+                is added in lib/site.ts.
               </p>
-            </div>
+            </>
           ) : (
             <div className={s.soon}>
               <p>

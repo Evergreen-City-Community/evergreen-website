@@ -32,50 +32,24 @@
   font-size: 17px;
   line-height: 1.5;
 }
-.form {
-  width: 100%;
-  margin-top: 8px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid var(--line);
-}
-.form iframe {
-  display: block;
-  width: 100%;
-  height: max(760px, 78svh);
-  border: 0;
-}
 .open {
-  margin-top: 4px;
+  margin-top: 6px;
   height: auto;
-  min-height: 46px;
-  padding: 12px 22px;
+  min-height: 56px;
+  padding: 14px 30px;
+  font-size: 17px;
   white-space: normal;
 }
-.placeholder {
-  width: 100%;
-  margin-top: 8px;
-  padding: 26px 22px;
-  border-radius: 20px;
-  border: 1px dashed rgba(255, 200, 80, 0.55);
-  background: rgba(255, 200, 80, 0.05);
+.off {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: var(--turquoise);
 }
-.placeholder b {
+.hint {
+  margin: 0;
   color: rgb(255, 205, 100);
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.placeholder p {
-  margin: 10px 0 0;
-  color: var(--ink-soft);
-  font-size: 15px;
-  line-height: 1.5;
-}
-.placeholder code {
-  color: #fff;
   font-size: 13px;
+  line-height: 1.5;
 }
 .soon {
   width: 100%;

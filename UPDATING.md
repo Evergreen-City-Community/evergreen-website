@@ -15,7 +15,7 @@ content is added.
 | Home "Start here" + Messages first listens | `lib/listen.ts` | Change the Spotify episode links and the featured video. |
 | Spotify player (Messages) | `LATEST_EPISODE` in `lib/listen.ts` | Paste the newest episode id. |
 | Recent videos (Messages) | `lib/recent-videos.ts` | Paste a YouTube link and a title at the top of the list. Keep it short and recent. |
-| Next Steps form (/next) | `NEXT_STEPS.formUrl` in `lib/site.ts` | Paste the Google Form link. |
+| Next Steps form (/next) | `NEXT_STEPS.formUrl` in `lib/site.ts` | Paste the Google Form link; the page's button opens it. |
 | WhatsApp number | `LINKS.whatsapp` in `lib/site.ts` | e.g. `https://wa.me/91XXXXXXXXXX` |
 | Play / Fishers of Men games | `PLAY_ENABLED` in `lib/flags.ts` (env `NEXT_PUBLIC_PLAY_ENABLED=1`) | Off: hidden and kept out of search. On: Home section, footer link and The NET credit return. |
 

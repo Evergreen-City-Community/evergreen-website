@@ -22,8 +22,8 @@ export const FAITH_STATEMENT = { pdf: "/docs/ecc-faith-statement.pdf", ready: fa
 
 /**
  * The Next Steps sign-up (the /next page, which the Sunday QR code opens).
- * Paste the Google Form link here once it exists. A docs.google.com/forms/... link is
- * shown on the page itself; a forms.gle short link can only be opened in a new tab.
+ * The page has one button that opens ECC's Google Form: paste the form's link
+ * here when ECC sends it (it can be a forms.gle or docs.google.com link).
  */
 export const NEXT_STEPS = {
   formUrl: "",
