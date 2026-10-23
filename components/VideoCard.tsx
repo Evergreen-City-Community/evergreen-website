@@ -4,11 +4,13 @@
 
 import { useState } from "react";
 
-type Props = { id: string; title: string; published: string; featured?: boolean };
+type Props = { id: string; title: string; published?: string; featured?: boolean };
 
 export default function VideoCard({ id, title, published, featured = false }: Props) {
   const [playing, setPlaying] = useState(false);
-  const date = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" }).format(new Date(published));
+  const date = published
+    ? new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" }).format(new Date(published))
+    : "";
   const thumb = featured ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg` : `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 
   return (
@@ -35,7 +37,7 @@ export default function VideoCard({ id, title, published, featured = false }: Pr
       </div>
       <div className="vcard__meta">
         <h3 className="vcard__title">{title}</h3>
-        <p className="vcard__date">{date}</p>
+        {date && <p className="vcard__date">{date}</p>}
       </div>
     </article>
   );

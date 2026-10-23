@@ -10,11 +10,13 @@ import Nav from "@/components/Nav";
 import PhotoMarquee, { type Photo } from "@/components/PhotoMarquee";
 import NextSunday from "@/components/NextSunday";
 import SwipeButton from "@/components/SwipeButton";
-import Testimonies from "@/components/Testimonies";
+import Stories from "@/components/Stories";
 import TiltCard from "@/components/TiltCard";
 import WelcomeText from "@/components/WelcomeText";
 import PoweredByNet from "@/components/fishers/PoweredByNet";
 import { GAMES } from "@/lib/fishers/games";
+import { PLAY_ENABLED } from "@/lib/flags";
+import { HOME_PICKS } from "@/lib/listen";
 import { CHURCH, LINKS } from "@/lib/site";
 import Reveal from "@/components/Reveal";
 
@@ -126,7 +128,7 @@ export default function Home() {
           </Reveal>
         </section>
 
-        <Testimonies />
+        <Stories />
 
         <section className="sunday">
           <Reveal as="div" className="sunday__head">
@@ -199,49 +201,53 @@ export default function Home() {
         <section className="messages-teaser">
           <div className="messages-teaser__main">
             <Reveal as="div" className="stack-10">
-              <p className="eyebrow">Messages</p>
+              <p className="eyebrow">Start here</p>
               <h2 className="h-xl" data-fish="messages">
-                Every week, a message
+                Hear us
                 <br />
-                rooted in <span className="accent">Christ</span>
+                <span className="accent">before</span> you visit
               </h2>
-              <p className="lead messages-teaser__lead">Not ready to walk in yet? Start here.</p>
+              <p className="lead messages-teaser__lead">Not ready to walk in yet? Start with one of these.</p>
             </Reveal>
-            <MessageCards />
+            <MessageCards items={HOME_PICKS} />
           </div>
           <Reveal as="div" className="btn-row btn-row--stack-phone">
-            <SwipeButton label="Watch on YouTube →" href={LINKS.youtube} scheme="outlineRed" />
-            <SwipeButton label="Listen on Spotify →" href={LINKS.spotify} scheme="outlineGreen" />
+            <Link className="pill pill--solid" href="/messages">
+              More on the Messages page →
+            </Link>
           </Reveal>
         </section>
 
-        <section className="play-teaser">
-          <Reveal as="div" className="stack-10 play-teaser__head">
-            <p className="eyebrow">Play</p>
-            <h2 className="h-xl" data-fish="play">
-              Take a break.
-              <br />
-              <span className="accent">Fish</span> for a while.
-            </h2>
-            <p className="lead play-teaser__lead">Five little games and a scoreboard, with a verse to take home each time.</p>
-          </Reveal>
-          <Reveal as="ul" className="play-teaser__games" delay={80}>
-            {GAMES.map((g) => (
-              <li key={g.slug}>
-                <Link href={`/fishers/${g.slug}`} className="play-chip">
-                  <span>{g.title}</span>
-                  <small>{g.ref}</small>
-                </Link>
-              </li>
-            ))}
-          </Reveal>
-          <Reveal as="div" className="btn-row btn-row--stack-phone" delay={140}>
-            <SwipeButton label="Play Fishers of Men →" href="/fishers" scheme="outlineGreen" />
-          </Reveal>
-          <Reveal as="div" delay={200}>
-            <PoweredByNet />
-          </Reveal>
-        </section>
+        {/* Paused (ECC brief, 23 Oct): flip PLAY_ENABLED in lib/flags.ts to bring it back. */}
+        {PLAY_ENABLED && (
+          <section className="play-teaser">
+            <Reveal as="div" className="stack-10 play-teaser__head">
+              <p className="eyebrow">Play</p>
+              <h2 className="h-xl" data-fish="play">
+                Take a break.
+                <br />
+                <span className="accent">Fish</span> for a while.
+              </h2>
+              <p className="lead play-teaser__lead">Five little games and a scoreboard, with a verse to take home each time.</p>
+            </Reveal>
+            <Reveal as="ul" className="play-teaser__games" delay={80}>
+              {GAMES.map((g) => (
+                <li key={g.slug}>
+                  <Link href={`/fishers/${g.slug}`} className="play-chip">
+                    <span>{g.title}</span>
+                    <small>{g.ref}</small>
+                  </Link>
+                </li>
+              ))}
+            </Reveal>
+            <Reveal as="div" className="btn-row btn-row--stack-phone" delay={140}>
+              <SwipeButton label="Play Fishers of Men →" href="/fishers" scheme="outlineGreen" />
+            </Reveal>
+            <Reveal as="div" delay={200}>
+              <PoweredByNet />
+            </Reveal>
+          </section>
+        )}
 
         <CheckOut />
       </main>

@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function SpotifyEmbed({ showId, title }: { showId: string; title: string }) {
+export default function SpotifyEmbed({ id, kind = "show", title }: { id: string; kind?: "show" | "episode"; title: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [load, setLoad] = useState(false);
 
@@ -29,7 +29,7 @@ export default function SpotifyEmbed({ showId, title }: { showId: string; title:
     <div className="spotify" ref={ref}>
       {load ? (
         <iframe
-          src={`https://open.spotify.com/embed/show/${showId}?utm_source=generator&theme=0`}
+          src={`https://open.spotify.com/embed/${kind}/${id}?utm_source=generator&theme=0`}
           title={title}
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy"

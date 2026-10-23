@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PLAY_ENABLED } from "@/lib/flags";
 import { CHURCH, LINKS } from "@/lib/site";
 import Logo from "./Logo";
 
@@ -13,7 +14,7 @@ const COLUMNS: { title: string; items: Item[] }[] = [
       { label: "Plan a visit", href: "/location" },
       { label: "Messages", href: "/messages" },
       { label: "Give", href: "/give" },
-      { label: "Play: Fishers of Men", href: "/fishers" },
+      ...(PLAY_ENABLED ? [{ label: "Play: Fishers of Men", href: "/fishers" }] : []),
     ],
   },
   {
@@ -35,7 +36,7 @@ export default function Footer() {
           <div className="footer__brand">
             <Logo className="footer__logo" />
             <p className="footer__name">{CHURCH.name}</p>
-            <p className="footer__tag">In Keralam as it is in Heaven</p>
+            <p className="footer__tag">{CHURCH.tagline}</p>
           </div>
 
           <div className="footer__col footer__col--visit">

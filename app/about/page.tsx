@@ -4,11 +4,13 @@ import Image from "next/image";
 import BgVideo from "@/components/BgVideo";
 import CheckOut from "@/components/CheckOut";
 import LivingRing from "@/components/LivingRing";
+import PhotoMarquee, { type Photo } from "@/components/PhotoMarquee";
 import Nav from "@/components/Nav";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import YouTubeLite from "@/components/YouTubeLite";
-import { CHURCH } from "@/lib/site";
+import { SHOW_PLACEHOLDERS } from "@/lib/flags";
+import { CHURCH, FAITH_STATEMENT } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About · Evergreen City Community, Trivandrum",
@@ -65,11 +67,75 @@ const BELIEFS = [
   },
 ];
 
-const LIFE = [
-  { src: "/images/community/worship-3.jpg", alt: "Worship with hands raised", portrait: true },
-  { src: "/images/community/greeting.jpg", alt: "People chatting before the service" },
-  { src: "/images/community/kids.jpg", alt: "Children playing together", portrait: true },
-];
+// The Life at ECC strip. Add a photo by dropping it into /public/images/community/
+// and adding a line here (caption is optional). ECC is sending photos of life
+// groups, men's fellowship and other ministries; until then clearly marked
+// placeholders hold their place on previews (and are left out of the live site).
+const LIFE: Photo[] = [
+  {
+    src: "/images/community/worship-1.jpg",
+    alt: "A man worshipping with hands raised",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+  {
+    src: "/images/community/greeting.jpg",
+    alt: "People chatting in a circle before the service",
+    caption: "Before the service",
+  },
+  {
+    src: "/images/community/worship-2.jpg",
+    alt: "People singing during worship",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+  {
+    src: "/images/community/fellowship.jpg",
+    alt: "Friends laughing together after church",
+    caption: "Fellowship",
+  },
+  {
+    alt: "Life groups",
+    portrait: true,
+    caption: "Life groups",
+    placeholder: true,
+  },
+  {
+    src: "/images/community/kids.jpg",
+    alt: "Children playing together",
+    portrait: true,
+    caption: "Kids at church",
+  },
+  {
+    src: "/images/community/preaching.jpg",
+    alt: "Ps. Presty leading worship",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+  {
+    src: "/images/community/friends.jpg",
+    alt: "Two friends smiling at the camera",
+    caption: "Friends",
+  },
+  { alt: "Men's fellowship", caption: "Men’s fellowship", placeholder: true },
+  {
+    src: "/images/community/worship-4.jpg",
+    alt: "Worship on a Sunday morning",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+  {
+    src: "/images/community/group.jpg",
+    alt: "The Evergreen City Community at Christmas",
+    caption: "Christmas together",
+  },
+  {
+    src: "/images/community/worship-5.jpg",
+    alt: "A young man worshipping",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+].filter((p) => !p.placeholder || SHOW_PLACEHOLDERS);
 
 export default function About() {
   return (
@@ -87,9 +153,16 @@ export default function About() {
               Transforming <span className="accent">Communities.</span>
             </h1>
             <p className="lead about-hero__lead">
-              A multicultural, contemporary, Spirit-led church in {CHURCH.area}, since {CHURCH.founded}.
+              A multicultural, contemporary, Spirit-led church in {CHURCH.area},
+              since {CHURCH.founded}.
             </p>
-            <Image src="/images/signature.svg" alt="Evergreen" width={120} height={44} className="who__signature" />
+            <Image
+              src="/images/signature.svg"
+              alt="Evergreen"
+              width={120}
+              height={44}
+              className="who__signature"
+            />
           </Reveal>
           <LivingRing />
         </section>
@@ -104,8 +177,15 @@ export default function About() {
           </Reveal>
           <ol className="identity__list">
             {IDENTITY.map((item, i) => (
-              <Reveal as="li" className="identity__item" key={item.title} delay={i * 110}>
-                <span className="identity__num">{String(i + 1).padStart(2, "0")}</span>
+              <Reveal
+                as="li"
+                className="identity__item"
+                key={item.title}
+                delay={i * 110}
+              >
+                <span className="identity__num">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <p className="identity__label">{item.label}</p>
                 <h3 className="identity__title">{item.title}</h3>
                 <p className="identity__text">{item.text}</p>
@@ -117,18 +197,28 @@ export default function About() {
         {/* 3 — Story */}
         <section className="story">
           <Reveal as="figure" className="story__photo">
-            <Image src="/images/community/preaching.jpg" alt="Pastor Presty preaching on a Sunday" fill sizes="(max-width: 809px) 100vw, 420px" style={{ objectFit: "cover" }} />
+            <Image
+              src="/images/community/preaching.jpg"
+              alt="Pastor Presty preaching on a Sunday"
+              fill
+              sizes="(max-width: 809px) 100vw, 420px"
+              style={{ objectFit: "cover" }}
+            />
           </Reveal>
           <Reveal className="story__body" delay={120}>
             <p className="eyebrow">Our story · Since {CHURCH.founded}</p>
-            <h2 data-fish="story" className="h-section story__title">A church that feels like home first</h2>
+            <h2 data-fish="story" className="h-section story__title">
+              A church that feels like home first
+            </h2>
             <p className="story__text">
-              Evergreen City Community was founded in {CHURCH.founded} by Presty Varghese and Sheba Mathew with a simple
-              conviction: the church should feel like home before it feels like church.
+              Evergreen City Community was founded in {CHURCH.founded} by Presty
+              Varghese and Sheba Mathew with a simple conviction: the church
+              should feel like home before it feels like church.
             </p>
             <p className="story__text">
-              Since then, ECC has grown into a multicultural, contemporary faith community in Trivandrum committed to
-              raising generations and transforming communities.
+              Since then, ECC has grown into a multicultural, contemporary faith
+              community in Trivandrum committed to raising generations and
+              transforming communities.
             </p>
           </Reveal>
         </section>
@@ -136,18 +226,26 @@ export default function About() {
         {/* 4 — Pastors */}
         <section className="pastors">
           <Reveal className="pastors__photo-wrap">
-            <TiltCard src="/images/pastors.jpg" alt="Presty Varghese and Sheba Mathew, lead pastors" className="pastors__photo" />
+            <TiltCard
+              src="/images/pastors.jpg"
+              alt="Presty Varghese and Sheba Mathew, lead pastors"
+              className="pastors__photo"
+            />
           </Reveal>
           <Reveal className="pastors__body" delay={120}>
             <p className="eyebrow">Lead pastors</p>
-            <h2 data-fish="pastors" className="h-section pastors__title">Presty Varghese &amp; Sheba Mathew</h2>
+            <h2 data-fish="pastors" className="h-section pastors__title">
+              Presty Varghese &amp; Sheba Mathew
+            </h2>
             <p className="story__text">
-              Presty and Sheba serve as the lead pastors of Evergreen City Community, guiding the church with vision and
-              compassion. Their journey is marked by a commitment to faithfulness and transformation.
+              Presty and Sheba serve as the lead pastors of Evergreen City
+              Community, guiding the church with vision and compassion. Their
+              journey is marked by a commitment to faithfulness and
+              transformation.
             </p>
             <p className="story__text">
-              Since founding ECC in {CHURCH.founded}, they have nurtured a community where all are welcome to find
-              belonging and purpose.
+              Since founding ECC in {CHURCH.founded}, they have nurtured a
+              community where all are welcome to find belonging and purpose.
             </p>
           </Reveal>
         </section>
@@ -170,39 +268,68 @@ export default function About() {
           <div className="creed__aside">
             <Reveal className="creed__sticky">
               <p className="eyebrow creed__eyebrow">What we believe</p>
-              <h2 data-fish="creed" className="h-section creed__title">Seven things we hold to</h2>
+              <h2 data-fish="creed" className="h-section creed__title">
+                Seven things we hold to
+              </h2>
               <p className="story__text creed__intro">
-                The foundations under everything we do on a Sunday and through the week.
+                The foundations under everything we do on a Sunday and through
+                the week.
               </p>
               <CreedScroll total={BELIEFS.length} />
             </Reveal>
           </div>
-          <ol className="creed__list">
-            {BELIEFS.map((b, i) => (
-              <Reveal as="li" className="creed__item" key={b.title} delay={40}>
-                <span className="creed__num">{String(i + 1).padStart(2, "0")}</span>
-                <div>
-                  <p className="creed__name">{b.title}</p>
-                  <p className="body-muted creed__text">{b.text}</p>
-                </div>
+          <div className="creed__main">
+            <ol className="creed__list">
+              {BELIEFS.map((b, i) => (
+                <Reveal
+                  as="li"
+                  className="creed__item"
+                  key={b.title}
+                  delay={40}
+                >
+                  <span className="creed__num">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <p className="creed__name">{b.title}</p>
+                    <p className="body-muted creed__text">{b.text}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </ol>
+            {(FAITH_STATEMENT.ready || SHOW_PLACEHOLDERS) && (
+              <Reveal className="creed__faith">
+                <p className="creed__faith-line">
+                  Want the detail? Read our full faith statement.
+                </p>
+                <a
+                  className="pill pill--solid"
+                  href={FAITH_STATEMENT.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read our full faith statement
+                  <span className="creed__pdf">PDF</span>
+                </a>
+                {!FAITH_STATEMENT.ready && (
+                  <p className="creed__ph">
+                    Placeholder PDF: ECC to send the real one
+                  </p>
+                )}
               </Reveal>
-            ))}
-          </ol>
+            )}
+          </div>
         </section>
 
-        {/* 7 — Life at ECC */}
+        {/* 7 — Life at ECC: a slow, looping strip. Pauses on hover or touch, still for reduced motion. */}
         <section className="life">
           <Reveal className="life__head">
-            <p className="eyebrow">Life at ECC</p>
-            <h2 data-fish="life" className="h-section">Sundays, up close</h2>
+            <p className="eyebrow">Sundays, groups and more</p>
+            <h2 data-fish="life" className="h-section">
+              Life at ECC
+            </h2>
           </Reveal>
-          <div className="life__grid">
-            {LIFE.map((p, i) => (
-              <Reveal as="figure" className={`life__photo${p.portrait ? " life__photo--portrait" : ""}`} key={p.src} delay={i * 100}>
-                <Image src={p.src} alt={p.alt} fill sizes="(max-width: 809px) 100vw, 33vw" style={{ objectFit: "cover" }} />
-              </Reveal>
-            ))}
-          </div>
+          <PhotoMarquee photos={LIFE} pauseOnHover />
         </section>
 
         <CheckOut />

@@ -85,13 +85,15 @@ export default function Welcome() {
         <p className="eyebrow gate__eyebrow">Welcome home</p>
         <h1 id="gate-title" className="gate__title">
           <span className="gate__line">
-            <span style={{ animationDelay: "0.25s" }}>In</span> <span style={{ animationDelay: "0.4s" }}>Keralam</span>
+            <span style={{ animationDelay: "0.25s" }}>Raising</span>{" "}
+            <span className="accent" style={{ animationDelay: "0.45s" }}>
+              Generations.
+            </span>
           </span>
           <span className="gate__line">
-            <span style={{ animationDelay: "0.6s" }}>as</span> <span style={{ animationDelay: "0.72s" }}>it</span>{" "}
-            <span style={{ animationDelay: "0.84s" }}>is</span> <span style={{ animationDelay: "0.96s" }}>in</span>{" "}
-            <span className="accent" style={{ animationDelay: "1.15s" }}>
-              Heaven.
+            <span style={{ animationDelay: "0.8s" }}>Transforming</span>{" "}
+            <span className="accent" style={{ animationDelay: "1.05s" }}>
+              Communities.
             </span>
           </span>
         </h1>

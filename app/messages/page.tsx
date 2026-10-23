@@ -6,8 +6,9 @@ import SpotifyEmbed from "@/components/SpotifyEmbed";
 import SwipeButton from "@/components/SwipeButton";
 import VideoCard from "@/components/VideoCard";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { FEATURED_VIDEO, LATEST_EPISODE, START_HERE } from "@/lib/listen";
+import { recentVideos } from "@/lib/recent-videos";
 import { LINKS } from "@/lib/site";
-import { getRecentVideos, isMessage } from "@/lib/youtube";
 
 export const metadata: Metadata = {
   title: "Watch & Listen Online · Evergreen City Community",
@@ -15,18 +16,10 @@ export const metadata: Metadata = {
     "Can't join us in person? Stream messages, worship and stories from Evergreen City Community Church on YouTube and Spotify — anytime, anywhere.",
 };
 
-const SPOTIFY_SHOW_ID = "2rcUdvCFUuTLzLPr24cR33";
-// "Jam sessions Episode 2 | That's Who I Praise". Change or clear to un-pin.
-const FEATURED_VIDEO_ID = "Z9Xv9PXLs5c";
-
-export default async function Messages() {
-  const videos = await getRecentVideos(12);
-  // Sermons and services first, then worship covers and shorts.
-  const ordered = [...videos.filter(isMessage), ...videos.filter((v) => !isMessage(v))];
-  // Pin a chosen video as the big featured one; whatever was featured takes its place.
-  const pin = ordered.findIndex((v) => v.id === FEATURED_VIDEO_ID);
-  if (pin > 0) [ordered[0], ordered[pin]] = [ordered[pin], ordered[0]];
-  const [featured, ...rest] = ordered;
+// Rule for this page (ECC brief, 23 Oct): nothing goes on it that we can't keep
+// fresh. What it shows is chosen by hand in lib/listen.ts and lib/recent-videos.ts.
+export default function Messages() {
+  const recent = recentVideos();
 
   return (
     <>
@@ -54,36 +47,55 @@ export default async function Messages() {
           <Reveal className="picks__head">
             <p className="eyebrow">Start here</p>
             <h2 data-fish="picks" className="h-lg">
-              Three good <span className="accent">first listens</span>
+              Good <span className="accent">first listens</span>
             </h2>
           </Reveal>
-          <MessageCards />
+          <MessageCards items={START_HERE} />
         </section>
 
-        {/* 3 — Latest video */}
-        {featured && (
-          <section className="latest">
+        {/* 3 — One featured video */}
+        <section className="latest">
+          <Reveal className="latest__head">
+            <p className="eyebrow">Watch</p>
+            <h2 data-fish="latest" className="h-section">From our YouTube</h2>
+          </Reveal>
+          <Reveal className="latest__featured" delay={80}>
+            <VideoCard {...FEATURED_VIDEO} featured />
+          </Reveal>
+          <Reveal className="latest__more">
+            <a className="inline-link" href={LINKS.youtube} target="_blank" rel="noopener noreferrer">
+              All videos on YouTube →
+            </a>
+          </Reveal>
+        </section>
+
+        {/* 4 — Recent videos (a short row, updated by hand; hidden when empty) */}
+        {(recent.items.length > 0 || recent.placeholders > 0) && (
+          <section className="recent">
             <Reveal className="latest__head">
-              <p className="eyebrow">Watch</p>
-              <h2 data-fish="latest" className="h-section">From our YouTube</h2>
+              <p className="eyebrow">Recent</p>
+              <h2 className="h-section">Recent videos</h2>
             </Reveal>
-            <Reveal className="latest__featured" delay={80}>
-              <VideoCard {...featured} featured />
-            </Reveal>
-            {rest.length > 0 && (
-              <div className="vgrid">
-                {rest.slice(0, 8).map((v, i) => (
-                  <Reveal key={v.id} delay={(i % 4) * 70}>
-                    <VideoCard {...v} />
-                  </Reveal>
-                ))}
-              </div>
-            )}
-            <Reveal className="latest__more">
-              <a className="inline-link" href={LINKS.youtube} target="_blank" rel="noopener noreferrer">
-                All videos on YouTube →
-              </a>
-            </Reveal>
+            <div className="vgrid vgrid--recent">
+              {recent.items.map((v, i) => (
+                <Reveal key={v.id} delay={i * 70}>
+                  <VideoCard id={v.id} title={v.title} published={v.date} />
+                </Reveal>
+              ))}
+              {Array.from({ length: recent.placeholders }, (_, i) => (
+                <Reveal key={`ph-${i}`} delay={i * 70}>
+                  <div className="vcard vcard--placeholder">
+                    <div className="vcard__media">
+                      <span className="voice__flag">Placeholder</span>
+                    </div>
+                    <div className="vcard__meta">
+                      <h3 className="vcard__title">Recent video, e.g. the church anniversary</h3>
+                      <p className="vcard__date">ECC to send the YouTube link and title</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
           </section>
         )}
 
@@ -101,7 +113,7 @@ export default async function Messages() {
             </a>
           </Reveal>
           <Reveal className="podcast__player" delay={100}>
-            <SpotifyEmbed showId={SPOTIFY_SHOW_ID} title="Evergreen City Community on Spotify" />
+            <SpotifyEmbed kind="episode" id={LATEST_EPISODE.id} title={`Latest episode: ${LATEST_EPISODE.title}`} />
           </Reveal>
         </section>
 

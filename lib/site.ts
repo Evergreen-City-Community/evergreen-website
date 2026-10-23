@@ -3,6 +3,8 @@ export const SITE_URL = "https://evergreencitycommunity.com";
 export const CHURCH = {
   name: "Evergreen City Community",
   shortName: "ECC",
+  // Travels with the name wherever it appears as a sign-off (ECC brief, 23 Oct).
+  tagline: "Raising Generations. Transforming Communities.",
   // From the site's own metadata. Confirm the wording before launch.
   venue: "Evergreen Hall, Legacy House",
   area: "Kazhakootam, Trivandrum",
@@ -13,6 +15,19 @@ export const CHURCH = {
   founded: 2022,
   entity: "Evergreen Legacy Foundation",
   year: 2026,
+};
+
+/** The faith statement PDF. Replace the file, keep the name, then set ready to true. */
+export const FAITH_STATEMENT = { pdf: "/docs/ecc-faith-statement.pdf", ready: false };
+
+/**
+ * The Next Steps sign-up (the /next page, which the Sunday QR code opens).
+ * Paste the Google Form link here once it exists. A docs.google.com/forms/... link is
+ * shown on the page itself; a forms.gle short link can only be opened in a new tab.
+ */
+export const NEXT_STEPS = {
+  formUrl: "",
+  followUpWithin: "48 hours",
 };
 
 export const LINKS = {

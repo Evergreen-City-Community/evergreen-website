@@ -1,17 +1,20 @@
 "use client";
 
-// A slow, endless strip of real photos. Drifts on its own, slows (doesn't
-// stop) under the cursor, and can be dragged or swiped with momentum.
+// A slow, endless strip of real photos. Drifts on its own, can be dragged or
+// swiped with momentum, and stands still for visitors who ask for less motion.
+// By default it slows under the cursor; with `pauseOnHover` it stops instead
+// (and, on touch, stops while a finger is down and for a moment after).
+// A photo can carry a caption, or be a clearly marked placeholder tile.
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-export type Photo = { src: string; alt: string; portrait?: boolean };
+export type Photo = { src?: string; alt: string; portrait?: boolean; caption?: string; placeholder?: boolean };
 
 const DRIFT = 28; // px per second
 const HOVER = 0.35; // drift multiplier while hovered
 
-export default function PhotoMarquee({ photos }: { photos: Photo[] }) {
+export default function PhotoMarquee({ photos, pauseOnHover = false }: { photos: Photo[]; pauseOnHover?: boolean }) {
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -79,7 +82,7 @@ export default function PhotoMarquee({ photos }: { photos: Photo[] }) {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       if (!dragging) {
-        const drift = reduce ? 0 : -DRIFT * (hovered ? HOVER : 1);
+        const drift = reduce ? 0 : -DRIFT * (hovered ? (pauseOnHover ? 0 : HOVER) : 1);
         if (now < idleUntil) {
           // momentum after a swipe, easing out
           v *= Math.pow(0.08, dt);
@@ -97,13 +100,24 @@ export default function PhotoMarquee({ photos }: { photos: Photo[] }) {
       cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, []);
+  }, [pauseOnHover]);
 
   const row = (ariaHidden: boolean) => (
     <div className="marquee__row" aria-hidden={ariaHidden || undefined}>
       {photos.map((p, i) => (
-        <figure className={`marquee__card${p.portrait ? " marquee__card--portrait" : ""}`} key={`${p.src}-${i}`}>
-          <Image src={p.src} alt={ariaHidden ? "" : p.alt} fill sizes={p.portrait ? "230px" : "460px"} style={{ objectFit: "cover" }} draggable={false} />
+        <figure
+          className={`marquee__card${p.portrait ? " marquee__card--portrait" : ""}${p.placeholder ? " marquee__card--placeholder" : ""}`}
+          key={`${p.src ?? p.alt}-${i}`}
+        >
+          {p.src ? (
+            <Image src={p.src} alt={ariaHidden ? "" : p.alt} fill sizes={p.portrait ? "230px" : "460px"} style={{ objectFit: "cover" }} draggable={false} />
+          ) : (
+            <span className="marquee__ph">
+              <b>Placeholder</b>
+              Photos coming from ECC
+            </span>
+          )}
+          {p.caption && <figcaption className="marquee__caption">{p.caption}</figcaption>}
         </figure>
       ))}
     </div>

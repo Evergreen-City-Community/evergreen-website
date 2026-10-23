@@ -29,10 +29,16 @@ const BANK = [
 ];
 const BANK_ALL = BANK.map((b) => `${b.label}: ${b.value}`).join("\n");
 
+// Draft copy for ECC to approve (their brief, 23 Oct). The "beyond Sundays" wording
+// is deliberate: a Beyond Sunday programme is coming, and this card will link to
+// it when it launches.
 const WHERE = [
-  { title: "Building community", text: "Sundays, small gatherings, and the simple cost of keeping a door open." },
+  { title: "Raising generations", text: "Children, teens and young families growing up knowing they belong." },
   { title: "Transforming communities", text: "Reaching into homes, workplaces and neighbourhoods across the city." },
-  { title: "Sustaining Sundays", text: "Worship, teaching and a space where anyone can walk in." },
+  {
+    title: "Sustaining Sundays and beyond",
+    text: "Worship, teaching and a space where anyone can walk in, and the work that carries on through the week.",
+  },
 ];
 
 const QUESTIONS: QA[] = [
@@ -68,8 +74,8 @@ export default function Give() {
               <span className="accent">Partner</span> in what God is doing here
             </h1>
             <p className="lead give-hero__lead">
-              Everything given goes directly toward building community, transforming communities, and sustaining what
-              happens every <span className="accent">Sunday in Trivandrum.</span>
+              Everything given goes directly toward raising generations, transforming communities, and sustaining{" "}
+              <span className="accent">Sundays and beyond.</span>
             </p>
           </Reveal>
         </section>

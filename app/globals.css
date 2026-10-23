@@ -4609,3 +4609,140 @@ html.entering .page {
     padding: 80px 24px;
   }
 }
+
+/* Stories of transformation: photo-led cards */
+.voice--photo {
+  padding: 0 0 26px;
+  overflow: hidden;
+}
+.voice--photo .voice__quote,
+.voice--photo .voice__who {
+  padding: 0 26px;
+}
+.voice__photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: rgba(255, 255, 255, 0.04);
+}
+.voice__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 55%, rgba(0, 0, 0, 0.5));
+}
+
+/* Messages: recent videos row, and stand-in tiles */
+.recent {
+  width: 1200px;
+  max-width: 100%;
+  padding: 20px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+.vgrid--recent {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 300px));
+  justify-content: center;
+}
+.vcard--placeholder .vcard__media {
+  border: 1px dashed rgba(255, 200, 80, 0.5);
+  background: rgba(255, 200, 80, 0.04);
+}
+.msg-card--placeholder {
+  outline: 2px dashed rgba(255, 255, 255, 0.55);
+  outline-offset: -8px;
+}
+@media (max-width: 809.98px) {
+  .recent {
+    padding: 20px 20px 60px;
+  }
+}
+
+/* About: faith statement button under the seven beliefs */
+.creed__main {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  min-width: 0;
+}
+.creed__faith {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+.creed__faith-line {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+.creed__pdf {
+  margin-left: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.18);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.creed__ph {
+  margin: 0;
+  color: rgb(255, 205, 100);
+  font-size: 12px;
+}
+@media (max-width: 1199.98px) {
+  .creed__faith {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* About: Life at ECC strip (captions, stand-in tiles, full width) */
+.life {
+  width: 100%;
+  padding: 40px 0 100px;
+  overflow: hidden;
+}
+.life__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+}
+.marquee__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 36px 14px 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.78), transparent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}
+.marquee__card--placeholder {
+  border: 1px dashed rgba(255, 200, 80, 0.55);
+  background: rgba(255, 200, 80, 0.05);
+}
+.marquee__ph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  text-align: center;
+}
+.marquee__ph b {
+  color: rgb(255, 205, 100);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}

@@ -1,6 +1,6 @@
 "use client";
 
-// The hero's curved "In Keralam as it is in Heaven" band, alive: the text
+// The hero's curved tagline band, alive: the text
 // scrolls along an arch while a small school of fish swims in its gap, a sail
 // boat floats in the other gap, and two free fish weave above and below the
 // words, crossing them now and then.
@@ -39,8 +39,8 @@ function runLength(el: SVGTextElement | null, text: string) {
 }
 
 export default function LivingRing({
-  textA = "In Keralam As It Is In Heaven",
-  textB = "In Keralam As It Is In Heaven",
+  textA = "Raising Generations. Transforming Communities.",
+  textB = "Raising Generations. Transforming Communities.",
   duration = 16,
   fill = "rgb(130, 130, 130)",
   bg = "#000",
