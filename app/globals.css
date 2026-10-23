@@ -4746,3 +4746,10 @@ html.entering .page {
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
+
+/* The beliefs list is indented (a plain <ol>): line the faith statement up with it. */
+@media (min-width: 1200px) {
+  .creed__faith {
+    padding-left: 40px;
+  }
+}
