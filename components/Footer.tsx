@@ -11,6 +11,7 @@ const COLUMNS: { title: string; items: Item[] }[] = [
     items: [
       { label: "Home", href: "/" },
       { label: "About", href: "/about" },
+      { label: "Our pastors", href: "/pastors" },
       { label: "Plan a visit", href: "/location" },
       { label: "Messages", href: "/messages" },
       { label: "Give", href: "/give" },

@@ -15,16 +15,19 @@ import TiltCard from "@/components/TiltCard";
 import WelcomeText from "@/components/WelcomeText";
 import PoweredByNet from "@/components/fishers/PoweredByNet";
 import { GAMES } from "@/lib/fishers/games";
+import JsonLd from "@/components/JsonLd";
 import { PLAY_ENABLED } from "@/lib/flags";
+import { pageMeta, webPageJsonLd } from "@/lib/seo";
 import { HOME_PICKS } from "@/lib/listen";
 import { CHURCH, LINKS } from "@/lib/site";
 import Reveal from "@/components/Reveal";
 
-export const metadata: Metadata = {
-  title: "Evergreen City Community Church",
+export const metadata: Metadata = pageMeta({
+  title: "Evergreen City Community Church · Church in Trivandrum",
   description:
-    "Evergreen City Community is a multicultural, contemporary church in Trivandrum, Kerala. Join us every Sunday for worship, community, and life-changing faith.",
-};
+    "English-speaking, multicultural church in Kazhakootam, Trivandrum, near Technopark. Sundays at 10:30 AM, Evergreen Hall, Legacy House. Everyone is welcome.",
+  path: "/",
+});
 
 const PHOTOS: Photo[] = [
   { src: "/images/community/greeting.jpg", alt: "People chatting in a circle before the service" },
@@ -64,6 +67,13 @@ const SUNDAY = [
 export default function Home() {
   return (
     <>
+      <JsonLd
+        data={webPageJsonLd({
+          name: "Evergreen City Community Church · Church in Trivandrum",
+          description: "English-speaking, multicultural, Spirit-led church in Kazhakootam, Trivandrum, near Technopark.",
+          path: "/",
+        })}
+      />
       <Nav mode="fixed" />
       <MouseTrail />
       <main className="page">
@@ -186,6 +196,9 @@ export default function Home() {
             </p>
             <Link href="/about" className="inline-link">
               Our story and what we believe →
+            </Link>
+            <Link href="/pastors" className="inline-link">
+              Meet Pastor Presty and Pastor Sheba →
             </Link>
           </Reveal>
         </section>

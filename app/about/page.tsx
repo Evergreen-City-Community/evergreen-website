@@ -1,6 +1,7 @@
 import CreedScroll from "@/components/CreedScroll";
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import BgVideo from "@/components/BgVideo";
 import CheckOut from "@/components/CheckOut";
 import LivingRing from "@/components/LivingRing";
@@ -9,14 +10,17 @@ import Nav from "@/components/Nav";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import YouTubeLite from "@/components/YouTubeLite";
+import JsonLd from "@/components/JsonLd";
 import { SHOW_PLACEHOLDERS } from "@/lib/flags";
+import { breadcrumbJsonLd, pageMeta, webPageJsonLd } from "@/lib/seo";
 import { CHURCH, FAITH_STATEMENT, VISION_VIDEO } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "About · Evergreen City Community, Trivandrum",
+export const metadata: Metadata = pageMeta({
+  title: "About Evergreen City Community Church · Our Story & Beliefs",
   description:
-    "Founded in 2022 by Presty Varghese and Sheba Mathew, Evergreen City Community is a multicultural, contemporary church in Trivandrum committed to raising generations and transforming communities.",
-};
+    "Founded in 2022 by Pastor Presty Varghese and Pastor Sheba Mathew, Evergreen City Community is a multicultural church in Trivandrum. Our story and beliefs.",
+  path: "/about",
+});
 
 const IDENTITY = [
   {
@@ -186,6 +190,20 @@ const LIFE: Photo[] = [
 export default function About() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            name: "About Evergreen City Community Church",
+            description: "Our story, our pastors and what we believe.",
+            path: "/about",
+            type: "AboutPage",
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
+          ]),
+        ]}
+      />
       <Nav mode="fixed" />
       <main className="page">
         {/* 1 — Hero */}
@@ -292,6 +310,11 @@ export default function About() {
             <p className="story__text">
               Since founding ECC in {CHURCH.founded}, they have nurtured a
               community where all are welcome to find belonging and purpose.
+            </p>
+            <p className="story__text">
+              <Link href="/pastors" className="inline-link">
+                More about Pastor Presty Varghese and Pastor Sheba Mathew →
+              </Link>
             </p>
           </Reveal>
         </section>

@@ -6,15 +6,18 @@ import SpotifyEmbed from "@/components/SpotifyEmbed";
 import SwipeButton from "@/components/SwipeButton";
 import VideoCard from "@/components/VideoCard";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd, pageMeta, webPageJsonLd } from "@/lib/seo";
 import { FEATURED_VIDEO, LATEST_EPISODE, START_HERE } from "@/lib/listen";
 import { recentVideos } from "@/lib/recent-videos";
 import { LINKS } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Watch & Listen Online · Evergreen City Community",
+export const metadata: Metadata = pageMeta({
+  title: "Sermons & Messages · Evergreen City Community, Trivandrum",
   description:
-    "Can't join us in person? Stream messages, worship and stories from Evergreen City Community Church on YouTube and Spotify — anytime, anywhere.",
-};
+    "Watch and listen to messages and worship from Evergreen City Community Church, Trivandrum, on YouTube and Spotify, including episodes from Ps. Presty Varghese.",
+  path: "/messages",
+});
 
 // Rule for this page (ECC brief, 23 Oct): nothing goes on it that we can't keep
 // fresh. What it shows is chosen by hand in lib/listen.ts and lib/recent-videos.ts.
@@ -23,6 +26,20 @@ export default function Messages() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            name: "Sermons and messages online",
+            description: "Messages and worship from Evergreen City Community Church on YouTube and Spotify.",
+            path: "/messages",
+            type: "CollectionPage",
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Messages", path: "/messages" },
+          ]),
+        ]}
+      />
       <Nav mode="fixed" />
       <main className="page">
         {/* 1 — Hero */}

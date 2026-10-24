@@ -8,14 +8,17 @@ import Nav from "@/components/Nav";
 import NextSunday from "@/components/NextSunday";
 import Reveal from "@/components/Reveal";
 import WavyGrid from "@/components/WavyGrid";
+import JsonLd from "@/components/JsonLd";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { breadcrumbJsonLd, faqJsonLd, pageMeta, webPageJsonLd } from "@/lib/seo";
 import { CHURCH, LINKS } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Plan a Visit · Evergreen City Community, Trivandrum",
+export const metadata: Metadata = pageMeta({
+  title: "Church in Kazhakootam, Trivandrum · Sunday Times & Directions",
   description:
-    "Join Evergreen City Community Church every Sunday at 10:30 AM at Evergreen Hall, Legacy House, Kazhakootam, Trivandrum. Directions, service times, and everything you need for your first visit.",
-};
+    "Visit Evergreen City Community in Kazhakootam, Trivandrum, near Technopark. Sundays 10:30 AM at Evergreen Hall, Legacy House. Directions and what to expect.",
+  path: "/location",
+});
 
 const ADDRESS = `${CHURCH.venue}, ${CHURCH.area}`;
 
@@ -89,9 +92,37 @@ const QUESTIONS: QA[] = [
   },
 ];
 
+// The same questions as plain text, for search engines (kept in step with QUESTIONS above).
+const FAQ_PLAIN: { q: string; a: string }[] = [
+  { q: "I’m not religious. Can I still come?", a: "Yes. Come as you are. There’s no sign-up and nobody will single you out. Sit anywhere, join in as much or as little as you like." },
+  { q: "What should I wear?", a: "Whatever you’re comfortable in. On any Sunday you’ll see everything from jeans to sarees." },
+  { q: "Is the service in English?", a: "Yes. We’re an English-speaking, multicultural church, and people come from all over." },
+  { q: "What about my kids?", a: "Kids are welcome at every service." },
+  {
+    q: "How long does it go?",
+    a: `About ninety minutes. Doors open at ${CHURCH.arriveFrom}, we start at ${CHURCH.serviceTime} and usually finish by ${CHURCH.endsBy}. Some Sundays worship runs longer, and we’re okay with that.`,
+  },
+  { q: "Does it cost anything?", a: "No. There’s no ticket and no fee. Giving is something our community does, never something a guest is expected to do." },
+  { q: "Can I watch online first?", a: "Of course. Every Sunday message goes up on YouTube and Spotify, and you can start with a message on our Messages page." },
+];
+
 export default function Location() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({
+            name: "Church in Kazhakootam, Trivandrum: Sunday service and directions",
+            description: "Where and when Evergreen City Community Church meets, and what to expect on your first Sunday.",
+            path: "/location",
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Plan a visit", path: "/location" },
+          ]),
+          faqJsonLd(FAQ_PLAIN),
+        ]}
+      />
       <Nav mode="fixed" />
       <main className="page">
         {/* 1 — Hero */}
@@ -128,6 +159,21 @@ export default function Location() {
               </Reveal>
             ))}
           </ul>
+        </section>
+
+        {/* Local introduction: who we are and where, in plain words search engines and people can both read */}
+        <section className="local-intro">
+          <Reveal className="local-intro__inner">
+            <p className="eyebrow">Find us</p>
+            <h2 className="h-section">A church near Technopark, in Kazhakootam</h2>
+            <p className="story__text">
+              Evergreen City Community is an English-speaking, multicultural church in Trivandrum (Thiruvananthapuram). We meet every Sunday at {CHURCH.serviceTime} at {CHURCH.venue}, {CHURCH.area} (also spelled
+              Kazhakkoottam or Kazhakuttom).
+            </p>
+            <p className="story__text">
+              Whether you work at Technopark, study nearby, live in Kazhakootam, Kariavattom or Sreekariyam, or you’re new to Trivandrum, you’re welcome here. Come as you are.
+            </p>
+          </Reveal>
         </section>
 
         {/* 3 — The morning */}

@@ -5,14 +5,17 @@ import CopyButton from "@/components/CopyButton";
 import FAQ, { type QA } from "@/components/FAQ";
 import Nav from "@/components/Nav";
 import Reveal from "@/components/Reveal";
+import JsonLd from "@/components/JsonLd";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { breadcrumbJsonLd, pageMeta, webPageJsonLd } from "@/lib/seo";
 import { CHURCH } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Give & Support the Mission · Evergreen City Community",
+export const metadata: Metadata = pageMeta({
+  title: "Give · Evergreen City Community Church, Trivandrum",
   description:
-    "Partner with Evergreen City Community Church in Trivandrum. Your generosity funds worship, outreach, and community transformation across Kerala.",
-};
+    "Partner with Evergreen City Community Church in Trivandrum. Your giving raises generations, transforms communities and sustains Sundays and beyond.",
+  path: "/give",
+});
 
 // Read from the church's own payment QR code. Make a ₹1 test payment before launch.
 const UPI = {
@@ -63,6 +66,15 @@ const QUESTIONS: QA[] = [
 export default function Give() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageJsonLd({ name: "Give to Evergreen City Community Church", description: "Ways to give, and where it goes.", path: "/give" }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Give", path: "/give" },
+          ]),
+        ]}
+      />
       <Nav mode="fixed" />
       <main className="page">
         {/* 1 — Hero */}

@@ -4753,3 +4753,32 @@ html.entering .page {
     padding-left: 40px;
   }
 }
+
+/* SEO: the address line under the closing call to action, and the local introduction on Plan a visit */
+.checkout__where {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: -0.005em;
+}
+.local-intro {
+  width: 100%;
+  padding: 20px 24px 40px;
+  display: flex;
+  justify-content: center;
+}
+.local-intro__inner {
+  width: 680px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.local-intro__inner .story__text {
+  margin: 0;
+}
+.leadership__text .inline-link + .inline-link {
+  margin-top: 6px;
+}

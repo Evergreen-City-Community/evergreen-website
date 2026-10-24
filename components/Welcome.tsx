@@ -18,8 +18,14 @@ import { CHURCH } from "@/lib/site";
 export const ENTERED_KEY = "ecc-entered";
 export const SHOW_AGAIN_AFTER_HOURS = 6;
 
-/** Runs inline before paint: marks <html> as entered for recent visitors. */
-export const WELCOME_SCRIPT = `try{var t=+localStorage.getItem("${ENTERED_KEY}");if(t&&Date.now()-t<${SHOW_AGAIN_AFTER_HOURS}*36e5)document.documentElement.classList.add("entered")}catch(e){}`;
+/**
+ * Runs inline before paint and marks <html> as "entered" (which hides this screen) for
+ *  - recent visitors, and
+ *  - people arriving from a search engine: a full-screen welcome in front of a search
+ *    result is the kind of "interstitial" Google ranks lower on phones, and it costs
+ *    real visitors. Everyone else (direct, WhatsApp, social) still gets the welcome.
+ */
+export const WELCOME_SCRIPT = `try{var d=document.documentElement,t=+localStorage.getItem("${ENTERED_KEY}"),r="";try{r=document.referrer?new URL(document.referrer).hostname:""}catch(e){}if((t&&Date.now()-t<${SHOW_AGAIN_AFTER_HOURS}*36e5)||/(^|\\.)(google|bing|duckduckgo|yahoo|ecosia|yandex|baidu|qwant|startpage)\\./.test(r)||/(^|\\.)search\\.brave\\.com$/.test(r))d.classList.add("entered")}catch(e){}`;
 
 const LEAVE_MS = 1100;
 
@@ -83,7 +89,7 @@ export default function Welcome() {
 
       <div className="gate__center">
         <p className="eyebrow gate__eyebrow">Welcome home</p>
-        <h1 id="gate-title" className="gate__title">
+        <p id="gate-title" className="gate__title">
           <span className="gate__line">
             <span style={{ animationDelay: "0.25s" }}>Raising</span>{" "}
             <span className="accent" style={{ animationDelay: "0.45s" }}>
@@ -96,7 +102,7 @@ export default function Welcome() {
               Communities.
             </span>
           </span>
-        </h1>
+        </p>
 
         <div className="gate__actions">
           <button ref={buttonRef} type="button" className="gate__enter" onClick={() => enter(true)}>

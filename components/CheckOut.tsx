@@ -18,6 +18,9 @@ export default function CheckOut() {
           <p className="lead checkout__lead">
             No sign-up. No pressure. Just show up any Sunday at {CHURCH.serviceTime} — we’d love to meet you.
           </p>
+          <p className="checkout__where">
+            {CHURCH.venue}, {CHURCH.area} · near Technopark
+          </p>
         </div>
         <div className="btn-row btn-row--stack-phone">
           <SwipeButton label="Plan a visit →" href="/location" scheme="outlineRed" />
