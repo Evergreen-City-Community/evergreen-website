@@ -16,7 +16,7 @@ content is added.
 | Spotify player (Messages) | `LATEST_EPISODE` in `lib/listen.ts` | Paste the newest episode id. |
 | Recent videos (Messages) | `lib/recent-videos.ts` | Paste a YouTube link and a title at the top of the list. Keep it short and recent. |
 | Next Steps form (/next) | `NEXT_STEPS.formUrl` in `lib/site.ts` | Paste the Google Form link; the page's button opens it. |
-| WhatsApp number | `LINKS.whatsapp` in `lib/site.ts` | e.g. `https://wa.me/91XXXXXXXXXX` |
+| WhatsApp number | `LINKS.whatsapp` in `lib/site.ts` | Set to +91 96647 19827. Change it there and every WhatsApp button follows. |
 | Play / Fishers of Men games | `PLAY_ENABLED` in `lib/flags.ts` (env `NEXT_PUBLIC_PLAY_ENABLED=1`) | Off: hidden and kept out of search. On: Home section, footer link and The NET credit return. |
 
 The QR code, slide and print card for /next are in `print/next-steps/`. They point at

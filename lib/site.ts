@@ -35,9 +35,9 @@ export const LINKS = {
   spotify: "https://open.spotify.com/show/2rcUdvCFUuTLzLPr24cR33?si=ee554a0094774180",
   instagram: "https://www.instagram.com/evergreencitycommunity/",
   maps: "https://maps.app.goo.gl/qFMFXVSUyAv4zrKJ8",
-  // The Framer site never linked its WhatsApp buttons. Set the real number
-  // here (e.g. "https://wa.me/91XXXXXXXXXX") and every WhatsApp link goes live.
-  whatsapp: "",
+  // ECC's WhatsApp number (+91 96647 19827). Every WhatsApp button and link on
+  // the site reads this one value.
+  whatsapp: "https://wa.me/919664719827",
 };
 
 export const NAV_ITEMS = [
