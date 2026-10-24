@@ -18,7 +18,7 @@ export const CHURCH = {
 };
 
 /** The faith statement PDF. Replace the file, keep the name, then set ready to true. */
-export const FAITH_STATEMENT = { pdf: "/docs/ecc-faith-statement.pdf", ready: false };
+export const FAITH_STATEMENT = { pdf: "/docs/ecc-faith-statement.pdf", ready: true };
 
 /**
  * The Next Steps sign-up (the /next page, which the Sunday QR code opens).
