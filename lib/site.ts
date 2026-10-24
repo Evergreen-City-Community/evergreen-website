@@ -17,6 +17,12 @@ export const CHURCH = {
   year: 2026,
 };
 
+/**
+ * The "Hear it from us" vision video on About. Hidden until ECC sends the new
+ * video: put its YouTube id in `id` and set `ready: true` to bring the section back.
+ */
+export const VISION_VIDEO = { id: "LT0wkSXF7dU", ready: false };
+
 /** The faith statement PDF. Replace the file, keep the name, then set ready to true. */
 export const FAITH_STATEMENT = { pdf: "/docs/ecc-faith-statement.pdf", ready: true };
 

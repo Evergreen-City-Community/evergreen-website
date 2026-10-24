@@ -10,7 +10,7 @@ import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import YouTubeLite from "@/components/YouTubeLite";
 import { SHOW_PLACEHOLDERS } from "@/lib/flags";
-import { CHURCH, FAITH_STATEMENT } from "@/lib/site";
+import { CHURCH, FAITH_STATEMENT, VISION_VIDEO } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About · Evergreen City Community, Trivandrum",
@@ -72,26 +72,115 @@ const BELIEFS = [
 // groups, men's fellowship and other ministries; until then clearly marked
 // placeholders hold their place on previews (and are left out of the live site).
 const LIFE: Photo[] = [
-  { src: "/images/community/worship-1.jpg", alt: "A man worshipping with hands raised", portrait: true, caption: "Sunday worship" },
-  { src: "/images/community/youth-group.jpg", alt: "The ECC youth, dressed in traditional Kerala clothes, smiling for a group photo", caption: "Youth" },
-  { src: "/images/community/greeting.jpg", alt: "People chatting in a circle before the service", caption: "Before the service" },
-  { src: "/images/community/worship-2.jpg", alt: "People singing during worship", portrait: true, caption: "Sunday worship" },
-  { src: "/images/community/independence-day-prayer.jpg", alt: "Young people kneeling in prayer on stage in front of an Indian flag", caption: "Independence Day" },
-  { src: "/images/community/fellowship.jpg", alt: "Friends laughing together after church", caption: "Fellowship" },
-  { alt: "Life groups", portrait: true, caption: "Life groups", placeholder: true },
-  { src: "/images/community/mens-fellowship-selfie.jpg", alt: "A group of men from ECC smiling in a selfie at a bowling night", caption: "Men’s fellowship" },
-  { src: "/images/community/kids.jpg", alt: "Children playing together", portrait: true, caption: "Kids at church" },
-  { src: "/images/community/independence-day-1.jpg", alt: "A young man speaking into a microphone beside an Indian flag", caption: "Independence Day" },
-  { src: "/images/community/preaching.jpg", alt: "Ps. Presty leading worship", portrait: true, caption: "Sunday worship" },
-  { src: "/images/community/mens-fellowship-lanes.jpg", alt: "Men from ECC watching and cheering at the bowling lanes", caption: "Men’s fellowship" },
-  { src: "/images/community/worship-4.jpg", alt: "Worship on a Sunday morning", portrait: true, caption: "Sunday worship" },
-  { src: "/images/community/independence-day-2.jpg", alt: "A woman in a yellow saree speaking on stage in front of an Indian flag", caption: "Independence Day" },
-  { alt: "Women's fellowship", portrait: true, caption: "Women’s fellowship", placeholder: true },
-  { src: "/images/community/mens-fellowship-pair.jpg", alt: "Two men from ECC smiling with thumbs up at the bowling alley", portrait: true, caption: "Men’s fellowship" },
-  { src: "/images/community/group.jpg", alt: "The Evergreen City Community at Christmas", caption: "Christmas together" },
-  { src: "/images/community/independence-day-3.jpg", alt: "A young man in a blue kurta reading from a page on stage", caption: "Independence Day" },
-  { src: "/images/community/mens-fellowship-balls.jpg", alt: "Men from ECC choosing bowling balls", caption: "Men’s fellowship" },
-  { src: "/images/community/worship-5.jpg", alt: "A young man worshipping", portrait: true, caption: "Sunday worship" },
+  {
+    src: "/images/community/worship-1.jpg",
+    alt: "A man worshipping with hands raised",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+  {
+    src: "/images/community/youth-group.jpg",
+    alt: "The ECC youth, dressed in traditional Kerala clothes, smiling for a group photo",
+    caption: "Youth",
+  },
+  {
+    src: "/images/community/greeting.jpg",
+    alt: "People chatting in a circle before the service",
+    caption: "Before the service",
+  },
+  {
+    src: "/images/community/worship-2.jpg",
+    alt: "People singing during worship",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+  {
+    src: "/images/community/independence-day-prayer.jpg",
+    alt: "Young people kneeling in prayer on stage in front of an Indian flag",
+    caption: "Independence Day",
+  },
+  {
+    src: "/images/community/fellowship.jpg",
+    alt: "Friends laughing together after church",
+    caption: "Fellowship",
+  },
+  {
+    alt: "Life groups",
+    portrait: true,
+    caption: "Life groups",
+    placeholder: true,
+  },
+  {
+    src: "/images/community/mens-fellowship-selfie.jpg",
+    alt: "A group of men from ECC smiling in a selfie at a bowling night",
+    caption: "Men’s fellowship",
+  },
+  {
+    src: "/images/community/kids.jpg",
+    alt: "Children playing together",
+    portrait: true,
+    caption: "Kids at church",
+  },
+  {
+    src: "/images/community/independence-day-1.jpg",
+    alt: "A young man speaking into a microphone beside an Indian flag",
+    caption: "Independence Day",
+  },
+  {
+    src: "/images/community/preaching.jpg",
+    alt: "Ps. Presty leading worship",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+  {
+    src: "/images/community/mens-fellowship-lanes.jpg",
+    alt: "Men from ECC watching and cheering at the bowling lanes",
+    caption: "Men’s fellowship",
+  },
+  {
+    src: "/images/community/worship-4.jpg",
+    alt: "Worship on a Sunday morning",
+    portrait: true,
+    caption: "Sunday worship",
+  },
+  {
+    src: "/images/community/independence-day-2.jpg",
+    alt: "A woman in a yellow saree speaking on stage in front of an Indian flag",
+    caption: "Independence Day",
+  },
+  {
+    alt: "Women's fellowship",
+    portrait: true,
+    caption: "Women’s fellowship",
+    placeholder: true,
+  },
+  {
+    src: "/images/community/mens-fellowship-pair.jpg",
+    alt: "Two men from ECC smiling with thumbs up at the bowling alley",
+    portrait: true,
+    caption: "Men’s fellowship",
+  },
+  {
+    src: "/images/community/group.jpg",
+    alt: "The Evergreen City Community at Christmas",
+    caption: "Christmas together",
+  },
+  {
+    src: "/images/community/independence-day-3.jpg",
+    alt: "A young man in a blue kurta reading from a page on stage",
+    caption: "Independence Day",
+  },
+  {
+    src: "/images/community/mens-fellowship-balls.jpg",
+    alt: "Men from ECC choosing bowling balls",
+    caption: "Men’s fellowship",
+  },
+  {
+    src: "/images/community/worship-5.jpg",
+    alt: "A young man worshipping",
+    portrait: true,
+    caption: "Sunday worship",
+  },
 ].filter((p) => !p.placeholder || SHOW_PLACEHOLDERS);
 
 export default function About() {
@@ -207,18 +296,20 @@ export default function About() {
           </Reveal>
         </section>
 
-        {/* 5 — Vision video */}
-        <section className="vision">
-          <Reveal className="vision__head">
-            <p className="eyebrow">Hear it from us</p>
-            <h2 data-fish="vision" className="h-lg">
-              The <span className="accent">ECC vision</span>, in a few minutes
-            </h2>
-          </Reveal>
-          <Reveal className="vision__video" delay={100}>
-            <YouTubeLite id="LT0wkSXF7dU" title="ECC Vision" />
-          </Reveal>
-        </section>
+        {/* 5 — Vision video (hidden until ECC sends the new one: see VISION_VIDEO in lib/site.ts) */}
+        {VISION_VIDEO.ready && (
+          <section className="vision">
+            <Reveal className="vision__head">
+              <p className="eyebrow">Hear it from us</p>
+              <h2 data-fish="vision" className="h-lg">
+                The <span className="accent">ECC vision</span>, in a few minutes
+              </h2>
+            </Reveal>
+            <Reveal className="vision__video" delay={100}>
+              <YouTubeLite id={VISION_VIDEO.id} title="ECC Vision" />
+            </Reveal>
+          </section>
+        )}
 
         {/* 6 — Beliefs */}
         <section className="creed">
