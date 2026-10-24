@@ -72,69 +72,22 @@ const BELIEFS = [
 // groups, men's fellowship and other ministries; until then clearly marked
 // placeholders hold their place on previews (and are left out of the live site).
 const LIFE: Photo[] = [
-  {
-    src: "/images/community/worship-1.jpg",
-    alt: "A man worshipping with hands raised",
-    portrait: true,
-    caption: "Sunday worship",
-  },
-  {
-    src: "/images/community/greeting.jpg",
-    alt: "People chatting in a circle before the service",
-    caption: "Before the service",
-  },
-  {
-    src: "/images/community/worship-2.jpg",
-    alt: "People singing during worship",
-    portrait: true,
-    caption: "Sunday worship",
-  },
-  {
-    src: "/images/community/fellowship.jpg",
-    alt: "Friends laughing together after church",
-    caption: "Fellowship",
-  },
-  {
-    alt: "Life groups",
-    portrait: true,
-    caption: "Life groups",
-    placeholder: true,
-  },
-  {
-    src: "/images/community/kids.jpg",
-    alt: "Children playing together",
-    portrait: true,
-    caption: "Kids at church",
-  },
-  {
-    src: "/images/community/preaching.jpg",
-    alt: "Ps. Presty leading worship",
-    portrait: true,
-    caption: "Sunday worship",
-  },
-  {
-    src: "/images/community/friends.jpg",
-    alt: "Two friends smiling at the camera",
-    caption: "Friends",
-  },
+  { src: "/images/community/worship-1.jpg", alt: "A man worshipping with hands raised", portrait: true, caption: "Sunday worship" },
+  { src: "/images/community/youth-group.jpg", alt: "The ECC youth, dressed in traditional Kerala clothes, smiling for a group photo", caption: "Youth" },
+  { src: "/images/community/greeting.jpg", alt: "People chatting in a circle before the service", caption: "Before the service" },
+  { src: "/images/community/worship-2.jpg", alt: "People singing during worship", portrait: true, caption: "Sunday worship" },
+  { src: "/images/community/independence-day-prayer.jpg", alt: "Young people kneeling in prayer on stage in front of an Indian flag", caption: "Independence Day" },
+  { src: "/images/community/fellowship.jpg", alt: "Friends laughing together after church", caption: "Fellowship" },
+  { alt: "Life groups", portrait: true, caption: "Life groups", placeholder: true },
+  { src: "/images/community/independence-day-1.jpg", alt: "A young man speaking into a microphone beside an Indian flag", caption: "Independence Day" },
+  { src: "/images/community/kids.jpg", alt: "Children playing together", portrait: true, caption: "Kids at church" },
+  { src: "/images/community/independence-day-2.jpg", alt: "A woman in a yellow saree speaking on stage in front of an Indian flag", caption: "Independence Day" },
+  { src: "/images/community/preaching.jpg", alt: "Ps. Presty leading worship", portrait: true, caption: "Sunday worship" },
   { alt: "Men's fellowship", caption: "Men’s fellowship", placeholder: true },
-  {
-    src: "/images/community/worship-4.jpg",
-    alt: "Worship on a Sunday morning",
-    portrait: true,
-    caption: "Sunday worship",
-  },
-  {
-    src: "/images/community/group.jpg",
-    alt: "The Evergreen City Community at Christmas",
-    caption: "Christmas together",
-  },
-  {
-    src: "/images/community/worship-5.jpg",
-    alt: "A young man worshipping",
-    portrait: true,
-    caption: "Sunday worship",
-  },
+  { src: "/images/community/worship-4.jpg", alt: "Worship on a Sunday morning", portrait: true, caption: "Sunday worship" },
+  { src: "/images/community/independence-day-3.jpg", alt: "A young man in a blue kurta reading from a page on stage", caption: "Independence Day" },
+  { src: "/images/community/group.jpg", alt: "The Evergreen City Community at Christmas", caption: "Christmas together" },
+  { src: "/images/community/worship-5.jpg", alt: "A young man worshipping", portrait: true, caption: "Sunday worship" },
 ].filter((p) => !p.placeholder || SHOW_PLACEHOLDERS);
 
 export default function About() {
