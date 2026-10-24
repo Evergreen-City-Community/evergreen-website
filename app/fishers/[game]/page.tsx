@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import GameShell from "@/components/fishers/GameShell";
 import Nav from "@/components/Nav";
+import { PLAY_ENABLED } from "@/lib/flags";
 import { GAMES, GAME_BY_SLUG, isGameSlug } from "@/lib/fishers/games";
 import s from "@/components/fishers/fishers.module.css";
 
@@ -21,6 +22,8 @@ export async function generateMetadata({ params }: { params: Promise<{ game: str
 }
 
 export default function GamePage({ params }: { params: Promise<{ game: string }> }) {
+  // Paused: see PLAY_ENABLED in lib/flags.ts.
+  if (!PLAY_ENABLED) notFound();
   return (
     <>
       <Nav mode="fixed" />

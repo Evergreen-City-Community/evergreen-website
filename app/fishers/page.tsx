@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import BeyondGames from "@/components/fishers/BeyondGames";
 import Hub from "@/components/fishers/Hub";
 import PoweredByNet from "@/components/fishers/PoweredByNet";
 import Nav from "@/components/Nav";
+import { PLAY_ENABLED } from "@/lib/flags";
 import s from "@/components/fishers/fishers.module.css";
 
 export const metadata: Metadata = {
@@ -11,6 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default function Fishers() {
+  // Paused: see PLAY_ENABLED in lib/flags.ts.
+  if (!PLAY_ENABLED) notFound();
   return (
     <>
       <Nav mode="fixed" />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import { SHOW_PLACEHOLDERS } from "@/lib/flags";
@@ -18,6 +19,8 @@ export const metadata: Metadata = {
 
 export default function NextSteps() {
   const { formUrl, followUpWithin } = NEXT_STEPS;
+  // Hidden until ECC's Google Form link is set in lib/site.ts.
+  if (!formUrl && !SHOW_PLACEHOLDERS) notFound();
 
   return (
     <>
@@ -57,14 +60,7 @@ export default function NextSteps() {
                 is added in lib/site.ts.
               </p>
             </>
-          ) : (
-            <div className={s.soon}>
-              <p>
-                The sign-up form is almost ready. For now, please say hello to
-                someone at the welcome desk. We’d love to meet you.
-              </p>
-            </div>
-          )}
+          ) : null}
 
           <p className={s.fine}>
             We only use your details to follow up on the step you choose.{" "}

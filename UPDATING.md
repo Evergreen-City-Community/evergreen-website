@@ -1,8 +1,7 @@
 # Updating the ECC site: where each thing lives
 
-Placeholders (dashed, labelled "Placeholder") appear on previews and the demo link
-only. On the live production site those sections simply don't show until real
-content is added.
+Anything not ready yet is hidden on every site (see `HIDDEN-ITEMS.md` for the
+full checklist). Sections simply don't show until real content is added.
 
 | What | Where | How |
 | --- | --- | --- |
