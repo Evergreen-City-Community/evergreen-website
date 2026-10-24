@@ -85,6 +85,7 @@ const LIFE: Photo[] = [
   { src: "/images/community/preaching.jpg", alt: "Ps. Presty leading worship", portrait: true, caption: "Sunday worship" },
   { alt: "Men's fellowship", caption: "Men’s fellowship", placeholder: true },
   { src: "/images/community/worship-4.jpg", alt: "Worship on a Sunday morning", portrait: true, caption: "Sunday worship" },
+  { alt: "Women's fellowship", portrait: true, caption: "Women’s fellowship", placeholder: true },
   { src: "/images/community/independence-day-3.jpg", alt: "A young man in a blue kurta reading from a page on stage", caption: "Independence Day" },
   { src: "/images/community/group.jpg", alt: "The Evergreen City Community at Christmas", caption: "Christmas together" },
   { src: "/images/community/worship-5.jpg", alt: "A young man worshipping", portrait: true, caption: "Sunday worship" },
