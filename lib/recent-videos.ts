@@ -9,7 +9,10 @@ import { SHOW_PLACEHOLDERS } from "./flags";
 
 export type RecentVideo = { url: string; title: string; date?: string };
 
-export const RECENT_VIDEOS: RecentVideo[] = [];
+export const RECENT_VIDEOS: RecentVideo[] = [
+  { url: "https://youtu.be/Yha_7TJqRlo", title: "ECC Kids | A Day Full of Fun, Laughter & Memories!", date: "2026-10-24" },
+  { url: "https://www.youtube.com/watch?v=mt_3ytjh4O0", title: "4 Years of God's Faithfulness | ECC 4th Anniversary Highlights", date: "2026-10-24" },
+];
 
 export type RecentItem = { id: string; title: string; date?: string };
 
