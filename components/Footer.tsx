@@ -50,7 +50,7 @@ export default function Footer() {
             <p className="footer__meta">
               {CHURCH.venue}
               <br />
-              {CHURCH.area}
+              {CHURCH.areaFull}
             </p>
             <a className="footer__link footer__link--accent" href={LINKS.maps} target="_blank" rel="noopener noreferrer">
               Get directions →

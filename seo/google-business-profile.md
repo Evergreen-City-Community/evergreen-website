@@ -13,7 +13,7 @@ Google account (not a personal one), and add a second owner so it is never lost.
 | Business name | Evergreen City Community Church *(exactly this; do not add "Trivandrum" or keywords, Google suspends profiles for that)* |
 | Category (main) | Church |
 | Categories (extra) | Non-denominational church (or Christian church; the pastor chooses what fits) |
-| Address | Evergreen Hall, Legacy House, Kazhakootam, Thiruvananthapuram, Kerala. **Add the exact street line and PIN code.** Place the pin exactly on the building. |
+| Address | 3rd Floor, Legacy House, Opp Ambrosia, Kazhakootam, Trivandrum, Kerala 695582 *(exactly as the website shows it)*. Place the pin exactly on the building. |
 | Service area | none (a church with a venue shows its address, not an area) |
 | Phone | A number the church answers. WhatsApp-only numbers can work as the number. |
 | Website | https://evergreencitycommunity.com/?utm_source=google&utm_medium=organic&utm_campaign=business-profile *(the extra part lets you see Profile visits in your analytics)* |
@@ -23,7 +23,7 @@ Google account (not a personal one), and add a second owner so it is never lost.
 | Languages | English |
 
 ## Description (about 600 of the 750 characters; paste)
-> Evergreen City Community is an English-speaking, multicultural, Spirit-led church in Kazhakootam, Trivandrum, near Technopark. We meet every Sunday at 10:30 AM at Evergreen Hall, Legacy House. Led by Pastor Presty Varghese and Pastor Sheba Mathew, we are a church that feels like home before it feels like church. Whether you are new to Trivandrum, finding your way back to faith, or just curious, you are welcome here, kids included. No sign-up and no pressure: come as you are. Raising Generations. Transforming Communities.
+> Evergreen City Community is an English-speaking, multicultural, Spirit-led church in Kazhakootam, Trivandrum, near Technopark. We meet every Sunday at 10:30 AM on the 3rd floor of Legacy House, opposite Ambrosia. Led by Pastor Presty Varghese and Pastor Sheba Mathew, we are a church that feels like home before it feels like church. Whether you are new to Trivandrum, finding your way back to faith, or just curious, you are welcome here, kids included. No sign-up and no pressure: come as you are. Raising Generations. Transforming Communities.
 
 ## Photos (the Profile with more photos gets far more actions)
 Add at least 10: the logo (use `public/images/logo-512.png`), a cover photo (the community group), the outside of the hall and its entrance (so people can find it), the inside, worship, the kids, the youth, the Independence Day photos, the men's fellowship. Real photos only. Add a short video of a Sunday once available.

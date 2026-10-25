@@ -16,11 +16,11 @@ import { CHURCH, LINKS } from "@/lib/site";
 export const metadata: Metadata = pageMeta({
   title: "Church in Kazhakootam, Trivandrum · Sunday Times & Directions",
   description:
-    "Visit Evergreen City Community in Kazhakootam, Trivandrum, near Technopark. Sundays 10:30 AM at Evergreen Hall, Legacy House. Directions and what to expect.",
+    "Visit Evergreen City Community in Kazhakootam, Trivandrum, near Technopark. Sundays 10:30 AM, Legacy House, Opp Ambrosia. Directions and what to expect.",
   path: "/location",
 });
 
-const ADDRESS = `${CHURCH.venue}, ${CHURCH.area}`;
+const ADDRESS = `${CHURCH.venue}, ${CHURCH.areaFull}`;
 
 const ESSENTIALS = [
   { label: "When", value: "Every Sunday", note: `${CHURCH.serviceTime} · doors from ${CHURCH.arriveFrom}` },
@@ -216,7 +216,7 @@ export default function Location() {
             <div className="address-card">
               <p className="essential__label">Address</p>
               <p className="address-card__line">{CHURCH.venue}</p>
-              <p className="address-card__sub">{CHURCH.area}</p>
+              <p className="address-card__sub">{CHURCH.areaFull}</p>
               <div className="address-card__actions">
                 <a className="pill pill--solid" href={LINKS.maps} target="_blank" rel="noopener noreferrer">
                   <PinIcon />

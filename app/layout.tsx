@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 const description =
-  "English-speaking, multicultural church in Kazhakootam, Trivandrum, near Technopark. Sundays at 10:30 AM, Evergreen Hall, Legacy House. Everyone is welcome.";
+  "English-speaking, multicultural church in Kazhakootam, Trivandrum, near Technopark. Sundays at 10:30 AM, 3rd Floor, Legacy House, Opp Ambrosia. All welcome.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

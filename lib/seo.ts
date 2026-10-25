@@ -15,7 +15,7 @@ export const SEO = {
   /** Other ways people write or say it. */
   alternateNames: ["Evergreen City Community", "ECC Trivandrum", "ECC Kazhakootam", "Evergreen Church Trivandrum", "Evergreen City Church"],
   /** Filled in once ECC confirms them; the markup includes them only when set. */
-  postalCode: "" as string,
+  postalCode: CHURCH.postcode as string,
   geo: null as null | { lat: number; lng: number },
   telephone: "" as string,
   /** Social and media profiles that belong to the church. */
@@ -70,7 +70,7 @@ const websiteId = `${SITE_URL}/#website`;
 const address = {
   "@type": "PostalAddress",
   streetAddress: CHURCH.venue,
-  addressLocality: "Kazhakootam, Thiruvananthapuram",
+  addressLocality: CHURCH.area, // "Kazhakootam, Trivandrum", the same wording as the Business Profile
   addressRegion: "Kerala",
   ...(SEO.postalCode ? { postalCode: SEO.postalCode } : {}),
   addressCountry: "IN",

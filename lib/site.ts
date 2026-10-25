@@ -5,9 +5,12 @@ export const CHURCH = {
   shortName: "ECC",
   // Travels with the name wherever it appears as a sign-off (ECC brief, 23 Oct).
   tagline: "Raising Generations. Transforming Communities.",
-  // From the site's own metadata. Confirm the wording before launch.
-  venue: "Evergreen Hall, Legacy House",
+  // The address exactly as ECC gave it (25 Oct) and as it is on the Google Business
+  // Profile. Keep the two identical: Google compares them.
+  venue: "3rd Floor, Legacy House, Opp Ambrosia",
   area: "Kazhakootam, Trivandrum",
+  areaFull: "Kazhakootam, Trivandrum, Kerala 695582",
+  postcode: "695582",
   serviceDay: "Every Sunday",
   serviceTime: "10:30 AM",
   arriveFrom: "10:15 AM",

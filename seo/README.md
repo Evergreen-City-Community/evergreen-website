@@ -47,7 +47,7 @@ part. The other two are done off the website, and they decide the "church near m
 | "church in Trivandrum" in the ordinary results | 6 to 12 months, driven by links and content. |
 
 ## Still needed to finish the on-site markup
-- The **PIN code** and **exact street address**, and the **map coordinates** (open the church in Google Maps, right-click the pin, copy the two numbers). Without them the address markup is less complete. Add them in `lib/seo.ts` (`postalCode`, `geo`).
+- The **map coordinates** (open the church in Google Maps, right-click the pin, copy the two numbers). Add them in `lib/seo.ts` (`geo`). *(The address and PIN 695582 are done: 3rd Floor, Legacy House, Opp Ambrosia, Kazhakootam, Trivandrum, Kerala 695582, identical on the website and the Business Profile.)*
 - A **church phone number**, if one should be public (`telephone` in `lib/seo.ts`).
 - The Search Console and Bing verification codes (see `search-console-and-bing.md`).
 

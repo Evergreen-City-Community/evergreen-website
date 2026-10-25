@@ -25,7 +25,7 @@ import Reveal from "@/components/Reveal";
 export const metadata: Metadata = pageMeta({
   title: "Evergreen City Community Church · Church in Trivandrum",
   description:
-    "English-speaking, multicultural church in Kazhakootam, Trivandrum, near Technopark. Sundays at 10:30 AM, Evergreen Hall, Legacy House. Everyone is welcome.",
+    "English-speaking, multicultural church in Kazhakootam, Trivandrum, near Technopark. Sundays at 10:30 AM, 3rd Floor, Legacy House, Opp Ambrosia. All welcome.",
   path: "/",
 });
 
