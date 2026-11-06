@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar · Evergreen City Community</title>
+<meta name="description" content="Events, services and posters from Evergreen City Community — with an archive of past years.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Pinyon+Script&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+
+  /* ===== THEMES — change the default in the script (THEME = "green" | "red") ===== */
+  :root,[data-theme="green"]{            /* Evergreen: green + red + gold */
+    --bg:#041a12; --bg-2:#0b4a33; --glow:230,196,118;
+    --card:rgba(18,92,62,.34); --line:rgba(230,196,118,.28);
+    --gold:#e6c476; --gold-2:#a87f35; --gold-lite:#f7dea0;
+    --text:#fbf6ea; --soft:#d8e6dd; --muted:#a9c4b6;
+    --hl-a:#cf3640; --hl-b:#8e1520; --hl-solid:#c92f3a; --hl-border:rgba(255,130,130,.6); --hl-rgb:214,58,68;
+    --poster-a:#12683f; --poster-b:#04200f;
+    --pin-a:#ffb3b3; --pin-b:#cf3640; --pin-c:#6e0f17;
+    --star-a:#fff8e0; --star-b:#f2cf7c; --star-c:#b07d2a;
+  }
+  [data-theme="red"]{                    /* Crimson: red + green + gold */
+    --bg:#2b050b; --bg-2:#6a1019; --glow:230,196,118;
+    --card:rgba(168,26,40,.3); --line:rgba(230,196,118,.32);
+    --gold:#e8c67a; --gold-2:#a87f35; --gold-lite:#f8e0a6;
+    --text:#fff5ea; --soft:#f3dcd6; --muted:#e2b9b5;
+    --hl-a:#23855a; --hl-b:#0e4d32; --hl-solid:#1f7a50; --hl-border:rgba(130,225,175,.6); --hl-rgb:50,160,110;
+    --poster-a:#98202c; --poster-b:#3a0a12;
+    --pin-a:#d9f7e6; --pin-b:#2a8a5c; --pin-c:#0d3a26;
+    --star-a:#fff8e0; --star-b:#f2cf7c; --star-c:#b07d2a;
+  }
+  :root{
+    --radius:16px;
+    --serif:'Playfair Display',Georgia,serif;
+    --script:'Pinyon Script','Snell Roundhand',cursive;
+    --sans:'DM Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;background:var(--bg)}
+  body{
+    margin:0;color:var(--text);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1.5px 1.5px at 12% 22%,rgba(255,255,255,.7),transparent 60%),
+      radial-gradient(1px 1px at 28% 64%,rgba(255,255,255,.5),transparent 60%),
+      radial-gradient(1.5px 1.5px at 47% 12%,rgba(var(--glow),.8),transparent 60%),
+      radial-gradient(1px 1px at 63% 48%,rgba(255,255,255,.5),transparent 60%),
+      radial-gradient(1.5px 1.5px at 81% 78%,rgba(255,255,255,.6),transparent 60%),
+      radial-gradient(1px 1px at 92% 30%,rgba(255,255,255,.5),transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* script accent word */
+  .sc{font-family:var(--script);font-weight:400;font-size:1.28em;letter-spacing:0;line-height:.8;color:var(--gold-lite);text-shadow:0 0 28px rgba(var(--glow),.35)}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;overflow:hidden;padding:220px 0 0;
+    background:
+      radial-gradient(900px 300px at 50% 0,rgba(var(--glow),var(--wash,0)),transparent 70%),
+      radial-gradient(700px 420px at 82% 8%,rgba(var(--glow),var(--sg,.22)),transparent 65%),
+      radial-gradient(900px 520px at 8% -20%,var(--bg-2),transparent 70%);
+  }
+  .hero .wrap{position:relative;z-index:2}
+  .hero .star-big{position:absolute;right:-60px;top:-70px;width:440px;height:440px;opacity:.95;z-index:1;filter:drop-shadow(0 0 40px rgba(var(--glow),.5))}
+  .hero .sprig-l{position:absolute;left:44%;top:-46px;width:130px;transform:rotate(28deg);opacity:.9;z-index:1}
+  .hero .sprig-r{position:absolute;right:-10px;bottom:30px;width:150px;transform:scaleX(-1) rotate(160deg);opacity:.8;z-index:1}
+  .eyebrow{font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:700}
+  .hero h1{font:800 clamp(64px,13vw,150px)/.88 var(--serif);letter-spacing:-.05em;margin:16px 0 10px;color:#fff}
+  .hero h1 .sc{display:block;margin-top:2px;margin-left:.04em;font-size:1.08em;color:var(--gold-lite);text-shadow:0 0 34px rgba(var(--glow),.45)}
+  .hero p.sub{max-width:520px;color:var(--soft);margin:0 0 34px}
+
+  .years{display:flex;align-items:flex-end;gap:6px;flex-wrap:wrap}
+  .years .lbl{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 10px 12px 0}
+  .year-tab{
+    appearance:none;border:1px solid var(--line);border-bottom:0;cursor:pointer;font:800 22px/1 var(--serif);
+    padding:14px 22px 12px;border-radius:14px 14px 0 0;background:var(--card);color:var(--muted);
+    transition:background .2s,color .2s,transform .2s;
+  }
+  .year-tab small{font:500 12px var(--sans);opacity:.75;margin-left:6px}
+  .year-tab:hover{color:#fff;transform:translateY(-2px)}
+  .year-tab[aria-selected="true"]{background:var(--bg);color:var(--gold);border-color:rgba(230,196,118,.6)}
+  .year-tab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+  /* ---------- Month ---------- */
+  main{padding:44px 0 90px;position:relative}
+  .month{margin-bottom:72px}
+  .month-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+  .month-nav button{
+    border:1.5px solid var(--line);background:transparent;color:var(--text);font:700 14px var(--sans);
+    padding:8px 18px;border-radius:999px;cursor:pointer;transition:background .2s,border-color .2s
+  }
+  .month-nav button:hover{border-color:var(--gold)}
+  .month-nav button[aria-pressed="true"]{background:var(--hl-solid);color:#fff;border-color:var(--hl-solid)}
+  .month-title{font:800 clamp(44px,8vw,82px)/.95 var(--serif);letter-spacing:-.04em;margin:0 0 8px;color:#fff}
+  .month-title .sc{margin-left:.12em}
+  .month-sub{color:var(--muted);margin:0 0 28px}
+
+  /* big calendar */
+  .cal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;backdrop-filter:blur(6px);box-shadow:0 20px 50px -25px rgba(0,0,0,.7)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .dow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-align:center;padding:4px 0 8px;font-weight:700}
+  .day{min-height:92px;border-radius:10px;padding:7px 7px 6px;background:rgba(255,255,255,.05);position:relative;display:flex;flex-direction:column;gap:4px;font:inherit;text-align:left;border:0;color:inherit}
+  .day.blank{background:transparent}
+  .day .n{font-weight:700;font-size:14px;color:var(--soft)}
+  .day.sun .n{color:var(--gold)}
+  .day.has{
+    background:linear-gradient(160deg,var(--hl-a),var(--hl-b));border:1px solid var(--hl-border);
+    cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 0 22px -8px rgba(var(--hl-rgb),.8)
+  }
+  .day.has .n{color:var(--gold-lite)}
+  .day.has:hover{transform:translateY(-2px);box-shadow:0 0 28px -4px rgba(var(--hl-rgb),.95)}
+  .day.has:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .day.has.notice{background:rgba(var(--glow),.1);border:1px dashed rgba(var(--glow),.7);box-shadow:none}
+  .day.has.notice .n{color:var(--gold)}
+  .chip{font-size:11.5px;line-height:1.25;font-weight:500;color:#fff}
+  .chip.tbc::after{content:" · TBC";opacity:.75}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:14px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .legend .lg-ev{background:linear-gradient(160deg,var(--hl-a),var(--hl-b));border:1px solid var(--hl-border)}
+  .legend .lg-no{background:rgba(var(--glow),.2);border:1px dashed var(--gold)}
+
+  /* ---------- Event cards (pinned posters) ---------- */
+  .events{margin-top:60px;display:grid;gap:44px}
+  .event{display:grid;grid-template-columns:300px 1fr;gap:36px;align-items:start;scroll-margin-top:24px}
+  .event.flash .body,.event.flash .notice-card{animation:flash 1.4s ease}
+  @keyframes flash{0%,100%{box-shadow:none}30%{box-shadow:0 0 0 3px var(--gold),0 0 40px rgba(var(--glow),.5)}}
+
+  .pin-board{position:relative;padding:22px 14px 14px}
+  .poster{
+    position:relative;display:block;width:100%;aspect-ratio:4/5;border:0;padding:0;background:var(--poster-b);
+    border-radius:4px;overflow:hidden;box-shadow:0 22px 40px -14px rgba(0,0,0,.75),0 0 0 1px rgba(var(--glow),.3);
+    transform:rotate(-1.6deg);transition:transform .25s;cursor:zoom-in;
+  }
+  .event:nth-child(even) .poster{transform:rotate(1.4deg)}
+  .poster:hover{transform:rotate(0) scale(1.02)}
+  .poster:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+  .poster img{width:100%;height:100%;object-fit:cover;display:block}
+  .poster.empty{
+    cursor:default;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;
+    background:radial-gradient(circle at 75% 25%,rgba(var(--glow),.3),transparent 55%),linear-gradient(170deg,var(--poster-a),var(--poster-b) 72%)
+  }
+  .poster.empty .star{position:absolute;right:-28px;top:-18px;width:190px;height:190px;filter:drop-shadow(0 0 22px rgba(var(--glow),.55))}
+  .poster.empty .sprig{position:absolute;right:-8px;bottom:-8px;width:92px;opacity:.9;transform:scaleX(-1) rotate(-14deg)}
+  .poster.empty .ph-d{position:absolute;left:20px;top:18px;font:800 54px/1 var(--serif);letter-spacing:-.04em;color:#fff}
+  .poster.empty .ph-d small{display:block;font:700 13px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+  .poster.empty .ph-t{position:relative;font:800 28px/.95 var(--serif);letter-spacing:-.04em;color:#fff;text-align:left}
+  .poster.empty .ph-t .sc{display:block;font-size:1.5em;margin-top:2px}
+  .poster.empty .ph-s{position:relative;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+  .pin{position:absolute;left:50%;top:6px;width:22px;height:22px;margin-left:-11px;border-radius:50%;z-index:2;
+    background:radial-gradient(circle at 35% 30%,var(--pin-a),var(--pin-b) 55%,var(--pin-c));box-shadow:0 5px 8px rgba(0,0,0,.55)}
+  .pin::after{content:"";position:absolute;left:8px;top:8px;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.7)}
+
+  .body{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;display:grid;grid-template-columns:1fr auto;gap:22px;backdrop-filter:blur(6px);position:relative;overflow:hidden}
+  .body::after{content:"";position:absolute;right:-70px;top:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(var(--glow),.14),transparent 65%);pointer-events:none}
+  .date-line{font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--gold);margin-bottom:8px}
+  .badge{display:inline-block;margin-left:8px;font-size:11px;letter-spacing:.1em;padding:3px 9px;border-radius:999px;border:1.5px dashed var(--gold);color:var(--gold-lite);background:rgba(var(--glow),.1);vertical-align:1px}
+  .body h3{font:800 clamp(32px,4.6vw,48px)/.95 var(--serif);letter-spacing:-.04em;margin:0 0 14px;color:#fff}
+  .body h3 .sc{margin-left:.06em}
+  .body p{margin:0 0 14px;color:var(--soft)}
+  .meta{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:15px}
+  .meta li{display:flex;gap:10px}
+  .meta b{min-width:56px;color:var(--muted);font-weight:500}
+  .note{margin-top:14px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding-left:10px}
+
+  /* mini calendar */
+  .mini{width:168px;position:relative;z-index:1}
+  .mini h4{margin:0 0 6px;font:700 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+  .mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:11px;color:var(--soft)}
+  .mini-grid .h{color:var(--muted);font-weight:700}
+  .mini-grid span{aspect-ratio:1;display:grid;place-items:center;border-radius:50%}
+  .mini-grid .on{background:var(--hl-solid);color:#fff;font-weight:700;box-shadow:0 0 12px rgba(var(--hl-rgb),.8)}
+  .mini-grid .on.tbc{background:transparent;color:var(--gold-lite);outline:2px dashed var(--gold);outline-offset:-2px;box-shadow:none}
+
+  /* notice row (e.g. no service) */
+  .event.notice-row{grid-template-columns:1fr}
+  .notice-card{display:flex;gap:20px;align-items:center;background:rgba(var(--glow),.09);border:1px dashed rgba(var(--glow),.65);border-radius:var(--radius);padding:22px 28px}
+  .notice-card .big{font:800 46px/1 var(--serif);letter-spacing:-.04em;color:var(--gold);min-width:92px;text-align:center}
+  .notice-card .big small{display:block;font:700 12px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .notice-card h3{font:800 28px/1 var(--serif);letter-spacing:-.04em;margin:0 0 4px;color:#fff}
+  .notice-card p{margin:0;color:var(--soft)}
+
+  .also{margin-top:8px;border:1.5px dashed rgba(var(--glow),.5);border-radius:var(--radius);padding:24px 28px;background:rgba(var(--glow),.06)}
+  .also h3{font:800 30px/1 var(--serif);letter-spacing:-.04em;margin:0 0 6px;color:#fff}
+  .also p{margin:0;color:var(--soft)}
+
+  .empty-state{background:var(--card);border:1.5px dashed var(--line);border-radius:var(--radius);padding:48px 24px;text-align:center;color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);background:rgba(0,0,0,.28);color:var(--muted);padding:30px 0;font-size:14px}
+
+  /* ---------- String lights ---------- */
+  .lights{position:absolute;left:0;top:0;width:100%;height:240px;z-index:3;pointer-events:none;overflow:hidden}
+  .lights svg{display:block}
+  .lights .string{fill:none;stroke:#f4ecd9;stroke-width:2.6;stroke-linecap:round;filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+  .lights .cord{stroke:#f4ecd9;stroke-width:2.2;stroke-linecap:round}
+  .lights .clip{fill:#f4ecd9;stroke:rgba(0,0,0,.35);stroke-width:.8}
+  .lights .glass{stroke:var(--gold);stroke-width:2.6;stroke-linejoin:round}
+  .lights .fil{fill:none;stroke:#fff6dc;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
+  .lights .nail{fill:var(--hl-b);stroke:var(--gold);stroke-width:1.6}
+  .lights .bulb{animation:sway var(--sd,5s) ease-in-out var(--sl,0s) infinite alternate}
+  /* alternate bulbs switch on and off: even ones lit while odd ones are dark, then they swap */
+  .lights .halo,.lights .core{animation:lampOn 2s linear var(--bl,0s) infinite}
+  .lights .fil{animation:filOn 2s linear var(--bl,0s) infinite}
+  .lights .dim{fill:#0a110d;opacity:0;animation:lampOff 2s linear var(--bl,0s) infinite}
+  .lights .spark{animation:twinkle var(--td,3.4s) ease-in-out var(--tl,0s) infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes sway{from{transform:rotate(-2.4deg)}to{transform:rotate(2.4deg)}}
+  @keyframes lampOn{0%,42%{opacity:1}52%,92%{opacity:0}100%{opacity:1}}
+  @keyframes lampOff{0%,42%{opacity:0}52%,92%{opacity:.72}100%{opacity:0}}
+  @keyframes filOn{0%,42%{opacity:.95}52%,92%{opacity:.25}100%{opacity:.95}}
+  @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.5) rotate(0)}50%{opacity:.95;transform:scale(1) rotate(45deg)}}
+
+  /* ---------- Christmas night mode ---------- */
+  .hero,main,footer{position:relative;z-index:1}
+  body::before{ /* night-sky stars */
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.6s ease;
+    background:
+      radial-gradient(2px 2px at 6% 14%,#fff,transparent 60%),radial-gradient(1.5px 1.5px at 15% 46%,#fff,transparent 60%),
+      radial-gradient(2px 2px at 23% 82%,#fff,transparent 60%),radial-gradient(1.5px 1.5px at 31% 28%,#fff,transparent 60%),
+      radial-gradient(2.5px 2.5px at 39% 64%,rgba(var(--glow),1),transparent 60%),radial-gradient(1.5px 1.5px at 46% 9%,#fff,transparent 60%),
+      radial-gradient(2px 2px at 54% 90%,#fff,transparent 60%),radial-gradient(1.5px 1.5px at 62% 36%,#fff,transparent 60%),
+      radial-gradient(2px 2px at 70% 70%,#fff,transparent 60%),radial-gradient(2.5px 2.5px at 77% 18%,rgba(var(--glow),1),transparent 60%),
+      radial-gradient(1.5px 1.5px at 84% 52%,#fff,transparent 60%),radial-gradient(2px 2px at 91% 86%,#fff,transparent 60%),
+      radial-gradient(1.5px 1.5px at 96% 24%,#fff,transparent 60%),radial-gradient(1.5px 1.5px at 11% 68%,#fff,transparent 60%);
+  }
+  html[data-mode="night"] body::before{opacity:.9;animation:skyTwinkle 5s ease-in-out infinite alternate}
+  @keyframes skyTwinkle{from{opacity:.55}to{opacity:1}}
+
+  [data-theme="green"][data-mode="night"]{--bg:#020b08;--bg-2:#052a1c;--card:rgba(6,46,32,.5);--line:rgba(230,196,118,.36);--poster-a:#0a4a2f;--poster-b:#021409}
+  [data-theme="red"][data-mode="night"]{--bg:#140205;--bg-2:#4c0a13;--card:rgba(120,16,28,.38);--line:rgba(230,196,118,.38);--poster-a:#7a1520;--poster-b:#2a060c}
+  html[data-mode="night"] .hero{--sg:.42;--wash:.2}
+  html[data-mode="night"] .hero .star-big{filter:drop-shadow(0 0 60px rgba(var(--glow),.85));animation:breathe 4.5s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.05);opacity:1}}
+
+  /* bulbs: tap target + steady glow at night (they light up one after another) */
+  .lights .bulb{pointer-events:all;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  html[data-mode="night"] .lights .halo,html[data-mode="night"] .lights .core{animation:litUp .7s ease-out var(--ld,0s) both}
+  html[data-mode="night"] .lights .halo{transform-box:fill-box;transform-origin:center;transform:scale(1.3)}
+  html[data-mode="night"] .lights .fil{animation:none;opacity:1}
+  html[data-mode="night"] .lights .dim{animation:darkOut .7s ease-out var(--ld,0s) both}
+  @keyframes litUp{from{opacity:0}to{opacity:1}}
+  @keyframes darkOut{from{opacity:.72}to{opacity:0}}
+
+  .snow{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
+  .blackout{position:fixed;inset:0;background:#000;z-index:55;opacity:0;pointer-events:none;transition:opacity .9s ease}
+  .blackout.on{opacity:1;transition-duration:.3s}
+
+  .top-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .hint{border:0;background:none;color:var(--gold-lite);font:700 13px var(--sans);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:6px 0;animation:hintPulse 2.4s ease-in-out infinite}
+  .hint[hidden]{display:none}
+  @keyframes hintPulse{0%,100%{opacity:.55}50%{opacity:1}}
+
+  .night-toggle{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:8px;border:1px solid var(--line);
+    background:rgba(0,0,0,.55);backdrop-filter:blur(8px);color:#fff;font:700 13px var(--sans);padding:10px 16px;border-radius:999px;cursor:pointer;transition:border-color .2s,background .2s}
+  .music-toggle{position:fixed;right:16px;bottom:64px;z-index:60;display:flex;align-items:center;gap:8px;border:1px solid var(--line);
+    background:rgba(0,0,0,.55);backdrop-filter:blur(8px);color:#fff;font:700 13px var(--sans);padding:9px 14px;border-radius:999px;cursor:pointer;transition:border-color .2s,background .2s}
+  .music-toggle[hidden]{display:none}
+  .music-toggle:hover{border-color:var(--gold)}
+  .music-toggle .ic{color:var(--gold);font-size:15px;line-height:1}
+  .music-toggle[aria-pressed="true"]{border-color:var(--gold)}
+  .music-toggle:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .night-toggle:hover{border-color:var(--gold)}
+  .night-toggle .ic{color:var(--gold);font-size:15px;line-height:1}
+  .night-toggle:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  html[data-mode="night"] .night-toggle{background:var(--gold);color:#1a1205;border-color:var(--gold)}
+  html[data-mode="night"] .night-toggle .ic{color:#1a1205}
+
+  /* theme preview switch (only visible with ?themes in the URL) */
+  .theme-switch{position:fixed;left:16px;bottom:16px;z-index:60;display:flex;gap:6px;background:rgba(0,0,0,.65);padding:6px;border-radius:999px;backdrop-filter:blur(8px)}
+  .theme-switch button{border:0;border-radius:999px;padding:8px 14px;font:700 13px var(--sans);cursor:pointer;background:transparent;color:#fff}
+  .theme-switch button[aria-pressed="true"]{background:var(--gold);color:#1a1205}
+
+  /* lightbox */
+  .lb{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;place-items:center;z-index:70;padding:24px}
+  .lb.open{display:grid}
+  .lb img{max-width:min(94vw,820px);max-height:88vh;border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 60px rgba(var(--glow),.25)}
+  .lb button{position:absolute;top:16px;right:16px;border:0;background:var(--gold);color:#1a1205;font:700 15px var(--sans);padding:10px 16px;border-radius:999px;cursor:pointer}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:860px){
+    .hero .star-big{width:300px;height:300px;right:-80px;top:-60px;opacity:.8}
+    .hero .sprig-l{width:110px}
+    .hero .sprig-r{display:none}
+    .event{grid-template-columns:1fr;gap:10px}
+    .pin-board{max-width:300px;margin:0 auto;width:100%}
+    .body{grid-template-columns:1fr}
+    .mini{width:100%;max-width:200px}
+  }
+  @media (max-width:640px){
+    .hero{padding-top:165px}
+    .lights{height:175px}
+    .cal{padding:10px}
+    .cal-grid{gap:3px}
+    .day{min-height:54px;padding:5px;align-items:center}
+    .day .chip{display:none}
+    .day.has::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-lite);box-shadow:0 0 8px var(--gold)}
+    .dow{font-size:10px;letter-spacing:.04em}
+    .body{padding:22px}
+    .notice-card{flex-direction:column;align-items:flex-start;gap:8px}
+    .notice-card .big{text-align:left}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="star-big" data-art="star" aria-hidden="true"></span>
+  <div class="lights" id="lights" aria-hidden="true"></div>
+  <span class="sprig-r" data-art="sprig" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="top-row"><div class="eyebrow">Evergreen City Community</div><button class="hint" id="hint" type="button">✦ Tap a bulb</button></div>
+    <h1>Our <span class="sc">Calendar</span></h1>
+    <p class="sub">Services, gatherings and mission days — with the posters pinned up. Tap a year to see what we got up to in past seasons.</p>
+    <div class="years" role="tablist" aria-label="Choose a year">
+      <span class="lbl">Year</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<footer><div class="wrap">Evergreen City Community · Everyone is welcome. · <a href="/">Back to the main site</a></div></footer>
+
+<canvas class="snow" id="snow" aria-hidden="true"></canvas>
+<div class="blackout" id="blackout" aria-hidden="true"></div>
+<button class="music-toggle" id="musicToggle" type="button" aria-pressed="false" hidden><span class="ic" aria-hidden="true">♪</span><span class="txt">Music off</span></button>
+<button class="night-toggle" id="nightToggle" type="button" aria-pressed="false"><span class="ic" aria-hidden="true">✦</span><span class="txt">Christmas night</span></button>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Poster">
+  <button type="button" id="lbClose">Close ✕</button>
+  <img alt="" id="lbImg">
+</div>
+
+<script>
+/* =====================================================================
+   EDIT HERE — this is the only part you need to touch each year.
+   ---------------------------------------------------------------------
+   • Add a new year by adding a block like  2027: { ... }
+   • Each event needs:   id, date ("YYYY-MM-DD"), title
+   • Optional:           time, venue, entry, blurb, note, poster, tbc, type
+        poster : path to the image, e.g. "posters/2026/christmas-fair.jpg"
+                 (leave "" until you have it — a placeholder is shown)
+        tbc    : true  → shows a "Date to be confirmed" tag
+        type   : "notice" → slim banner (e.g. "No service")
+   • "undated" = things happening that month with no fixed date yet.
+   • Old years stay in the file forever — that's your archive.
+   ===================================================================== */
+const CALENDAR = {
+  2026: {
+    undated: [
+      { month: 12, title: "House Carols", blurb: "Carolling in homes across the community. Dates and host families will be shared here soon." }
+    ],
+    events: [
+      {
+        id: "mission-visit",
+        date: "2026-11-28",
+        title: "Mission Outreach Visit",
+        blurb: "As part of our church mission, we will be visiting a home for people with intellectual disabilities to spend time with the residents.",
+        time: "",
+        venue: "",
+        poster: ""
+      },
+      {
+        id: "christmas-fair",
+        date: "2026-12-11",
+        title: "Christmas Fair",
+        blurb: "Join us for the Evergreen City Community Christmas Fair: food stalls, arts & crafts, games & activities and live music. Bring family and friends.",
+        time: "Friday, 7 PM – 9 PM",
+        venue: "Rooftop, Legacy House, Kazhakootam",
+        entry: "Entry fee ₹100 · Free entry for children below 6",
+        poster: "posters/christmas-fair.webp"
+      },
+      {
+        id: "christmas-service",
+        date: "2026-12-20",
+        tbc: true,
+        title: "Christmas Service",
+        blurb: "Our community gathers to celebrate the birth of Jesus.",
+        time: "Sunday evening (time to be announced)",
+        venue: "",
+        poster: ""
+      },
+      {
+        id: "no-service",
+        type: "notice",
+        date: "2026-12-27",
+        title: "No Service",
+        blurb: "There is no Sunday service this week. We'll see you on New Year's Eve."
+      },
+      {
+        id: "new-year-service",
+        date: "2026-12-31",
+        title: "New Year Service",
+        blurb: "Let's close out the year together in worship and prayer.",
+        time: "",
+        venue: "",
+        poster: ""
+      }
+    ]
+  }
+  /* When 2027 begins, add a 2027: { ... } block above. 2026 then becomes an
+     archive tab automatically. To add past years, add 2025: { ... } the same way. */
+};
+/* ===================== end of editable section ===================== */
+
+
+/* asset paths: work both when opened from a folder and when served at yoursite.com/calendar */
+const ASSETS = /^\/calendar(\/|$)/.test(location.pathname) ? "/calendar/" : "";
+const asset = p => (/^(https?:)?\/\//.test(p) || p.startsWith("/")) ? p : ASSETS + p;
+
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const $ = (s,el=document)=>el.querySelector(s);
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const parse = iso => { const [y,m,d]=iso.split("-").map(Number); return new Date(y,m-1,d); };
+
+/* ---------- decorative art (drawn in code, no image files needed) ---------- */
+let artId = 0;
+function starSVG(){
+  const id = "sg"+(artId++);
+  const pts = [], facets = [];
+  for(let k=0;k<8;k++){
+    const a  = (k*45-90)*Math.PI/180, a2 = ((k*45+22.5)-90)*Math.PI/180;
+    const R  = k%2===0 ? 100 : 56;
+    pts.push([100+R*Math.cos(a),100+R*Math.sin(a)], [100+15*Math.cos(a2),100+15*Math.sin(a2)]);
+  }
+  const poly = pts.map(p=>p.map(n=>n.toFixed(1)).join(",")).join(" ");
+  // light facets: alternating triangles from centre
+  for(let i=0;i<pts.length;i+=2){
+    const p=pts[i], q=pts[(i+1)%pts.length];
+    facets.push(`<polygon points="100,100 ${p[0].toFixed(1)},${p[1].toFixed(1)} ${q[0].toFixed(1)},${q[1].toFixed(1)}" fill="#fff" opacity=".28"/>`);
+  }
+  return `<svg class="star" viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
+    <defs><radialGradient id="${id}" cx="50%" cy="50%" r="55%"><stop offset="0" style="stop-color:#fff"/><stop offset=".35" style="stop-color:var(--star-b)"/><stop offset="1" style="stop-color:var(--star-c)"/></radialGradient></defs>
+    <polygon points="${poly}" fill="url(#${id})"/>${facets.join("")}
+    <circle cx="100" cy="100" r="6" fill="#fff"/></svg>`;
+}
+function sprigSVG(){
+  const id = "gd"+(artId++);
+  const P=(t)=>{ // quadratic bezier stem
+    const [x0,y0,cx,cy,x1,y1]=[12,186,40,70,150,16];
+    return [(1-t)*(1-t)*x0+2*(1-t)*t*cx+t*t*x1,(1-t)*(1-t)*y0+2*(1-t)*t*cy+t*t*y1];
+  };
+  let leaves="";
+  for(let i=1;i<=9;i++){
+    const t=i/10, [x,y]=P(t), [x2,y2]=P(t+.02);
+    const ang=Math.atan2(y2-y,x2-x)*180/Math.PI;
+    const s=1-t*.45;
+    [-1,1].forEach(side=>{
+      leaves+=`<ellipse cx="0" cy="0" rx="${(6*s).toFixed(1)}" ry="${(19*s).toFixed(1)}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(ang+90+side*52).toFixed(1)}) translate(0 ${(-14*s).toFixed(1)})" fill="url(#${id})"/>`;
+    });
+  }
+  const tip=P(1);
+  leaves+=`<ellipse rx="5" ry="15" transform="translate(${tip[0]} ${tip[1]}) rotate(35) translate(0 -8)" fill="url(#${id})"/>`;
+  return `<svg class="sprig" viewBox="0 0 190 200" width="100%" aria-hidden="true"><defs>
+    <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6dfa4"/><stop offset=".55" stop-color="#d4a950"/><stop offset="1" stop-color="#8e6a2a"/></linearGradient></defs>
+    <path d="M12 186 Q40 70 150 16" stroke="url(#${id})" stroke-width="2.5" fill="none" stroke-linecap="round"/>${leaves}</svg>`;
+}
+function paintArt(root=document){
+  root.querySelectorAll("[data-art]").forEach(el=>{
+    if(el.dataset.done) return; el.dataset.done=1;
+    el.innerHTML = el.dataset.art==="star" ? starSVG() : sprigSVG();
+  });
+}
+
+/* ---------- string lights (drawn in code; they glow in a wave and sway gently) ---------- */
+function buildLights(){
+  const box = $("#lights"); if(!box) return;
+  const W = Math.max(box.clientWidth, 320), small = W < 640;
+  const H = small ? 175 : 240, sc = small ? .86 : 1.2;
+  const gap = small ? 150 : W < 1100 ? 210 : 250, dip = small ? 28 : 40;
+  const rnd = i => { const x = Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); };   // steady "random"
+  const n = Math.ceil(W/gap)+2, x0 = -gap*.45, y0 = 12;
+
+  let string = `M ${x0} ${y0}`, items = "", sparks = "", nails = "", k = 0;
+  for(let i=0;i<n;i++){
+    const ax = x0+i*gap, bx = ax+gap, cx = ax+gap/2, cy = y0+dip*2;
+    string += ` Q ${cx} ${cy} ${bx} ${y0}`;
+    nails += `<circle class="nail" cx="${bx}" cy="${y0}" r="4.5"/>`;
+    [[.27,24],[.74,64]].forEach(([t,len],j)=>{
+      const x = (1-t)*(1-t)*ax+2*(1-t)*t*cx+t*t*bx, y = (1-t)*(1-t)*y0+2*(1-t)*t*cy+t*t*y0;
+      if(y*0+x < -20 || x > W+20){ k++; return; }
+      const alt = k%3===1, f = alt?"url(#bgAlt)":"url(#bgGold)", hr = alt?"var(--hl-rgb)":"var(--glow)";
+      const L = len*sc*(.9+rnd(k)*.25), gy = y+L+12*sc;                       // where the glass sits
+      items += `<g class="bulb" style="--bl:${k%2?"-1s":"0s"};--ld:${(k*.1).toFixed(2)}s;--sd:${(4+rnd(k+3)*2.5).toFixed(2)}s;--sl:${(-rnd(k+9)*4).toFixed(2)}s;transform-origin:${x.toFixed(1)}px ${y.toFixed(1)}px">
+        <line class="cord" x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${x.toFixed(1)}" y2="${(y+L).toFixed(1)}"/>
+        <path d="M${(x-4).toFixed(1)} ${(y+3).toFixed(1)} q4 -5 8 0" class="cord" fill="none"/>
+        <g transform="translate(${x.toFixed(1)} ${(y+L).toFixed(1)}) scale(${sc})">
+          <circle class="halo" cx="0" cy="30" r="44" fill="url(#halo${alt?"Alt":"Gold"})"/>
+          <rect class="clip" x="-8" y="-9" width="16" height="11" rx="2.5"/>
+          <path class="glass" d="M-6 2 L6 2 L6 11 C6 14 17 19 17 31 C17 42 9 48 0 48 C-9 48 -17 42 -17 31 C-17 19 -6 14 -6 11 Z" fill="${f}"/>
+          <path class="dim" d="M-6 2 L6 2 L6 11 C6 14 17 19 17 31 C17 42 9 48 0 48 C-9 48 -17 42 -17 31 C-17 19 -6 14 -6 11 Z"/>
+          <ellipse class="core" cx="0" cy="33" rx="9" ry="11" fill="#fff4cc" opacity=".6"/>
+          <path class="fil" d="M-4 12 L-4 28 L-1.5 21 L1.5 28 L4 21 L4 12"/>
+        </g></g>`;
+      // a little sparkle beside some bulbs
+      if(j===0 || rnd(k+20)>.4){
+        const sx = x + (j? -1:1)*(46+rnd(k+30)*28), sy = y+dip*.9+30+rnd(k+40)*70, s = 5+rnd(k+50)*4;
+        if(sx>0 && sx<W) sparks += `<path class="spark" d="M0 ${-s*1.6} Q${s*.18} ${-s*.18} ${s*1.6} 0 Q${s*.18} ${s*.18} 0 ${s*1.6} Q${-s*.18} ${s*.18} ${-s*1.6} 0 Q${-s*.18} ${-s*.18} 0 ${-s*1.6}Z" fill="var(--gold-lite)" transform="translate(${sx.toFixed(1)} ${sy.toFixed(1)})" style="--td:${(3+rnd(k+60)*2).toFixed(2)}s;--tl:${(-rnd(k+70)*4).toFixed(2)}s"/>`;
+      }
+      k++;
+    });
+  }
+  box.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="bgGold" cx="50%" cy="62%" r="60%"><stop offset="0" stop-color="#fff3c2"/><stop offset=".5" stop-color="#f0bd4f"/><stop offset="1" stop-color="#a8721f"/></radialGradient>
+      <radialGradient id="bgAlt" cx="50%" cy="62%" r="60%"><stop offset="0" stop-color="#ffe3c4"/><stop offset=".45" style="stop-color:var(--hl-a)"/><stop offset="1" style="stop-color:var(--hl-b)"/></radialGradient>
+      <radialGradient id="haloGold"><stop offset="0" style="stop-color:rgb(var(--glow));stop-opacity:.55"/><stop offset="1" style="stop-color:rgb(var(--glow));stop-opacity:0"/></radialGradient>
+      <radialGradient id="haloAlt"><stop offset="0" style="stop-color:rgb(var(--hl-rgb));stop-opacity:.6"/><stop offset="1" style="stop-color:rgb(var(--hl-rgb));stop-opacity:0"/></radialGradient>
+    </defs>
+    <path class="string" d="${string}"/>${nails}${sparks}${items}</svg>`;
+}
+buildLights();
+$("#lights").addEventListener("click",e=>{ if(e.target.closest(".bulb")) toggleNight(); });   // tap any bulb
+let lw = innerWidth; addEventListener("resize",()=>{ if(innerWidth!==lw){ lw=innerWidth; buildLights(); } });
+
+/* ---------- Christmas night: tap a bulb → lights out → steady glow + falling snow ---------- */
+const NIGHT_AUTO = (d)=> d.getMonth()===11 && ((d.getDate()===24 && d.getHours()>=17) || d.getDate()===25);  // Dec 24 evening & Dec 25 → set to ()=>false to switch this off
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store = { get:k=>{ try{return localStorage.getItem(k)}catch(e){return null} }, set:(k,v)=>{ try{localStorage.setItem(k,v)}catch(e){} } };
+
+/* ---------- background music ----------
+   Put your licensed audio file at  audio/christmas-jazz.mp3  (next to this page).
+   If the file isn't there, the Music button simply doesn't appear.
+   Browsers only allow sound after a tap, so it starts when a visitor taps a bulb (or the Music button). */
+const MUSIC = { src: asset("audio/christmas-jazz.mp3"), volume: 0.18 };   // 0 = silent, 1 = full volume
+const music = (()=>{
+  const a=new Audio(); a.src=MUSIC.src; a.loop=true; a.preload="metadata"; a.volume=0;
+  const btn=$("#musicToggle"); let ok=false, want=false, tmr=0;
+  a.addEventListener("loadedmetadata",()=>{ ok=true; btn.hidden=false; });
+  a.addEventListener("error",()=>{ ok=false; btn.hidden=true; });
+  const ui=()=>{ btn.setAttribute("aria-pressed",want); $(".txt",btn).textContent = want ? "Music on" : "Music off"; };
+  function ramp(to,ms,done){
+    clearInterval(tmr); const from=a.volume, t=performance.now();
+    tmr=setInterval(()=>{ const p=Math.min(1,(performance.now()-t)/ms); a.volume=Math.max(0,Math.min(1,from+(to-from)*p)); if(p>=1){ clearInterval(tmr); done&&done(); } },50);
+  }
+  function play(){ if(!ok) return; want=true; ui(); const p=a.play(); if(p&&p.catch) p.catch(()=>{ want=false; ui(); }); ramp(MUSIC.volume,2500); }
+  function pause(){ want=false; ui(); ramp(0,700,()=>a.pause()); }
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden) a.pause(); else if(want) a.play().catch(()=>{}); });
+  btn.onclick=()=>{ store.set("ecc-music", want?"0":"1"); want?pause():play(); };
+  return { tapStart(){ if(store.get("ecc-music")!=="0") play(); } };   // respects a visitor who switched it off
+})();
+
+const snow = (()=>{
+  /* look ported from the 21st.dev "SnowfallBackground": ❄ flakes, many sizes, slow fall, sideways drift, gentle spin */
+  const c=$("#snow"), g=c.getContext("2d"); let W=0,H=0,flakes=[],raf=0,run=false,t0=0,fade=0;
+  const MIN=3, MAX=30, GLYPH="\u2744\uFE0E";                      // ❄ forced to text (not emoji) style
+  const mk = init => {
+    const z=Math.pow(Math.random(),2.2), sz=MIN+z*(MAX-MIN);          // mostly small flakes, a few big soft ones
+    return {x:Math.random()*W, y:init?Math.random()*H:-sz*1.5, sz, v:16+z*38, s:Math.random()*6.28, w:.4+Math.random()*.7,
+            rot:Math.random()*6.28, spin:(Math.random()-.5)*.9, a:.3+Math.random()*.5, z};
+  };
+  function size(){
+    const d=Math.min(devicePixelRatio||1,2); W=innerWidth; H=innerHeight; c.width=W*d; c.height=H*d; g.setTransform(d,0,0,d,0,0);
+    const n=Math.round(Math.min(130,Math.max(50,W*H/10000))); while(flakes.length<n) flakes.push(mk(true)); flakes.length=n;
+  }
+  function frame(ts){
+    if(!run) return;
+    const dt=Math.min((ts-t0)/1000||.016,.05); t0=ts; fade=Math.min(1,fade+dt/2.5);
+    g.clearRect(0,0,W,H); g.fillStyle="#fff"; g.textAlign="center"; g.textBaseline="middle";
+    for(const f of flakes){
+      f.y+=f.v*dt; f.s+=f.w*dt; f.rot+=f.spin*dt; f.x+=(Math.sin(f.s)*12+7)*dt*(.4+f.z);
+      if(f.y>H+f.sz||f.x>W+f.sz){ Object.assign(f,mk(false)); f.x=Math.random()*W; }
+      g.globalAlpha=fade*f.a;
+      if(f.sz<7){ g.beginPath(); g.arc(f.x,f.y,f.sz/2.4,0,6.283); g.fill(); }
+      else { g.save(); g.translate(f.x,f.y); g.rotate(f.rot); g.font=f.sz+"px sans-serif"; g.fillText(GLYPH,0,0); g.restore(); }
+    }
+    raf=requestAnimationFrame(frame);
+  }
+  const begin = ()=>{ t0=performance.now(); raf=requestAnimationFrame(frame); };
+  document.addEventListener("visibilitychange",()=>{ if(!run) return; if(document.hidden) cancelAnimationFrame(raf); else begin(); });
+  addEventListener("resize",()=>{ if(run) size(); });
+  return { start(){ if(run||reduced) return; run=true; fade=0; size(); begin(); }, stop(){ run=false; cancelAnimationFrame(raf); g.clearRect(0,0,W,H); } };
+})();
+
+const isNight = ()=> document.documentElement.dataset.mode==="night";
+function applyMode(night){
+  document.documentElement.dataset.mode = night ? "night" : "day";
+  const b=$("#nightToggle"); b.setAttribute("aria-pressed",night); $(".txt",b).textContent = night ? "Back to day" : "Christmas night";
+  night ? snow.start() : snow.stop();
+  if(night) $("#hint").hidden = true;
+}
+function toggleNight(){
+  const to = !isNight(); store.set("ecc-night", to?"1":"0"); store.set("ecc-hint","1");
+  if(to) music.tapStart();                                      // must run inside the tap to be allowed to play
+  if(reduced){ applyMode(to); return; }
+  const bo=$("#blackout"); bo.classList.add("on");              // lights out…
+  setTimeout(()=>{ applyMode(to); bo.classList.remove("on"); },380);   // …then the glow comes on
+}
+$("#nightToggle").onclick = toggleNight;
+$("#hint").onclick = toggleNight;
+(function initMode(){
+  const q=new URLSearchParams(location.search), saved=store.get("ecc-night");
+  const night = q.has("night") ? true : q.has("day") ? false : saved!==null ? saved==="1" : NIGHT_AUTO(new Date());
+  if(store.get("ecc-hint")==="1") $("#hint").hidden = true;
+  applyMode(night);
+})();
+
+/* last word of a title becomes the script accent */
+function titleHTML(t){
+  const w = String(t).trim().split(/\s+/);
+  if(w.length<2) return esc(t);
+  const last = w.pop();
+  return `${esc(w.join(" "))} <span class="sc">${esc(last)}</span>`;
+}
+
+/* ---------- colour theme: "green" (evergreen + red + gold) or "red" (crimson + green + gold) ---------- */
+const THEME = "green";
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  document.querySelectorAll(".theme-switch button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.t===t));
+}
+(function(){
+  const q = new URLSearchParams(location.search);
+  const t = ["green","red"].includes(q.get("theme")) ? q.get("theme") : THEME;
+  document.documentElement.dataset.theme = t;
+  if(q.has("themes")){            // preview switcher: yoursite.com/calendar?themes
+    const sw = document.createElement("div"); sw.className="theme-switch";
+    sw.innerHTML = `<button data-t="green" type="button">Green</button><button data-t="red" type="button">Red</button>`;
+    sw.onclick = e=>{ const b=e.target.closest("button"); if(b) applyTheme(b.dataset.t); };
+    document.body.appendChild(sw); applyTheme(t);
+  }
+})();
+
+const years = Object.keys(CALENDAR).map(Number).sort((a,b)=>b-a);
+const thisYear = new Date().getFullYear();
+let state = { year: pickYear(), month: null };
+
+function pickYear(){
+  const h = parseInt(location.hash.replace("#",""),10);
+  if (years.includes(h)) return h;
+  return years.includes(thisYear) ? thisYear : years[0];
+}
+
+function monthsFor(year){
+  const set = new Set(CALENDAR[year].events.map(e=>parse(e.date).getMonth()));
+  (CALENDAR[year].undated||[]).forEach(u=>set.add(u.month-1));
+  return [...set].sort((a,b)=>a-b);
+}
+
+/* ---------- year tabs ---------- */
+function renderYears(){
+  const box = $(".years");
+  box.querySelectorAll(".year-tab").forEach(b=>b.remove());
+  years.forEach(y=>{
+    const b = document.createElement("button");
+    b.className="year-tab"; b.type="button"; b.setAttribute("role","tab");
+    b.setAttribute("aria-selected", y===state.year);
+    b.innerHTML = `’${String(y).slice(2)}<small>${y}${y===thisYear?"":" archive"}</small>`;
+    b.onclick = ()=>{ state.year=y; state.month=null; history.replaceState(null,"","#"+y); render(); window.scrollTo({top:0,behavior:"smooth"}); };
+    box.appendChild(b);
+  });
+}
+
+/* ---------- mini calendar ---------- */
+function miniCal(iso,tbc){
+  const d = parse(iso), y=d.getFullYear(), m=d.getMonth();
+  const first = new Date(y,m,1).getDay(), days = new Date(y,m+1,0).getDate();
+  let cells = DOW.map(x=>`<span class="h">${x[0]}</span>`).join("");
+  for(let i=0;i<first;i++) cells+="<span></span>";
+  for(let n=1;n<=days;n++) cells += n===d.getDate()
+      ? `<span class="on${tbc?" tbc":""}">${n}</span>` : `<span>${n}</span>`;
+  return `<div class="mini" aria-hidden="true"><h4>${MONTHS[m]} ${y}</h4><div class="mini-grid">${cells}</div></div>`;
+}
+
+/* ---------- big month ---------- */
+function monthGrid(year,month,events){
+  const first = new Date(year,month,1).getDay(), days = new Date(year,month+1,0).getDate();
+  const byDay = {};
+  events.forEach(e=>{ const d=parse(e.date); if(d.getMonth()===month) (byDay[d.getDate()] ||= []).push(e); });
+  let h = DOW.map(d=>`<div class="dow">${d}</div>`).join("");
+  for(let i=0;i<first;i++) h+=`<div class="day blank"></div>`;
+  for(let n=1;n<=days;n++){
+    const ev = byDay[n], sun = (first+n-1)%7===0;
+    if(ev){
+      const e = ev[0], label = `${WEEKDAYS[(first+n-1)%7]} ${n} ${MONTHS[month]}: ${e.title}`;
+      h+=`<button class="day has${e.type==="notice"?" notice":""}${sun?" sun":""}" data-target="${esc(e.id)}" aria-label="${esc(label)}"><span class="n">${n}</span>${ev.map(x=>`<span class="chip${x.tbc?" tbc":""}">${esc(x.title)}</span>`).join("")}</button>`;
+    } else h+=`<div class="day${sun?" sun":""}"><span class="n">${n}</span></div>`;
+  }
+  return `<div class="cal"><div class="cal-grid">${h}</div>
+    <div class="legend"><span><i class="lg-ev"></i>Event</span><span><i class="lg-no"></i>Notice</span><span>TBC = date to be confirmed</span></div></div>`;
+}
+
+/* ---------- event card ---------- */
+function eventCard(e){
+  const d = parse(e.date);
+  const dateStr = `${WEEKDAYS[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]}`;
+
+  if(e.type==="notice"){
+    return `<article class="event notice-row" id="${esc(e.id)}"><div class="notice-card">
+      <div class="big"><small>${MONTHS[d.getMonth()].slice(0,3)}</small>${d.getDate()}</div>
+      <div><h3>${esc(e.title)}</h3><p>${esc(e.blurb||"")}</p></div></div></article>`;
+  }
+
+  const poster = e.poster
+    ? `<button type="button" class="poster" data-poster="${esc(asset(e.poster))}" data-title="${esc(e.title)}" data-date="${MONTHS[d.getMonth()].slice(0,3)}|${d.getDate()}" aria-label="Enlarge poster for ${esc(e.title)}"><img src="${esc(asset(e.poster))}" alt="Poster for ${esc(e.title)}" loading="lazy"></button>`
+    : placeholder(e,d);
+
+  const rows = [
+    ["When", e.time || "Time to be announced"],
+    ["Where", e.venue || "Venue to be announced"],
+    ...(e.entry ? [["Entry", e.entry]] : [])
+  ].map(([k,v])=>`<li><b>${k}</b><span>${esc(v)}</span></li>`).join("");
+
+  return `<article class="event" id="${esc(e.id)}">
+    <div class="pin-board"><span class="pin" aria-hidden="true"></span>${poster}</div>
+    <div class="body">
+      <div>
+        <div class="date-line">${dateStr}${e.tbc?'<span class="badge">DATE TBC</span>':""}</div>
+        <h3>${titleHTML(e.title)}</h3>
+        ${e.blurb?`<p>${esc(e.blurb)}</p>`:""}
+        <ul class="meta">${rows}</ul>
+        ${e.note?`<div class="note">${esc(e.note)}</div>`:""}
+      </div>
+      ${miniCal(e.date,e.tbc)}
+    </div>
+  </article>`;
+}
+
+function placeholder(e,d){
+  return `<div class="poster empty" role="img" aria-label="Poster coming soon for ${esc(e.title)}">
+    <span class="star" data-art="star"></span><span class="sprig" data-art="sprig"></span>
+    <div class="ph-d"><small>${MONTHS[d.getMonth()].slice(0,3)}</small>${d.getDate()}</div>
+    <div class="ph-t">${titleHTML(e.title)}</div><div class="ph-s">Poster coming soon</div></div>`;
+}
+
+/* ---------- page ---------- */
+function render(){
+  renderYears();
+  const data = CALENDAR[state.year];
+  const ms = monthsFor(state.year);
+  if(state.month===null || !ms.includes(state.month)) state.month = ms[ms.length-1] ?? 0;
+  const m = state.month;
+
+  const events = data.events.filter(e=>parse(e.date).getMonth()===m).sort((a,b)=>a.date.localeCompare(b.date));
+  const undated = (data.undated||[]).filter(u=>u.month-1===m);
+  const isPast = state.year < thisYear;
+
+  const nav = ms.length>1 ? `<div class="month-nav" role="group" aria-label="Choose a month">${ms.map(i=>`<button type="button" aria-pressed="${i===m}" data-m="${i}">${MONTHS[i]}</button>`).join("")}</div>` : "";
+
+  $("#app").innerHTML = `<section class="month">
+    ${nav}
+    <h2 class="month-title">${MONTHS[m]} <span class="sc">${state.year}</span></h2>
+    <p class="month-sub">${isPast ? `A look back at what we shared in ${MONTHS[m]} ${state.year}.` : "Tap a highlighted day to jump to the event."}</p>
+    ${monthGrid(state.year,m,events)}
+    <div class="events">
+      ${events.length ? events.map(eventCard).join("") : `<div class="empty-state">No events recorded for ${MONTHS[m]} ${state.year}.</div>`}
+      ${undated.map(u=>`<div class="also"><h3>${titleHTML(u.title)}</h3><p>${esc(u.blurb||"")}</p></div>`).join("")}
+    </div>
+  </section>`;
+
+  /* wire up */
+  document.querySelectorAll(".month-nav button").forEach(b=>b.onclick=()=>{ state.month=+b.dataset.m; render(); });
+  document.querySelectorAll(".day.has").forEach(b=>b.onclick=()=>{
+    const t = document.getElementById(b.dataset.target); if(!t) return;
+    t.scrollIntoView({behavior:"smooth",block:"center"});
+    t.classList.remove("flash"); void t.offsetWidth; t.classList.add("flash");
+    setTimeout(()=>t.classList.remove("flash"),1500);
+  });
+  document.querySelectorAll(".poster[data-poster]").forEach(b=>{
+    b.onclick=()=>openLb(b.dataset.poster,b.dataset.title);
+    const img=b.querySelector("img");
+    img.onerror=()=>{
+      const [mon,day]=b.dataset.date.split("|");
+      b.outerHTML=`<div class="poster empty" role="img"><span class="star" data-art="star"></span><span class="sprig" data-art="sprig"></span><div class="ph-d"><small>${mon}</small>${day}</div><div class="ph-t">${titleHTML(b.dataset.title)}</div><div class="ph-s">Poster coming soon</div></div>`;
+      paintArt($("#app"));
+    };
+  });
+  paintArt();
+}
+
+/* lightbox */
+const lb=$("#lb"), lbImg=$("#lbImg");
+function openLb(src,title){ lbImg.src=src; lbImg.alt="Poster for "+title; lb.classList.add("open"); $("#lbClose").focus(); }
+function closeLb(){ lb.classList.remove("open"); lbImg.src=""; }
+lb.addEventListener("click",e=>{ if(e.target!==lbImg) closeLb(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeLb(); });
+window.addEventListener("hashchange",()=>{ state.year=pickYear(); state.month=null; render(); });
+
+render();
+</script>
+</body>
+</html>
