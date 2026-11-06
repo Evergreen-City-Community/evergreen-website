@@ -9,6 +9,7 @@ const PAGES: { path: string; changeFrequency: "weekly" | "monthly"; priority: nu
   { path: "/location", changeFrequency: "monthly", priority: 0.9, lastModified: "2026-10-25" },
   { path: "/about", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-10-25" },
   { path: "/pastors", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-10-25" },
+  { path: "/calendar", changeFrequency: "weekly", priority: 0.6, lastModified: "2026-11-06" },
   { path: "/messages", changeFrequency: "weekly", priority: 0.7, lastModified: "2026-10-25" },
   { path: "/give", changeFrequency: "monthly", priority: 0.5, lastModified: "2026-10-25" },
 ];
