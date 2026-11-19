@@ -16,9 +16,14 @@ const NEW_WORD: WordState = { guesses: [], won: false, done: false };
 const NEW_WHO: WhoState = { guesses: [], clues: 1, won: false, done: false };
 const TILE_EMOJI = { hit: "🟩", near: "🟨", miss: "⬛" } as const;
 
-/** Today in India time. While developing, ?day=YYYY-MM-DD pretends it is another day. */
+/**
+ * Today in India time. For testing, ?day=YYYY-MM-DD pretends it is another day,
+ * but only on localhost and on Vercel preview addresses, never on the church's own domain.
+ * (Scores are local only for now; when the shared leaderboard is added, the server decides the day.)
+ */
 function currentDay(): string {
-  if (process.env.NODE_ENV !== "production") {
+  const host = window.location.hostname;
+  if (host === "localhost" || host.endsWith(".vercel.app")) {
     const d = new URLSearchParams(window.location.search).get("day");
     if (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
   }
