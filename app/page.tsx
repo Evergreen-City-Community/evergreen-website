@@ -231,6 +231,21 @@ export default function Home() {
           </Reveal>
         </section>
 
+        <section className="play-teaser">
+          <Reveal as="div" className="stack-10 play-teaser__head">
+            <p className="eyebrow">Christmas Eve Bible Quiz</p>
+            <h2 className="h-xl" data-fish="quiz">
+              Walk the road to <span className="accent">Bethlehem</span>
+            </h2>
+            <p className="lead play-teaser__lead">
+              Two quick Bible puzzles a day. Build your score, and be ready for the live quiz on stage on Christmas Eve.
+            </p>
+          </Reveal>
+          <Reveal as="div" className="btn-row btn-row--stack-phone" delay={80}>
+            <SwipeButton label="Play today’s puzzles →" href="/games/bible-quiz" scheme="primary" />
+          </Reveal>
+        </section>
+
         {/* Paused (ECC brief, 23 Oct): flip PLAY_ENABLED in lib/flags.ts to bring it back. */}
         {PLAY_ENABLED && (
           <section className="play-teaser">

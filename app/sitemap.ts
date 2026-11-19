@@ -11,6 +11,7 @@ const PAGES: { path: string; changeFrequency: "weekly" | "monthly"; priority: nu
   { path: "/pastors", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-10-25" },
   { path: "/calendar", changeFrequency: "weekly", priority: 0.6, lastModified: "2026-11-14" },
   { path: "/messages", changeFrequency: "weekly", priority: 0.7, lastModified: "2026-10-25" },
+  { path: "/games/bible-quiz", changeFrequency: "weekly", priority: 0.6, lastModified: "2026-11-19" },
   { path: "/give", changeFrequency: "monthly", priority: 0.5, lastModified: "2026-10-25" },
 ];
 

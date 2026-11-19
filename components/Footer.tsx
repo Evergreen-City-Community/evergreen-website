@@ -14,6 +14,7 @@ const COLUMNS: { title: string; items: Item[] }[] = [
       { label: "Our pastors", href: "/pastors" },
       { label: "Plan a visit", href: "/location" },
       { label: "Messages", href: "/messages" },
+      { label: "Bible Quiz", href: "/games/bible-quiz" },
       { label: "Give", href: "/give" },
       ...(PLAY_ENABLED ? [{ label: "Play: Fishers of Men", href: "/fishers" }] : []),
     ],

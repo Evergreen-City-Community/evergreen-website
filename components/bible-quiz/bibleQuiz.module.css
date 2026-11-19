@@ -1,0 +1,498 @@
+/* Road to Bethlehem: the daily Bible quiz. Uses the site's dark theme and turquoise. */
+
+.page {
+  width: 760px;
+  max-width: 100%;
+  padding: 130px 20px 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.hero :global(.lead) {
+  max-width: 520px;
+  color: var(--muted);
+}
+
+.wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.skeleton {
+  width: 100%;
+  height: 360px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+/* ---------- stats + path ---------- */
+
+.stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.stats li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+.stats span {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.stats em {
+  font-style: normal;
+  font-size: 16px;
+  color: var(--muted);
+}
+.stats small {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.path {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+}
+.path li {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+}
+.path .passed {
+  background: var(--turquoise);
+}
+.path .here {
+  background: #fff;
+  box-shadow: 0 0 10px 2px rgba(0, 201, 177, 0.7);
+}
+.path li:last-child {
+  flex: 0 0 18px;
+  height: 18px;
+  background: none;
+  color: #f5b942;
+  font-size: 18px;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* ---------- game cards ---------- */
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color 0.25s ease;
+}
+.cardOpen {
+  border-color: rgba(0, 201, 177, 0.5);
+}
+.cardHead {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 22px;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.cardHead strong {
+  display: block;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+.cardHead small {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.cardHead em {
+  flex: none;
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--turquoise);
+  white-space: nowrap;
+}
+.cardHead:focus-visible {
+  outline: 2px solid var(--turquoise);
+  outline-offset: -2px;
+  border-radius: 22px;
+}
+.cardBody {
+  padding: 4px 22px 24px;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.clue {
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+.refLine {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- Manger Word ---------- */
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  align-items: center;
+}
+.row {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: 6px;
+  width: min(100%, calc(var(--cols) * 54px + (var(--cols) - 1) * 6px));
+}
+.tile {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: clamp(16px, 5vw, 26px);
+  font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+.typed {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.hit,
+.near,
+.miss {
+  border-color: transparent;
+  animation: flip 0.45s ease both;
+}
+.hit {
+  background: var(--turquoise);
+  color: #000;
+}
+.near {
+  background: #f5b942;
+  color: #000;
+}
+.miss {
+  background: rgba(255, 255, 255, 0.14);
+  color: #bbb;
+}
+.nudge {
+  animation: nudge 0.35s ease;
+}
+
+.keys {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  align-items: center;
+}
+.keyRow {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  width: 100%;
+}
+.key {
+  flex: 1 1 0;
+  max-width: 44px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.keyWide {
+  flex: 1.6 1 0;
+  max-width: 68px;
+  font-size: 12px;
+}
+.key:active {
+  transform: scale(0.95);
+}
+.key:focus-visible {
+  outline: 2px solid var(--turquoise);
+}
+.key_hit {
+  background: var(--turquoise);
+  color: #000;
+}
+.key_near {
+  background: #f5b942;
+  color: #000;
+}
+.key_miss {
+  background: rgba(255, 255, 255, 0.05);
+  color: #666;
+}
+
+/* ---------- Who Am I? ---------- */
+
+.clues {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.clues li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 16px;
+  line-height: 1.35;
+}
+.clueOn {
+  background: rgba(0, 201, 177, 0.1);
+  border: 1px solid rgba(0, 201, 177, 0.35);
+  animation: rise 0.35s ease both;
+}
+.clueOff {
+  border: 1px dashed var(--line);
+  color: #555;
+}
+.clueNum {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 12px;
+  font-weight: 700;
+}
+.misses {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+.chip,
+.chipHit {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+.chip {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.chipHit {
+  background: var(--turquoise);
+  color: #000;
+  font-weight: 600;
+}
+
+.guessForm {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.input {
+  flex: 1 1 200px;
+  min-width: 0;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font: inherit;
+  font-size: 16px; /* 16px stops iOS zooming into the field */
+}
+.input:focus-visible {
+  outline: 2px solid var(--turquoise);
+  outline-offset: 1px;
+}
+
+.primary,
+.ghost {
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.primary {
+  border: 0;
+  background: var(--turquoise);
+  color: #000;
+}
+.primary:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.ghost {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #fff;
+}
+.primary:focus-visible,
+.ghost:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.verdict {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--turquoise);
+}
+
+/* ---------- panels ---------- */
+
+.panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 1px solid rgba(0, 201, 177, 0.4);
+  border-radius: 24px;
+  background: rgba(0, 201, 177, 0.06);
+}
+.big {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.lead {
+  max-width: 460px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes flip {
+  from {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes nudge {
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+@keyframes rise {
+  from {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hit,
+  .near,
+  .miss,
+  .nudge,
+  .clueOn {
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding-top: 110px;
+  }
+  .cardHead {
+    padding: 16px;
+  }
+  .cardBody {
+    padding: 2px 14px 20px;
+  }
+  .key {
+    height: 46px;
+    font-size: 14px;
+  }
+}
