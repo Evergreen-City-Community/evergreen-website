@@ -1,53 +1,11 @@
-// Content for the two longer rounds: Verse Fill and Quick Fire.
-// One verse and five questions are used per day, in order, starting on QUIZ.start.
+// Content for Quick Fire: five questions are used per day, in order, starting on QUIZ.start.
 // Please have someone check the facts before launch.
 //
 // NOTE: like the other puzzles, these answers ship to the browser until the
 // shared leaderboard moves them server-side.
 
-/**
- * A verse with the words to hide in [square brackets]. King James text (public domain).
- * Keep it to 3 to 7 blanks per verse.
- */
-export type VersePuzzle = { ref: string; text: string };
-
 /** [question, right answer, wrong, wrong, wrong]. The order of the choices is shuffled in the game. */
 export type QuickRow = [string, string, string, string, string];
-
-export const VERSES: VersePuzzle[] = [
-  { ref: "Genesis 1:1", text: "In the [beginning] God [created] the [heaven] and the [earth]." },
-  { ref: "Psalm 23:1-2", text: "The LORD is my [shepherd]; I shall not [want]. He maketh me to lie down in green [pastures]: he leadeth me beside the still [waters]." },
-  { ref: "Proverbs 3:5", text: "[Trust] in the LORD with all thine [heart]; and lean not unto thine own [understanding]." },
-  { ref: "Joshua 1:9", text: "Have not I commanded thee? Be [strong] and of a good [courage]; be not [afraid], neither be thou [dismayed]: for the LORD thy God is with thee whithersoever thou [goest]." },
-  { ref: "Psalm 46:1", text: "God is our [refuge] and [strength], a very present [help] in [trouble]." },
-  { ref: "Psalm 119:105", text: "Thy [word] is a [lamp] unto my [feet], and a [light] unto my path." },
-  { ref: "Isaiah 40:31", text: "But they that [wait] upon the LORD shall renew their [strength]; they shall mount up with [wings] as eagles; they shall [run], and not be weary; and they shall [walk], and not faint." },
-  { ref: "Jeremiah 29:11", text: "For I know the [thoughts] that I think toward you, saith the LORD, thoughts of [peace], and not of [evil], to give you an expected [end]." },
-  { ref: "Psalm 118:24", text: "This is the [day] which the LORD hath [made]; we will [rejoice] and be [glad] in it." },
-  { ref: "Matthew 6:33", text: "But [seek] ye first the [kingdom] of God, and his [righteousness]; and all these things shall be [added] unto you." },
-  { ref: "Matthew 5:16", text: "Let your [light] so shine before [men], that they may see your good [works], and glorify your [Father] which is in heaven." },
-  { ref: "Matthew 11:28", text: "Come unto me, all ye that [labour] and are heavy [laden], and I will give you [rest]." },
-  { ref: "Mark 10:14", text: "Suffer the little [children] to come unto me, and forbid them [not]: for of such is the [kingdom] of God." },
-  { ref: "John 8:12", text: "I am the [light] of the [world]: he that followeth me shall not walk in [darkness], but shall have the light of [life]." },
-  { ref: "John 10:11", text: "I am the good [shepherd]: the good shepherd giveth his [life] for the [sheep]." },
-  { ref: "John 14:6", text: "Jesus saith unto him, I am the [way], the [truth], and the [life]: no man cometh unto the [Father], but by me." },
-  { ref: "John 15:13", text: "Greater [love] hath no man than this, that a man lay down his [life] for his [friends]." },
-  { ref: "Romans 8:28", text: "And we know that all [things] work together for [good] to them that [love] God, to them who are the [called] according to his purpose." },
-  { ref: "Romans 12:12", text: "Rejoicing in [hope]; patient in [tribulation]; continuing instant in [prayer]." },
-  { ref: "1 Corinthians 13:13", text: "And now abideth [faith], [hope], [charity], these three; but the [greatest] of these is charity." },
-  { ref: "Galatians 5:22", text: "But the fruit of the Spirit is [love], [joy], [peace], [longsuffering], [gentleness], [goodness], [faith]." },
-  { ref: "Ephesians 2:8", text: "For by [grace] are ye [saved] through [faith]; and that not of yourselves: it is the [gift] of God." },
-  { ref: "Philippians 4:13", text: "I can do all [things] through [Christ] which [strengtheneth] me." },
-  { ref: "Hebrews 11:1", text: "Now [faith] is the [substance] of things hoped for, the [evidence] of things not seen." },
-  { ref: "1 John 4:19", text: "We [love] him, because he first [loved] us." },
-  { ref: "John 3:16", text: "For God so [loved] the [world], that he gave his only begotten [Son], that whosoever [believeth] in him should not [perish], but have everlasting [life]." },
-  { ref: "Luke 1:30-31", text: "And the [angel] said unto her, Fear not, [Mary]: for thou hast found [favour] with God. And, behold, thou shalt conceive in thy [womb], and bring forth a [son], and shalt call his name [JESUS]." },
-  { ref: "Isaiah 7:14", text: "Therefore the Lord himself shall give you a [sign]; Behold, a [virgin] shall conceive, and bear a [son], and shall call his name [Immanuel]." },
-  { ref: "Micah 5:2", text: "But thou, [Bethlehem] Ephratah, though thou be little among the thousands of Judah, yet out of thee shall he come forth unto me that is to be [ruler] in [Israel]." },
-  { ref: "Luke 2:7", text: "And she brought forth her [firstborn] son, and wrapped him in [swaddling] clothes, and laid him in a [manger]; because there was no [room] for them in the [inn]." },
-  { ref: "Isaiah 9:6", text: "For unto us a [child] is born, unto us a [son] is given: and the government shall be upon his [shoulder]: and his name shall be called [Wonderful], [Counsellor], The mighty God, The everlasting Father, The [Prince] of [Peace]." },
-  { ref: "Luke 2:10-11", text: "And the angel said unto them, Fear not: for, behold, I bring you good [tidings] of great [joy], which shall be to all [people]. For unto you is born this day in the city of [David] a [Saviour], which is Christ the [Lord]." },
-];
 
 export const QUICK: QuickRow[] = [
   // ---- Beginnings

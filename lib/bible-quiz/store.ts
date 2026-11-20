@@ -1,13 +1,12 @@
 // The player's progress, kept in this browser. Every guess is saved as it is
 // made, so refreshing the page never gives a second chance at a puzzle.
 
-export type WordState = { guesses: string[]; won: boolean; done: boolean };
-export type WhoState = { guesses: string[]; clues: number; won: boolean; done: boolean };
-/** `locked` holds the blanks already filled correctly. */
-export type VerseState = { checks: number; locked: number[]; won: boolean; done: boolean; startedAt?: number };
-/** `picks` are the answers chosen so far ("" = ran out of time); `right` counts the correct ones. `startedAt` is when the clock for the current round or question began. */
+/** `startedAt` is when the player tapped Start: the round's clock runs from then, even across a refresh. */
+export type WordState = { guesses: string[]; won: boolean; done: boolean; startedAt?: number };
+export type WhoState = { guesses: string[]; clues: number; won: boolean; done: boolean; startedAt?: number };
+/** `picks` are the answers chosen so far; `right` counts the correct ones. */
 export type QuickState = { picks: string[]; right: number; done: boolean; startedAt?: number };
-export type DayState = { word?: WordState; who?: WhoState; verse?: VerseState; quick?: QuickState };
+export type DayState = { word?: WordState; who?: WhoState; quick?: QuickState };
 export type QuizData = { days: Record<string, DayState> };
 
 const KEY = "ecc-bible-quiz";

@@ -2,9 +2,9 @@
 // judged and how points are worked out. Pure functions, no browser needed.
 
 import { daysBetween } from "@/lib/fishers/day";
-import { QUIZ, VERSE_POINTS, WHO_POINTS, WORD_POINTS } from "./config";
+import { QUIZ, WHO_POINTS, WORD_POINTS } from "./config";
 import { PEOPLE, WORDS, type PersonPuzzle, type WordPuzzle } from "./content";
-import { QUICK, VERSES, type VersePuzzle } from "./content-rounds";
+import { QUICK } from "./content-rounds";
 import type { DayState, QuizData } from "./store";
 
 export const TOTAL_DAYS = daysBetween(QUIZ.start, QUIZ.last) + 1;
@@ -17,13 +17,13 @@ export type DayInfo =
 export function dayInfo(today: string): DayInfo {
   const n = daysBetween(QUIZ.start, today);
   if (n < 0) return { phase: "soon", daysToGo: -n };
-  const stocked = Math.min(WORDS.length, PEOPLE.length, VERSES.length, Math.floor(QUICK.length / QUIZ.quickPerDay));
+  const stocked = Math.min(WORDS.length, PEOPLE.length, Math.floor(QUICK.length / QUIZ.quickPerDay));
   if (n >= TOTAL_DAYS || n >= stocked) return { phase: "over" };
   return { phase: "live", index: n, number: n + 1 };
 }
 
-export function puzzlesFor(index: number): { word: WordPuzzle; person: PersonPuzzle; verse: VersePuzzle } {
-  return { word: WORDS[index], person: PEOPLE[index], verse: VERSES[index] };
+export function puzzlesFor(index: number): { word: WordPuzzle; person: PersonPuzzle } {
+  return { word: WORDS[index], person: PEOPLE[index] };
 }
 
 // ---------------------------------------------------------------- shuffling
@@ -48,39 +48,6 @@ function shuffle<T>(items: T[], rand: () => number): T[] {
   }
   return a;
 }
-
-// ---------------------------------------------------------------- Verse Fill
-
-export type VerseSeg = { text: string } | { blank: number };
-export type Chip = { id: number; word: string };
-
-/** Splits "a [b] c" into text and blanks, and lists the hidden words in order. */
-export function parseVerse(text: string): { segs: VerseSeg[]; answers: string[] } {
-  const segs: VerseSeg[] = [];
-  const answers: string[] = [];
-  for (const part of text.split(/(\[[^\]]+\])/)) {
-    if (!part) continue;
-    const m = part.match(/^\[(.+)\]$/);
-    if (m) {
-      segs.push({ blank: answers.length });
-      answers.push(m[1]);
-    } else segs.push({ text: part });
-  }
-  return { segs, answers };
-}
-
-/** The word bank: the hidden words plus two look-alike decoys from the verse, shuffled. */
-export function verseBank(text: string, seed: number): Chip[] {
-  const { segs, answers } = parseVerse(text);
-  const hidden = new Set(answers.map((a) => a.toLowerCase()));
-  const plain = segs.map((s) => ("text" in s ? s.text : "")).join(" ");
-  const pool = [...new Set(plain.split(/[^A-Za-z]+/).filter((w) => w.length >= 4 && !hidden.has(w.toLowerCase())))];
-  const rand = rng(seed);
-  const decoys = shuffle(pool, rand).slice(0, 2);
-  return shuffle([...answers, ...decoys], rand).map((word, id) => ({ id, word }));
-}
-
-export const sameWord = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 
 // ---------------------------------------------------------------- Quick Fire
 
@@ -158,17 +125,13 @@ export function whoScore(s: DayState["who"]): number {
   return s?.won ? WHO_POINTS[Math.min(s.clues, WHO_POINTS.length) - 1] : 0;
 }
 
-export function verseScore(s: DayState["verse"]): number {
-  return s?.won ? VERSE_POINTS[Math.min(s.checks, VERSE_POINTS.length) - 1] : 0;
-}
-
 export function quickScore(s: DayState["quick"]): number {
   return (s?.right ?? 0) * QUIZ.quickPoints;
 }
 
-const dayPoints = (d: DayState) => wordScore(d.word) + whoScore(d.who) + verseScore(d.verse) + quickScore(d.quick);
+const dayPoints = (d: DayState) => wordScore(d.word) + whoScore(d.who) + quickScore(d.quick);
 
-export const dayDone = (d: DayState | undefined) => !!d?.word?.done && !!d?.who?.done && !!d?.verse?.done && !!d?.quick?.done;
+export const dayDone = (d: DayState | undefined) => !!d?.word?.done && !!d?.who?.done && !!d?.quick?.done;
 
 export type Standing = {
   total: number;
