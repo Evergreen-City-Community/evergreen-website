@@ -30,7 +30,7 @@ export default function BibleQuizPage() {
             <span className="accent">Bethlehem</span>
           </h1>
           <p className="lead">
-            Three Bible games a day, about 5 minutes, every day until Christmas Eve. Build your streak and your score, and be ready for the live Bible quiz on stage.
+            Three Bible games a day, about 3 minutes, every day until Christmas Eve. Build your streak and your score, and be ready for the live Bible quiz on stage.
           </p>
         </header>
         <BibleQuiz />

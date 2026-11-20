@@ -31,8 +31,9 @@ const TILE_EMOJI = { hit: "🟩", near: "🟨", miss: "⬛" } as const;
 function currentDay(): string {
   const host = window.location.hostname;
   if (host === "localhost" || host.endsWith(".vercel.app")) {
-    const d = new URLSearchParams(window.location.search).get("day");
-    if (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+    // Forgiving on purpose: a link pasted with a full stop or space after it still works.
+    const d = new URLSearchParams(window.location.search).get("day")?.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+    if (d) return d;
   }
   return istDay();
 }

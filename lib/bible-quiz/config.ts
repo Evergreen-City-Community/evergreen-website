@@ -12,7 +12,7 @@ export const QUIZ = {
   /** Tries allowed in Manger Word. */
   wordTries: 6,
   /** The clock for every round (Manger Word, Who Am I?, Quick Fire), in seconds. */
-  roundSeconds: 150,
+  roundSeconds: 60,
   /** Quick Fire questions per day (the question list in content-rounds.ts must hold this many per day). */
   quickPerDay: 5,
   /** Points for each right Quick Fire answer. */
