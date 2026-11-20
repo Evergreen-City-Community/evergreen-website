@@ -29,7 +29,7 @@ export default function BibleQuizPage() {
               <span className="accent">Bethlehem</span>
             </h1>
             <p className="lead">
-              Two quick puzzles a day, every day until Christmas Eve. Build your streak and your score, and be ready for the live Bible quiz on stage.
+              Four Bible rounds a day, about 6 to 8 minutes, every day until Christmas Eve. Build your streak and your score, and be ready for the live Bible quiz on stage.
             </p>
           </header>
           <BibleQuiz />

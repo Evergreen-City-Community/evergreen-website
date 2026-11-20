@@ -238,7 +238,7 @@ export default function Home() {
               Walk the road to <span className="accent">Bethlehem</span>
             </h2>
             <p className="lead play-teaser__lead">
-              Two quick Bible puzzles a day. Build your score, and be ready for the live quiz on stage on Christmas Eve.
+              Four Bible rounds a day, about 6 to 8 minutes. Build your score, and be ready for the live quiz on stage on Christmas Eve.
             </p>
           </Reveal>
           <Reveal as="div" className="btn-row btn-row--stack-phone" delay={80}>

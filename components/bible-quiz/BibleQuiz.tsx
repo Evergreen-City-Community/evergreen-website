@@ -5,15 +5,23 @@
 
 import { useMemo, useState, useSyncExternalStore } from "react";
 import { QUIZ } from "@/lib/bible-quiz/config";
-import { dayDone, dayInfo, markGuess, puzzlesFor, standing, TOTAL_DAYS, whoScore, wordScore } from "@/lib/bible-quiz/play";
-import { EMPTY, parse, saveDay, snapshot, subscribe, type DayState, type WhoState, type WordState } from "@/lib/bible-quiz/store";
+import { dayDone, dayInfo, markGuess, puzzlesFor, quickFor, quickScore, standing, TOTAL_DAYS, verseScore, whoScore, wordScore } from "@/lib/bible-quiz/play";
+import { EMPTY, parse, saveDay, snapshot, subscribe, type DayState, type QuickState, type VerseState, type WhoState, type WordState } from "@/lib/bible-quiz/store";
 import { istDay, msUntilTomorrow } from "@/lib/fishers/day";
 import MangerWord from "./MangerWord";
+import QuickFire from "./QuickFire";
+import VerseFill from "./VerseFill";
 import WhoAmI from "./WhoAmI";
 import s from "./bibleQuiz.module.css";
 
+type Round = "word" | "who" | "verse" | "quick";
+const ROUNDS: Round[] = ["word", "who", "verse", "quick"];
+const NAMES: Record<Round, string> = { word: "Manger Word", who: "Who Am I?", verse: "Verse Fill", quick: "Quick Fire" };
+
 const NEW_WORD: WordState = { guesses: [], won: false, done: false };
 const NEW_WHO: WhoState = { guesses: [], clues: 1, won: false, done: false };
+const NEW_VERSE: VerseState = { checks: 0, locked: [], won: false, done: false };
+const NEW_QUICK: QuickState = { picks: [], right: 0, done: false };
 const TILE_EMOJI = { hit: "🟩", near: "🟨", miss: "⬛" } as const;
 
 /**
@@ -39,7 +47,8 @@ export default function BibleQuiz() {
   const today = useSyncExternalStore(tick, currentDay, () => "");
   const raw = useSyncExternalStore(subscribe, snapshot, () => "");
   const data = useMemo(() => (today ? parse(raw) : EMPTY), [raw, today]);
-  const [open, setOpen] = useState<"word" | "who" | null>(null);
+  // undefined = open the first round that is not finished yet.
+  const [pick, setPick] = useState<Round | null | undefined>(undefined);
   const [copied, setCopied] = useState(false);
 
   if (!today) return <div className={s.skeleton} aria-busy="true" />;
@@ -67,11 +76,25 @@ export default function BibleQuiz() {
     );
   }
 
-  const { word, person } = puzzlesFor(info.index);
+  const { word, person, verse } = puzzlesFor(info.index);
+  const questions = quickFor(info.index);
   const day: DayState = data.days[today] ?? {};
   const wordState = day.word ?? NEW_WORD;
   const whoState = day.who ?? NEW_WHO;
+  const verseState = day.verse ?? NEW_VERSE;
+  const quickState = day.quick ?? NEW_QUICK;
   const finished = dayDone(day);
+  const isDone: Record<Round, boolean> = { word: wordState.done, who: whoState.done, verse: verseState.done, quick: quickState.done };
+  const nextRound = ROUNDS.find((r) => !isDone[r]) ?? null;
+  const open = pick === undefined ? nextRound : pick;
+  const toggle = (r: Round) => setPick(open === r ? null : r);
+  // Keep the round on screen after a result is saved, so the player sees how they did.
+  const save = (patch: Partial<DayState>) => {
+    setPick(open);
+    saveDay(today, patch);
+  };
+  // After finishing the open round, offer a jump to the next unfinished one.
+  const upNext = open && isDone[open] ? ROUNDS.find((r) => !isDone[r]) : undefined;
   const todays = me.perDay[today]?.points ?? 0;
 
   const share = async () => {
@@ -80,6 +103,8 @@ export default function BibleQuiz() {
       `Manger Word ${wordState.won ? `${wordState.guesses.length}/${QUIZ.wordTries}` : `X/${QUIZ.wordTries}`}`,
       ...wordState.guesses.map((g) => markGuess(g, word.answer).map((m) => TILE_EMOJI[m]).join("")),
       `Who Am I? ${whoState.won ? `solved with ${whoState.clues} ${whoState.clues === 1 ? "clue" : "clues"} ⭐` : "missed this one"}`,
+      `Verse Fill ${verseState.won ? `✅ check ${verseState.checks}/${QUIZ.verseChecks}` : "missed"}`,
+      `Quick Fire ${quickState.right}/${QUIZ.quickPerDay}`,
       `${todays} points today · ${me.total.toLocaleString()} total`,
       `${window.location.origin}/games/bible-quiz`,
     ].join("\n");
@@ -127,24 +152,48 @@ export default function BibleQuiz() {
 
       <div className={s.cards}>
         <GameCard
-          title="Manger Word"
+          title={NAMES.word}
           blurb="Guess the hidden Bible word in six tries."
           state={wordState.done ? (wordState.won ? `Solved · +${wordScore(wordState)}` : "Missed") : wordState.guesses.length ? `${wordState.guesses.length}/${QUIZ.wordTries} tries` : "Not played"}
           active={open === "word"}
-          onToggle={() => setOpen(open === "word" ? null : "word")}
+          onToggle={() => toggle("word")}
         >
-          <MangerWord puzzle={word} state={wordState} onChange={(next) => saveDay(today, { word: next })} />
+          <MangerWord puzzle={word} state={wordState} onChange={(next) => save({ word: next })} />
         </GameCard>
         <GameCard
-          title="Who Am I?"
+          title={NAMES.who}
           blurb="Four clues. The fewer you need, the more you score."
           state={whoState.done ? (whoState.won ? `Solved · +${whoScore(whoState)}` : "Missed") : whoState.guesses.length || whoState.clues > 1 ? `Clue ${whoState.clues}/4` : "Not played"}
           active={open === "who"}
-          onToggle={() => setOpen(open === "who" ? null : "who")}
+          onToggle={() => toggle("who")}
         >
-          <WhoAmI puzzle={person} state={whoState} onChange={(next) => saveDay(today, { who: next })} />
+          <WhoAmI puzzle={person} state={whoState} onChange={(next) => save({ who: next })} />
+        </GameCard>
+        <GameCard
+          title={NAMES.verse}
+          blurb="Fill in the missing words of a Bible verse."
+          state={verseState.done ? (verseState.won ? `Done · +${verseScore(verseState)}` : "Missed") : verseState.checks ? `${verseState.checks}/${QUIZ.verseChecks} checks` : "Not played"}
+          active={open === "verse"}
+          onToggle={() => toggle("verse")}
+        >
+          <VerseFill puzzle={verse} seed={info.index * 101 + 7} state={verseState} onChange={(next) => save({ verse: next })} />
+        </GameCard>
+        <GameCard
+          title={NAMES.quick}
+          blurb={`${QUIZ.quickPerDay} quick questions. Pick the right answer.`}
+          state={quickState.done ? `${quickState.right}/${QUIZ.quickPerDay} · +${quickScore(quickState)}` : quickState.picks.length ? `${quickState.picks.length}/${QUIZ.quickPerDay} answered` : "Not played"}
+          active={open === "quick"}
+          onToggle={() => toggle("quick")}
+        >
+          <QuickFire questions={questions} state={quickState} onChange={(next) => save({ quick: next })} />
         </GameCard>
       </div>
+
+      {upNext && (
+        <button type="button" className={s.primary} onClick={() => setPick(upNext)}>
+          Next round: {NAMES[upNext]} →
+        </button>
+      )}
 
       {finished && (
         <section className={s.panel} aria-live="polite">

@@ -3,7 +3,11 @@
 
 export type WordState = { guesses: string[]; won: boolean; done: boolean };
 export type WhoState = { guesses: string[]; clues: number; won: boolean; done: boolean };
-export type DayState = { word?: WordState; who?: WhoState };
+/** `locked` holds the blanks already filled correctly. */
+export type VerseState = { checks: number; locked: number[]; won: boolean; done: boolean };
+/** `picks` are the answers chosen so far; `right` counts the correct ones. */
+export type QuickState = { picks: string[]; right: number; done: boolean };
+export type DayState = { word?: WordState; who?: WhoState; verse?: VerseState; quick?: QuickState };
 export type QuizData = { days: Record<string, DayState> };
 
 const KEY = "ecc-bible-quiz";

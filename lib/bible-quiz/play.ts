@@ -2,8 +2,9 @@
 // judged and how points are worked out. Pure functions, no browser needed.
 
 import { daysBetween } from "@/lib/fishers/day";
-import { QUIZ, WHO_POINTS, WORD_POINTS } from "./config";
+import { QUIZ, VERSE_POINTS, WHO_POINTS, WORD_POINTS } from "./config";
 import { PEOPLE, WORDS, type PersonPuzzle, type WordPuzzle } from "./content";
+import { QUICK, VERSES, type VersePuzzle } from "./content-rounds";
 import type { DayState, QuizData } from "./store";
 
 export const TOTAL_DAYS = daysBetween(QUIZ.start, QUIZ.last) + 1;
@@ -16,12 +17,82 @@ export type DayInfo =
 export function dayInfo(today: string): DayInfo {
   const n = daysBetween(QUIZ.start, today);
   if (n < 0) return { phase: "soon", daysToGo: -n };
-  if (n >= TOTAL_DAYS || n >= WORDS.length || n >= PEOPLE.length) return { phase: "over" };
+  const stocked = Math.min(WORDS.length, PEOPLE.length, VERSES.length, Math.floor(QUICK.length / QUIZ.quickPerDay));
+  if (n >= TOTAL_DAYS || n >= stocked) return { phase: "over" };
   return { phase: "live", index: n, number: n + 1 };
 }
 
-export function puzzlesFor(index: number): { word: WordPuzzle; person: PersonPuzzle } {
-  return { word: WORDS[index], person: PEOPLE[index] };
+export function puzzlesFor(index: number): { word: WordPuzzle; person: PersonPuzzle; verse: VersePuzzle } {
+  return { word: WORDS[index], person: PEOPLE[index], verse: VERSES[index] };
+}
+
+// ---------------------------------------------------------------- shuffling
+
+/** A small seeded random generator, so a puzzle looks the same to everyone on the same day. */
+function rng(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function shuffle<T>(items: T[], rand: () => number): T[] {
+  const a = [...items];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ---------------------------------------------------------------- Verse Fill
+
+export type VerseSeg = { text: string } | { blank: number };
+export type Chip = { id: number; word: string };
+
+/** Splits "a [b] c" into text and blanks, and lists the hidden words in order. */
+export function parseVerse(text: string): { segs: VerseSeg[]; answers: string[] } {
+  const segs: VerseSeg[] = [];
+  const answers: string[] = [];
+  for (const part of text.split(/(\[[^\]]+\])/)) {
+    if (!part) continue;
+    const m = part.match(/^\[(.+)\]$/);
+    if (m) {
+      segs.push({ blank: answers.length });
+      answers.push(m[1]);
+    } else segs.push({ text: part });
+  }
+  return { segs, answers };
+}
+
+/** The word bank: the hidden words plus two look-alike decoys from the verse, shuffled. */
+export function verseBank(text: string, seed: number): Chip[] {
+  const { segs, answers } = parseVerse(text);
+  const hidden = new Set(answers.map((a) => a.toLowerCase()));
+  const plain = segs.map((s) => ("text" in s ? s.text : "")).join(" ");
+  const pool = [...new Set(plain.split(/[^A-Za-z]+/).filter((w) => w.length >= 4 && !hidden.has(w.toLowerCase())))];
+  const rand = rng(seed);
+  const decoys = shuffle(pool, rand).slice(0, 2);
+  return shuffle([...answers, ...decoys], rand).map((word, id) => ({ id, word }));
+}
+
+export const sameWord = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
+
+// ---------------------------------------------------------------- Quick Fire
+
+export type Quick = { q: string; options: string[]; answer: string };
+
+export function quickFor(index: number): Quick[] {
+  const n = QUIZ.quickPerDay;
+  return QUICK.slice(index * n, (index + 1) * n).map(([q, answer, ...wrong], i) => ({
+    q,
+    answer,
+    options: shuffle([answer, ...wrong], rng(index * 31 + i + 5)),
+  }));
 }
 
 // ---------------------------------------------------------------- Manger Word
@@ -87,7 +158,17 @@ export function whoScore(s: DayState["who"]): number {
   return s?.won ? WHO_POINTS[Math.min(s.clues, WHO_POINTS.length) - 1] : 0;
 }
 
-export const dayDone = (d: DayState | undefined) => !!d?.word?.done && !!d?.who?.done;
+export function verseScore(s: DayState["verse"]): number {
+  return s?.won ? VERSE_POINTS[Math.min(s.checks, VERSE_POINTS.length) - 1] : 0;
+}
+
+export function quickScore(s: DayState["quick"]): number {
+  return (s?.right ?? 0) * QUIZ.quickPoints;
+}
+
+const dayPoints = (d: DayState) => wordScore(d.word) + whoScore(d.who) + verseScore(d.verse) + quickScore(d.quick);
+
+export const dayDone = (d: DayState | undefined) => !!d?.word?.done && !!d?.who?.done && !!d?.verse?.done && !!d?.quick?.done;
 
 export type Standing = {
   total: number;
@@ -107,7 +188,7 @@ export function standing(data: QuizData, today: string): Standing {
   let daysDone = 0;
   for (const k of keys) {
     const d = data.days[k];
-    const points = wordScore(d.word) + whoScore(d.who);
+    const points = dayPoints(d);
     let bonus = 0;
     if (dayDone(d)) {
       run = prev && daysBetween(prev, k) === 1 ? run + 1 : 1;
