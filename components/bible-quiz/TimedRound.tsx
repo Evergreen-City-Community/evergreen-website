@@ -5,11 +5,12 @@
 // zero the round ends with whatever has been earned so far.
 
 import type { ReactNode } from "react";
-import { QUIZ } from "@/lib/bible-quiz/config";
 import s from "./bibleQuiz.module.css";
 import { useCountdown } from "./useCountdown";
 
 type Props = {
+  /** Length of the clock in seconds. */
+  seconds: number;
   startedAt: number | undefined;
   done: boolean;
   onStart: () => void;
@@ -19,15 +20,15 @@ type Props = {
 
 const mmss = (secs: number) => `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
 
-export default function TimedRound({ startedAt, done, onStart, onExpire, children }: Props) {
+export default function TimedRound({ seconds, startedAt, done, onStart, onExpire, children }: Props) {
   const running = !done && startedAt !== undefined;
-  const left = useCountdown(running ? startedAt : undefined, QUIZ.roundSeconds, onExpire);
+  const left = useCountdown(running ? startedAt : undefined, seconds, onExpire);
 
   if (!done && startedAt === undefined) {
     return (
       <div className={s.game}>
         <p className={s.lead}>
-          You have {mmss(QUIZ.roundSeconds)} for this game. The clock starts when you tap Start, and it keeps running if you leave or refresh.
+          You have {seconds} seconds for this game. The clock starts when you tap Start, and it keeps running if you leave or refresh.
         </p>
         <button type="button" className={s.primary} onClick={onStart}>
           Start
@@ -40,8 +41,8 @@ export default function TimedRound({ startedAt, done, onStart, onExpire, childre
   return (
     <>
       {running && left !== null && (
-        <div className={`${s.clock}${left <= 15 ? ` ${s.clockLow}` : ""}`} role="timer" aria-label={`${secs} seconds left`}>
-          <span className={s.clockBar} style={{ width: `${Math.min(100, (left / QUIZ.roundSeconds) * 100)}%` }} />
+        <div className={`${s.clock}${left <= 10 ? ` ${s.clockLow}` : ""}`} role="timer" aria-label={`${secs} seconds left`}>
+          <span className={s.clockBar} style={{ width: `${Math.min(100, (left / seconds) * 100)}%` }} />
           <span className={s.clockText}>{mmss(secs)}</span>
         </div>
       )}

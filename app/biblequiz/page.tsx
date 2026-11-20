@@ -10,7 +10,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = {
   ...pageMeta({
     title: `${QUIZ.title} · Christmas Eve Bible Quiz · Evergreen City Community`,
-    description: "A short Bible game every day on the road to Christmas Eve, from Evergreen City Community, Trivandrum.",
+    description: "Play a short Bible game every day from 1 to 15 December for a place in the live Bible quiz on Christmas Eve, from Evergreen City Community, Trivandrum.",
     path: "/biblequiz",
   }),
   robots: { index: false, follow: false },
@@ -30,7 +30,7 @@ export default function BibleQuizPage() {
             <span className="accent">Bethlehem</span>
           </h1>
           <p className="lead">
-            Three Bible games a day, about 3 minutes, every day until Christmas Eve. Build your streak and your score, and be ready for the live Bible quiz on stage.
+            Three Bible games a day, about 2 minutes, from 1 to 15 December. Climb the leaderboard: the top players win a place in the live Bible quiz on stage on Christmas Eve.
           </p>
         </header>
         <BibleQuiz />

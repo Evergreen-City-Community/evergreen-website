@@ -1,18 +1,20 @@
-// Road to Bethlehem: the daily Bible quiz that leads up to the live quiz on
-// Christmas Eve. The two dates below are the only things to change to move
-// the quiz window; there must be one puzzle of each kind for every day in it
-// (see lib/bible-quiz/content.ts).
+// Road to Bethlehem: the daily Bible quiz. Play opens on `start` and closes
+// after `last`; the best players then join the live quiz on stage on Christmas
+// Eve. The two dates below are the only things to change to move the window.
+// The content lists (lib/bible-quiz/content.ts and content-rounds.ts) must hold
+// at least one puzzle of each kind for every day in it. Each player gets their
+// own shuffled order of those lists (see lib/bible-quiz/play.ts).
 
 export const QUIZ = {
   title: "Road to Bethlehem",
-  /** First puzzle day (India time). */
-  start: "2026-11-23",
-  /** Last puzzle day: Christmas Eve, the day of the live quiz. */
-  last: "2026-12-24",
+  /** First day of play (India time). Before this the page shows a countdown. */
+  start: "2026-12-01",
+  /** Last day of play (India time). The leaderboard closes after it. */
+  last: "2026-12-15",
   /** Tries allowed in Manger Word. */
   wordTries: 6,
-  /** The clock for every round (Manger Word, Who Am I?, Quick Fire), in seconds. */
-  roundSeconds: 60,
+  /** The clock for each game, in seconds. Short on purpose, so there is no time to look answers up. */
+  roundSeconds: { word: 30, who: 30, quick: 60 },
   /** Quick Fire questions per day (the question list in content-rounds.ts must hold this many per day). */
   quickPerDay: 5,
   /** Points for each right Quick Fire answer. */

@@ -7,7 +7,8 @@ export type WhoState = { guesses: string[]; clues: number; won: boolean; done: b
 /** `picks` are the answers chosen so far; `right` counts the correct ones. */
 export type QuickState = { picks: string[]; right: number; done: boolean; startedAt?: number };
 export type DayState = { word?: WordState; who?: WhoState; quick?: QuickState };
-export type QuizData = { days: Record<string, DayState> };
+/** `seed` is this player's own random number: it decides their personal order of puzzles. */
+export type QuizData = { days: Record<string, DayState>; seed?: number };
 
 const KEY = "ecc-bible-quiz";
 const EVENT = "ecc-bible-quiz-change";
@@ -40,7 +41,9 @@ export function parse(raw: string): QuizData {
   if (!raw) return EMPTY;
   try {
     const data = JSON.parse(raw) as Partial<QuizData>;
-    return data && typeof data === "object" && data.days && typeof data.days === "object" ? { days: data.days } : EMPTY;
+    return data && typeof data === "object" && data.days && typeof data.days === "object"
+      ? { days: data.days, seed: typeof data.seed === "number" ? data.seed : undefined }
+      : EMPTY;
   } catch {
     return EMPTY;
   }
@@ -48,7 +51,9 @@ export function parse(raw: string): QuizData {
 
 export function saveDay(dateKey: string, patch: Partial<DayState>) {
   const data = parse(snapshot());
-  const next: QuizData = { days: { ...data.days, [dateKey]: { ...data.days[dateKey], ...patch } } };
+  // A player's seed is made the first time they save anything, then never changes.
+  const seed = data.seed ?? Math.floor(Math.random() * 2 ** 32);
+  const next: QuizData = { seed, days: { ...data.days, [dateKey]: { ...data.days[dateKey], ...patch } } };
   const json = JSON.stringify(next);
   try {
     localStorage.setItem(KEY, json);

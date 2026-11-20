@@ -1,4 +1,6 @@
-// Content for Quick Fire: five questions are used per day, in order, starting on QUIZ.start.
+// Content for Quick Fire: the pool of questions. Each player gets their own shuffled order of it,
+// five questions a day, so two people playing on the same day see different questions.
+// Keep at least five per day in the window.
 // Please have someone check the facts before launch.
 //
 // NOTE: like the other puzzles, these answers ship to the browser until the

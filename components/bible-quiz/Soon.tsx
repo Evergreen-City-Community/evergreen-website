@@ -13,6 +13,7 @@ const everySecond = (cb: () => void) => {
 };
 
 const LAUNCH = new Date(`${QUIZ.start}T00:00:00Z`).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+const RANGE = `${new Date(`${QUIZ.start}T00:00:00Z`).toLocaleDateString("en-IN", { day: "numeric", month: "long", timeZone: "UTC" })} to ${new Date(`${QUIZ.last}T00:00:00Z`).toLocaleDateString("en-IN", { day: "numeric", month: "long", timeZone: "UTC" })}`;
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export default function Soon({ daysToGo }: { daysToGo: number }) {
@@ -45,15 +46,15 @@ export default function Soon({ daysToGo }: { daysToGo: number }) {
       <ul className={s.teasers}>
         <li>
           <strong>Three games a day</strong>
-          <span>Manger Word, Who Am I? and Quick Fire. About 3 minutes, and a new set every morning.</span>
+          <span>Manger Word, Who Am I? and Quick Fire. Quick, timed rounds: about 2 minutes a day, and a fresh set every day. Your questions are your own mix, so no peeking at a neighbour’s phone.</span>
         </li>
         <li>
           <strong>Keep your streak alive</strong>
           <span>Play every day for bonus points. Miss a day and the streak starts over.</span>
         </li>
         <li>
-          <strong>Walk to Christmas Eve</strong>
-          <span>{QUIZ.title} ends with the live Bible quiz on stage. Start practising now.</span>
+          <strong>Win your place on stage</strong>
+          <span>Play from {RANGE}. When the games close, the top players join the live Bible quiz on Christmas Eve.</span>
         </li>
       </ul>
 

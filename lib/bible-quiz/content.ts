@@ -1,5 +1,6 @@
-// The puzzles, one of each kind per day, in order from QUIZ.start. The list
-// ends on Christmas Eve with the manger and Jesus.
+// The pool of words and people. Each player gets their own shuffled order of
+// these lists, so two people playing on the same day see different puzzles.
+// Keep at least as many entries as there are days in the window.
 //
 // NOTE: this file ships to the browser, so answers can be read by anyone who
 // looks. That is fine while scores stay on the player's own device. When the

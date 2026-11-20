@@ -22,8 +22,18 @@ export function dayInfo(today: string): DayInfo {
   return { phase: "live", index: n, number: n + 1 };
 }
 
-export function puzzlesFor(index: number): { word: WordPuzzle; person: PersonPuzzle } {
-  return { word: WORDS[index], person: PEOPLE[index] };
+/** This player's own order of 0..n-1: a different shuffle for each seed and each kind of puzzle. */
+function order(n: number, seed: number, salt: number): number[] {
+  return shuffle(Array.from({ length: n }, (_, i) => i), rng((seed ^ Math.imul(salt, 0x9e3779b1)) >>> 0));
+}
+
+/**
+ * Today's word and person for this player. The seed is the player's own, so two
+ * people playing on the same day get different puzzles, and nobody sees the same
+ * puzzle twice.
+ */
+export function puzzlesFor(index: number, seed: number): { word: WordPuzzle; person: PersonPuzzle } {
+  return { word: WORDS[order(WORDS.length, seed, 1)[index]], person: PEOPLE[order(PEOPLE.length, seed, 2)[index]] };
 }
 
 // ---------------------------------------------------------------- shuffling
@@ -53,13 +63,13 @@ function shuffle<T>(items: T[], rand: () => number): T[] {
 
 export type Quick = { q: string; options: string[]; answer: string };
 
-export function quickFor(index: number): Quick[] {
+export function quickFor(index: number, seed: number): Quick[] {
   const n = QUIZ.quickPerDay;
-  return QUICK.slice(index * n, (index + 1) * n).map(([q, answer, ...wrong], i) => ({
-    q,
-    answer,
-    options: shuffle([answer, ...wrong], rng(index * 31 + i + 5)),
-  }));
+  const picks = order(QUICK.length, seed, 3).slice(index * n, (index + 1) * n);
+  return picks.map((row, i) => {
+    const [q, answer, ...wrong] = QUICK[row];
+    return { q, answer, options: shuffle([answer, ...wrong], rng((seed ^ (index * 31 + i + 5)) >>> 0)) };
+  });
 }
 
 // ---------------------------------------------------------------- Manger Word

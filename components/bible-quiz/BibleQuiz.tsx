@@ -63,13 +63,17 @@ export default function BibleQuiz() {
     return (
       <section className={s.panel}>
         <p className={s.big}>The road has reached Bethlehem</p>
-        <p className={s.lead}>The daily puzzles are finished. Your total: {me.total.toLocaleString()} points over {me.daysDone} days.</p>
+        <p className={s.lead}>
+          The games are closed. Your total: {me.total.toLocaleString()} points over {me.daysDone} {me.daysDone === 1 ? "day" : "days"}. Thank you for playing, and see you at the live Bible quiz!
+        </p>
       </section>
     );
   }
 
-  const { word, person } = puzzlesFor(info.index);
-  const questions = quickFor(info.index);
+  // Until the player has started something there is no seed yet; nothing is shown from it before then.
+  const seed = data.seed ?? 0;
+  const { word, person } = puzzlesFor(info.index, seed);
+  const questions = quickFor(info.index, seed);
   const day: DayState = data.days[today] ?? {};
   const wordState = day.word ?? NEW_WORD;
   const whoState = day.who ?? NEW_WHO;
@@ -151,6 +155,7 @@ export default function BibleQuiz() {
           onToggle={() => toggle("word")}
         >
           <TimedRound
+            seconds={QUIZ.roundSeconds.word}
             startedAt={wordState.startedAt}
             done={wordState.done}
             onStart={() => save({ word: { ...wordState, startedAt: Date.now() } })}
@@ -167,6 +172,7 @@ export default function BibleQuiz() {
           onToggle={() => toggle("who")}
         >
           <TimedRound
+            seconds={QUIZ.roundSeconds.who}
             startedAt={whoState.startedAt}
             done={whoState.done}
             onStart={() => save({ who: { ...whoState, startedAt: Date.now() } })}
@@ -183,6 +189,7 @@ export default function BibleQuiz() {
           onToggle={() => toggle("quick")}
         >
           <TimedRound
+            seconds={QUIZ.roundSeconds.quick}
             startedAt={quickState.startedAt}
             done={quickState.done}
             onStart={() => save({ quick: { ...quickState, startedAt: Date.now() } })}
