@@ -10,6 +10,7 @@ import { EMPTY, parse, saveDay, snapshot, subscribe, type DayState, type QuickSt
 import { istDay, msUntilTomorrow } from "@/lib/fishers/day";
 import MangerWord from "./MangerWord";
 import QuickFire from "./QuickFire";
+import Soon from "./Soon";
 import TimedRound from "./TimedRound";
 import WhoAmI from "./WhoAmI";
 import s from "./bibleQuiz.module.css";
@@ -56,16 +57,7 @@ export default function BibleQuiz() {
   const info = dayInfo(today);
   const me = standing(data, today);
 
-  if (info.phase === "soon") {
-    return (
-      <section className={s.panel}>
-        <p className={s.big}>The road opens soon</p>
-        <p className={s.lead}>
-          {info.daysToGo === 1 ? "The first puzzle arrives tomorrow." : `The first puzzle arrives in ${info.daysToGo} days.`} Come back and start walking.
-        </p>
-      </section>
-    );
-  }
+  if (info.phase === "soon") return <Soon daysToGo={info.daysToGo} />;
 
   if (info.phase === "over") {
     return (
