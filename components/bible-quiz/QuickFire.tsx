@@ -1,83 +1,73 @@
 "use client";
 
-// Quick Fire: five multiple-choice questions. Pick an answer, see if it was
-// right, move on. Every answer is saved as it is given.
+// Quick Fire: five multiple-choice questions against the clock. The server sends
+// one question at a time and tells you the right answer once you have picked.
 
 import { useState } from "react";
 import { QUIZ } from "@/lib/bible-quiz/config";
-import { quickScore, type Quick } from "@/lib/bible-quiz/play";
-import type { QuickState } from "@/lib/bible-quiz/store";
+import type { QuickView } from "@/lib/bible-quiz/view";
 import s from "./bibleQuiz.module.css";
 
-type Props = { questions: Quick[]; state: QuickState; onChange: (next: QuickState) => void };
+type Props = { view: QuickView; onPick: (option: string) => Promise<string | undefined>; busy: boolean };
 
-export default function QuickFire({ questions, state, onChange }: Props) {
-  // The question whose answer is on show right now (null once we move on).
-  const [shown, setShown] = useState<number | null>(null);
-  const cur = shown ?? state.picks.length;
-  const q = questions[cur];
-  const picked = shown !== null ? state.picks[shown] : undefined;
-
-  const choose = (option: string) => {
-    if (!q || picked !== undefined) return;
-    const picks = [...state.picks, option];
-    const right = state.right + (option === q.answer ? 1 : 0);
-    onChange({ ...state, picks, right, done: picks.length >= questions.length });
-    setShown(cur);
-  };
+export default function QuickFire({ view, onPick, busy }: Props) {
+  // How many answers the player has already looked at the result of.
+  const [seen, setSeen] = useState(view.answered);
+  const feedback = view.last && seen < view.answered ? view.last : null;
+  const now = Math.min(view.answered, view.total - 1);
 
   const dots = (
     <ol className={s.qDots} aria-label="Progress">
-      {questions.map((item, i) => (
-        <li key={i} className={i >= state.picks.length ? (i === cur && !state.done ? s.qNow : "") : state.picks[i] === item.answer ? s.qRight : s.qWrong} aria-hidden />
+      {Array.from({ length: view.total }, (_, i) => (
+        <li key={i} className={i < view.answered ? (view.outcomes[i] ? s.qRight : s.qWrong) : i === now && !view.done ? s.qNow : ""} aria-hidden />
       ))}
     </ol>
   );
 
-  // Finished (or the clock ran out): show the result.
-  if (state.done && (shown === null || !q)) {
-    const unanswered = questions.length - state.picks.length;
+  if (view.done && !feedback) {
     return (
       <div className={s.game}>
         {dots}
         <p className={s.verdict} role="status">
-          {unanswered > 0 ? "Time’s up! " : state.right === questions.length ? "Perfect round! " : ""}
-          {state.right} of {questions.length} right. +{quickScore(state)} points
+          {view.answered < view.total ? "Time’s up! " : view.right === view.total ? "Perfect round! " : ""}
+          {view.right} of {view.total} right. +{view.points} points
         </p>
       </div>
     );
   }
 
-  const isLast = cur === questions.length - 1;
+  const q = feedback ?? view.question;
+  if (!q) return <div className={s.game}>{dots}</div>;
+  const number = feedback ? view.answered : view.answered + 1;
 
   return (
     <div className={s.game}>
       {dots}
       <p className={s.clue}>
         <span className={s.qCount}>
-          {cur + 1}/{questions.length}
+          {number}/{view.total}
         </span>{" "}
         {q.q}
       </p>
       <ul className={s.options}>
         {q.options.map((o) => {
-          const cls = picked === undefined ? s.option : o === q.answer ? `${s.option} ${s.optRight}` : o === picked ? `${s.option} ${s.optWrong}` : `${s.option} ${s.optDim}`;
+          const cls = !feedback ? s.option : o === feedback.answer ? `${s.option} ${s.optRight}` : o === feedback.pick ? `${s.option} ${s.optWrong}` : `${s.option} ${s.optDim}`;
           return (
             <li key={o}>
-              <button type="button" className={cls} disabled={picked !== undefined} onClick={() => choose(o)}>
+              <button type="button" className={cls} disabled={!!feedback || busy} onClick={() => void onPick(o)}>
                 {o}
               </button>
             </li>
           );
         })}
       </ul>
-      {picked !== undefined && (
+      {feedback && (
         <>
           <p className={s.verdict} role="status">
-            {picked === q.answer ? `Right! +${QUIZ.quickPoints}` : `Not quite. The answer is ${q.answer}.`}
+            {feedback.pick === feedback.answer ? `Right! +${QUIZ.quickPoints}` : `Not quite. The answer is ${feedback.answer}.`}
           </p>
-          <button type="button" className={s.primary} onClick={() => setShown(null)}>
-            {isLast || state.done ? "See my result" : "Next question"}
+          <button type="button" className={s.primary} onClick={() => setSeen(view.answered)}>
+            {view.done ? "See my result" : "Next question"}
           </button>
         </>
       )}

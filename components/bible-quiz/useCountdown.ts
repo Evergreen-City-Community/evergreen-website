@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Seconds left on a clock that began at `startedAt` (a timestamp saved with the
- * player's progress, so refreshing the page never restarts it). Calls
- * `onExpire` once when it reaches zero. Pass undefined while no clock is running.
+ * Seconds left until `deadline` (a time on the server's clock). `offset` is how
+ * far the server's clock is ahead of this device's, so the countdown matches the
+ * server even if the phone's clock is wrong. Calls `onExpire` once at zero.
  */
-export function useCountdown(startedAt: number | undefined, seconds: number, onExpire: () => void): number | null {
+export function useCountdown(deadline: number | undefined, offset: number, total: number, onExpire: () => void): number | null {
   const [now, setNow] = useState(0);
   const expire = useRef(onExpire);
   const fired = useRef<number | undefined>(undefined);
@@ -17,19 +17,19 @@ export function useCountdown(startedAt: number | undefined, seconds: number, onE
   });
 
   useEffect(() => {
-    if (startedAt === undefined) return;
+    if (deadline === undefined) return;
     const id = window.setInterval(() => setNow(Date.now()), 250);
     return () => window.clearInterval(id);
-  }, [startedAt]);
+  }, [deadline]);
 
-  const left = startedAt === undefined ? null : Math.max(0, seconds - ((now || startedAt) - startedAt) / 1000);
+  const left = deadline === undefined ? null : now ? Math.max(0, (deadline - (now + offset)) / 1000) : total;
 
   useEffect(() => {
-    if (startedAt !== undefined && left === 0 && fired.current !== startedAt) {
-      fired.current = startedAt;
+    if (deadline !== undefined && left === 0 && fired.current !== deadline) {
+      fired.current = deadline;
       expire.current();
     }
-  }, [left, startedAt]);
+  }, [left, deadline]);
 
   return left;
 }

@@ -711,3 +711,130 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- sign-up and leaderboard ---------- */
+
+.joinForm {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.formError {
+  color: #f5b942;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.linkBtn {
+  background: none;
+  border: 0;
+  color: var(--turquoise);
+  font: inherit;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.board {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+}
+.boardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.boardHead h2 {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+.boardHead small {
+  color: var(--muted);
+  font-size: 13px;
+}
+.boardList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.boardList li {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.boardList li:nth-child(-n + 3) .boardRank {
+  color: #f5b942;
+}
+.boardMe {
+  background: rgba(0, 201, 177, 0.14) !important;
+  border: 1px solid rgba(0, 201, 177, 0.5);
+}
+.boardRank {
+  font-weight: 700;
+  color: var(--muted);
+}
+.boardName {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.boardPts {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--turquoise);
+}
+.boardYou {
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+}
+.account {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.account strong {
+  color: #fff;
+  letter-spacing: 0.08em;
+}
+.notice {
+  text-align: center;
+  color: #f5b942;
+  font-size: 14px;
+}
+
+/* ---------- organiser page ---------- */
+
+.adminTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.adminTable th,
+.adminTable td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.adminTable th {
+  color: var(--muted);
+  font-weight: 600;
+}
+.adminWrap {
+  width: 100%;
+  overflow-x: auto;
+}

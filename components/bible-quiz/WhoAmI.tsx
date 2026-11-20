@@ -1,65 +1,55 @@
 "use client";
 
-// Who Am I?: four clues, hardest first. Fewer clues used means more points.
+// Who Am I?: four clues, hardest first. The server holds the answer and judges guesses.
 
 import { useState, type FormEvent } from "react";
-import type { PersonPuzzle } from "@/lib/bible-quiz/content";
-import { isRightPerson, whoScore } from "@/lib/bible-quiz/play";
-import type { WhoState } from "@/lib/bible-quiz/store";
+import type { WhoView } from "@/lib/bible-quiz/view";
 import s from "./bibleQuiz.module.css";
 
-type Props = { puzzle: PersonPuzzle; state: WhoState; onChange: (next: WhoState) => void };
+type Props = {
+  view: WhoView;
+  /** Resolve to an error message, or undefined if it went through. */
+  onGuess: (text: string) => Promise<string | undefined>;
+  onSkip: () => Promise<string | undefined>;
+  busy: boolean;
+};
 
-export default function WhoAmI({ puzzle, state, onChange }: Props) {
+export default function WhoAmI({ view, onGuess, onSkip, busy }: Props) {
   const [text, setText] = useState("");
-  const last = puzzle.clues.length;
+  const shown = view.clues.length;
+  const last = shown >= view.total;
 
-  const guess = (e: FormEvent) => {
+  const guess = async (e: FormEvent) => {
     e.preventDefault();
     const g = text.trim();
-    if (!g || state.done) return;
-    setText("");
-    if (isRightPerson(g, puzzle)) {
-      onChange({ ...state, guesses: [...state.guesses, g], won: true, done: true });
-    } else if (state.clues >= last) {
-      onChange({ ...state, guesses: [...state.guesses, g], done: true });
-    } else {
-      onChange({ ...state, guesses: [...state.guesses, g], clues: state.clues + 1 });
-    }
-  };
-
-  const skip = () => {
-    if (state.done) return;
-    if (state.clues >= last) onChange({ ...state, done: true });
-    else onChange({ ...state, clues: state.clues + 1 });
+    if (!g || view.done || busy) return;
+    if (!(await onGuess(g))) setText("");
   };
 
   return (
     <div className={s.game}>
       <ol className={s.clues}>
-        {puzzle.clues.map((c, i) => (
-          <li key={i} className={i < state.clues ? s.clueOn : s.clueOff} aria-hidden={i >= state.clues}>
+        {Array.from({ length: view.total }, (_, i) => (
+          <li key={i} className={i < shown ? s.clueOn : s.clueOff} aria-hidden={i >= shown}>
             <span className={s.clueNum}>{i + 1}</span>
-            <span>{i < state.clues ? c : "Hidden clue"}</span>
+            <span>{i < shown ? view.clues[i] : "Hidden clue"}</span>
           </li>
         ))}
       </ol>
 
-      {state.guesses.length > 0 && (
+      {view.guesses.length > 0 && (
         <ul className={s.misses} aria-label="Your guesses">
-          {state.guesses.map((g, i) => (
-            <li key={i} className={state.won && i === state.guesses.length - 1 ? s.chipHit : s.chip}>
+          {view.guesses.map((g, i) => (
+            <li key={i} className={view.won && i === view.guesses.length - 1 ? s.chipHit : s.chip}>
               {g}
             </li>
           ))}
         </ul>
       )}
 
-      {state.done ? (
+      {view.done ? (
         <p className={s.verdict} role="status">
-          {state.won
-            ? `Yes, ${puzzle.name}! Solved with ${state.clues} ${state.clues === 1 ? "clue" : "clues"}. +${whoScore(state)} points`
-            : `It was ${puzzle.name}. Tomorrow’s a new person.`}
+          {view.won ? `Yes, ${view.name}! Solved with ${shown} ${shown === 1 ? "clue" : "clues"}. +${view.points} points` : `It was ${view.name}. Tomorrow’s a new person.`}
         </p>
       ) : (
         <form className={s.guessForm} onSubmit={guess}>
@@ -77,11 +67,11 @@ export default function WhoAmI({ puzzle, state, onChange }: Props) {
             spellCheck={false}
             enterKeyHint="go"
           />
-          <button type="submit" className={s.primary} disabled={!text.trim()}>
+          <button type="submit" className={s.primary} disabled={!text.trim() || busy}>
             Guess
           </button>
-          <button type="button" className={s.ghost} onClick={skip}>
-            {state.clues >= last ? "Give up" : "Next clue"}
+          <button type="button" className={s.ghost} disabled={busy} onClick={() => void onSkip()}>
+            {last ? "Give up" : "Next clue"}
           </button>
         </form>
       )}
