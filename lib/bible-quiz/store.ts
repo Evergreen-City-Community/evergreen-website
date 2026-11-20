@@ -4,9 +4,9 @@
 export type WordState = { guesses: string[]; won: boolean; done: boolean };
 export type WhoState = { guesses: string[]; clues: number; won: boolean; done: boolean };
 /** `locked` holds the blanks already filled correctly. */
-export type VerseState = { checks: number; locked: number[]; won: boolean; done: boolean };
-/** `picks` are the answers chosen so far; `right` counts the correct ones. */
-export type QuickState = { picks: string[]; right: number; done: boolean };
+export type VerseState = { checks: number; locked: number[]; won: boolean; done: boolean; startedAt?: number };
+/** `picks` are the answers chosen so far ("" = ran out of time); `right` counts the correct ones. `startedAt` is when the clock for the current round or question began. */
+export type QuickState = { picks: string[]; right: number; done: boolean; startedAt?: number };
 export type DayState = { word?: WordState; who?: WhoState; verse?: VerseState; quick?: QuickState };
 export type QuizData = { days: Record<string, DayState> };
 

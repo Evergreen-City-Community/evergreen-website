@@ -11,6 +11,11 @@ export const QUIZ = {
   last: "2026-12-24",
   /** Tries allowed in Manger Word. */
   wordTries: 6,
+  /** Verse Fill clock: base seconds plus seconds per blank (so long verses get more time). */
+  verseBaseSeconds: 30,
+  versePerBlankSeconds: 15,
+  /** Quick Fire clock, seconds per question. */
+  quickSeconds: 20,
   /** Times a player may check their answers in Verse Fill. */
   verseChecks: 3,
   /** Quick Fire questions per day (the question list in content-rounds.ts must hold this many per day). */
@@ -28,3 +33,6 @@ export const WORD_POINTS = [100, 80, 60, 45, 30, 20] as const;
 export const WHO_POINTS = [100, 70, 45, 25] as const;
 /** Points for finishing Verse Fill on check 1..3. */
 export const VERSE_POINTS = [100, 60, 30] as const;
+
+/** Shown before the timed rounds. */
+export const FAIR_PLAY = "God is watching, and you are a child of God. No Googling, no ChatGPT. Play it honest. 😇";
