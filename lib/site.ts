@@ -53,7 +53,6 @@ export const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Messages", href: "/messages" },
-  { label: "Bible Quiz", href: "/games/bible-quiz" },
   { label: "Give", href: "/give" },
 ];
 

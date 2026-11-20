@@ -103,7 +103,7 @@ export default function BibleQuiz() {
       `Who Am I? ${whoState.won ? `solved with ${whoState.clues} ${whoState.clues === 1 ? "clue" : "clues"} ⭐` : "missed this one"}`,
       `Quick Fire ${quickState.right}/${QUIZ.quickPerDay}`,
       `${todays} points today · ${me.total.toLocaleString()} total`,
-      `${window.location.origin}/games/bible-quiz`,
+      `${window.location.origin}/biblequiz`,
     ].join("\n");
     try {
       if (navigator.share) await navigator.share({ text: lines });

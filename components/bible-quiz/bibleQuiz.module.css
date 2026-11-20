@@ -3,7 +3,7 @@
 .page {
   width: 760px;
   max-width: 100%;
-  padding: 130px 20px 90px;
+  padding: 56px 20px 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,6 +16,11 @@
   align-items: center;
   gap: 14px;
   text-align: center;
+}
+.mark {
+  width: 34px;
+  height: auto;
+  margin-bottom: 6px;
 }
 .hero :global(.lead) {
   max-width: 520px;
@@ -483,7 +488,7 @@
 
 @media (max-width: 480px) {
   .page {
-    padding-top: 110px;
+    padding-top: 40px;
   }
   .cardHead {
     padding: 16px;
