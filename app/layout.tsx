@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import BgMusic from "@/components/BgMusic";
 import FishFlock from "@/components/FishFlock";
 import Footer from "@/components/Footer";
+import SiteChrome from "@/components/SiteChrome";
 import Welcome, { WELCOME_SCRIPT } from "@/components/Welcome";
 import JsonLd from "@/components/JsonLd";
 import { churchJsonLd, SEO, websiteJsonLd } from "@/lib/seo";
@@ -104,10 +105,12 @@ export default function RootLayout({
         </noscript>
         <JsonLd data={[churchJsonLd(), websiteJsonLd()]} />
         {children}
-        <Footer />
-        <FishFlock />
-        <BgMusic />
-        <Welcome />
+        <SiteChrome>
+          <Footer />
+          <FishFlock />
+          <BgMusic />
+          <Welcome />
+        </SiteChrome>
       </body>
     </html>
   );
