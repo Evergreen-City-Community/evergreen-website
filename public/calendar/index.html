@@ -362,6 +362,7 @@
         map    : Google Maps link (https://…) → shows a "Get directions" button
         venue  : false → hides the "Where" line altogether
         posterSoon : false → date card without the "Poster coming soon" line
+        listIn : 12 → list this event on that month's tab instead of its own (12 = December)
         poster : path to the image, e.g. "posters/2026/christmas-fair.jpg"
                  (leave "" until you have it — a placeholder is shown)
         tbc    : true  → shows a "Date to be confirmed" tag
@@ -376,6 +377,7 @@ const CALENDAR = {
       {
         id: "mission-visit",
         date: "2026-11-28",
+        listIn: 12,          // part of the Christmas list on the December tab
         title: "Christmas Outreach",
         blurb: "A special Christmas outreach as part of our church mission. We will spend time with the residents of St. Ignatius Charity Kendram.",
         time: "Saturday, 11 AM",
@@ -678,10 +680,13 @@ function pickYear(){
 }
 
 function monthsFor(year){
-  const set = new Set(CALENDAR[year].events.map(e=>parse(e.date).getMonth()));
+  const set = new Set(CALENDAR[year].events.map(tabMonth));
   (CALENDAR[year].undated||[]).forEach(u=>set.add(u.month-1));
   return [...set].sort((a,b)=>a-b);
 }
+
+/* which month tab an event is listed on (its own month unless "listIn" says otherwise) */
+const tabMonth = e => e.listIn ? e.listIn-1 : parse(e.date).getMonth();
 
 /* open on the month of the next upcoming event (else the latest month, e.g. archive years) */
 function defaultMonth(year, months){
@@ -689,7 +694,8 @@ function defaultMonth(year, months){
   const next = CALENDAR[year].events
     .filter(e=>e.type!=="notice" && parse(e.date)>=today)
     .sort((a,b)=>a.date.localeCompare(b.date))[0];
-  return next ? parse(next.date).getMonth() : (months[months.length-1] ?? 0);
+  if(!next) return months[months.length-1] ?? 0;
+  return tabMonth(next);
 }
 
 /* ---------- year tabs ---------- */
@@ -792,11 +798,11 @@ function render(){
   if(state.month===null || !ms.includes(state.month)) state.month = defaultMonth(state.year, ms);
   const m = state.month;
 
-  const events = data.events.filter(e=>parse(e.date).getMonth()===m).sort((a,b)=>a.date.localeCompare(b.date));
+  const events = data.events.filter(e=>tabMonth(e)===m).sort((a,b)=>a.date.localeCompare(b.date));
   const undated = (data.undated||[]).filter(u=>u.month-1===m);
   const isPast = state.year < thisYear;
 
-  const nav = ms.length>1 ? `<div class="month-nav" role="group" aria-label="Choose a month">${ms.map(i=>`<button type="button" aria-pressed="${i===m}" data-m="${i}">${MONTHS[i]}</button>`).join("")}</div>` : "";
+  const nav = ms.length ? `<div class="month-nav" role="group" aria-label="Choose a month">${ms.map(i=>`<button type="button" aria-pressed="${i===m}" data-m="${i}">${MONTHS[i]}</button>`).join("")}</div>` : "";
 
   $("#app").innerHTML = `<section class="month">
     ${nav}
