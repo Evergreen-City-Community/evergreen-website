@@ -6,7 +6,9 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   // /calendar is a self-contained page that lives in public/calendar/.
   async rewrites() {
-    return [{ source: "/calendar", destination: "/calendar/index.html" }];
+    return [{ source: "/calendar", destination: "/calendar/index.html" },
+      // /christmas is the guest view of the same page (flyer QR code).
+      { source: "/christmas", destination: "/calendar/index.html" }];
   },
 };
 

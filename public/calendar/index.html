@@ -172,6 +172,8 @@
   .jump{display:none;align-items:center;gap:10px;min-height:48px;margin:0 0 30px;padding:0 24px;border:0;border-radius:999px;
     background:var(--gold);color:#1a1205;font:700 16px var(--sans);cursor:pointer}
   .jump:focus-visible{outline:3px solid #fff;outline-offset:3px}
+  .guest .years,.guest .month-nav,.guest .legend span:last-child{display:none}
+  .guest .hero p.sub{margin-bottom:34px}
   .note{margin-top:14px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding-left:10px}
 
   /* mini calendar */
@@ -451,7 +453,7 @@ const CALENDAR = {
 
 
 /* asset paths: work both when opened from a folder and when served at yoursite.com/calendar */
-const ASSETS = /^\/calendar(\/|$)/.test(location.pathname) ? "/calendar/" : "";
+const ASSETS = /^\/(calendar|christmas)(\/|$)/.test(location.pathname) ? "/calendar/" : "";
 const asset = p => (/^(https?:)?\/\//.test(p) || p.startsWith("/")) ? p : ASSETS + p;
 
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -687,6 +689,26 @@ function monthsFor(year){
 
 /* which month tab an event is listed on (its own month unless "listIn" says otherwise) */
 const tabMonth = e => e.listIn ? e.listIn-1 : parse(e.date).getMonth();
+
+/* ---------- guest view: yoursite.com/christmas (the flyer QR) ----------
+   Shows only the events listed here, with wording for first-time visitors.
+   Event dates, times, venues and posters still come from CALENDAR above.
+   (Locally, add ?guest to the address to see it.) */
+const GUEST = /^\/christmas\/?$/.test(location.pathname) || new URLSearchParams(location.search).has("guest");
+const GUEST_EVENTS = {
+  "christmas-fair": "An evening of food stalls, arts and crafts, games and live music. Bring your family, friends and neighbours.",
+  "christmas-service": "Christmas is for everyone. Whether you come to church often or this is your first time, you\u2019re warmly welcome to celebrate with us."
+};
+if(GUEST){
+  for(const year of Object.values(CALENDAR)){
+    year.events = year.events.filter(e=>e.id in GUEST_EVENTS).map(e=>({...e, blurb:GUEST_EVENTS[e.id]}));
+    year.undated = [];
+  }
+  document.documentElement.classList.add("guest");
+  document.title = "Christmas \u00b7 Evergreen City Community";
+  $(".hero h1").innerHTML = 'Our <span class="sc">Christmas</span>';
+  $(".hero p.sub").textContent = "Celebrate Christmas with us. Here\u2019s when and where, with directions. Come as you are, and bring a friend.";
+}
 
 /* open on the month of the next upcoming event (else the latest month, e.g. archive years) */
 function defaultMonth(year, months){
