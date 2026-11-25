@@ -125,7 +125,7 @@
   .legend .lg-no{background:rgba(var(--glow),.2);border:1px dashed var(--gold)}
 
   /* ---------- Event cards (pinned posters) ---------- */
-  .events{margin-top:60px;display:grid;gap:44px}
+  .events{margin-top:60px;display:grid;gap:44px;scroll-margin-top:16px}
   .event{display:grid;grid-template-columns:300px 1fr;gap:36px;align-items:start;scroll-margin-top:24px}
   .event.flash .body,.event.flash .notice-card{animation:flash 1.4s ease}
   @keyframes flash{0%,100%{box-shadow:none}30%{box-shadow:0 0 0 3px var(--gold),0 0 40px rgba(var(--glow),.5)}}
@@ -165,6 +165,13 @@
   .meta{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:15px}
   .meta li{display:flex;gap:10px}
   .meta b{min-width:56px;color:var(--muted);font-weight:500}
+  .directions{display:flex;width:fit-content;align-items:center;gap:8px;min-height:44px;margin:8px 0 4px;padding:0 20px;
+    border:1.5px solid var(--gold);border-radius:999px;color:var(--gold-lite);font:700 14px var(--sans);text-decoration:none;transition:background .2s,color .2s}
+  .directions:hover{background:var(--gold);color:#1a1205}
+  .directions:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .jump{display:none;align-items:center;gap:10px;min-height:48px;margin:0 0 30px;padding:0 24px;border:0;border-radius:999px;
+    background:var(--gold);color:#1a1205;font:700 16px var(--sans);cursor:pointer}
+  .jump:focus-visible{outline:3px solid #fff;outline-offset:3px}
   .note{margin-top:14px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding-left:10px}
 
   /* mini calendar */
@@ -290,6 +297,15 @@
     .mini{width:100%;max-width:200px}
   }
   @media (max-width:640px){
+    .jump{display:inline-flex}
+    /* floating buttons become round icons so they don't cover "Get directions" */
+    .music-toggle,.night-toggle{right:10px;width:44px;height:44px;padding:0;justify-content:center}
+    .night-toggle{bottom:12px}
+    .music-toggle{bottom:64px}
+    .music-toggle .txt,.night-toggle .txt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+    .music-toggle[aria-pressed="true"]{background:var(--gold);color:#1a1205}
+    .music-toggle[aria-pressed="true"] .ic{color:#1a1205}
+    .hero p.sub{margin-bottom:20px}
     .hero{padding-top:165px}
     .lights{height:175px}
     .cal{padding:10px}
@@ -315,6 +331,7 @@
     <div class="top-row"><div class="eyebrow">Evergreen City Community</div><button class="hint" id="hint" type="button">✦ Tap a bulb</button></div>
     <h1>Our <span class="sc">Calendar</span></h1>
     <p class="sub">Services, gatherings and mission days — with the posters pinned up. Tap a year to see what we got up to in past seasons.</p>
+    <button class="jump" id="jump" type="button">Christmas events <span aria-hidden="true">↓</span></button>
     <div class="years" role="tablist" aria-label="Choose a year">
       <span class="lbl">Year</span>
     </div>
@@ -341,7 +358,10 @@
    ---------------------------------------------------------------------
    • Add a new year by adding a block like  2027: { ... }
    • Each event needs:   id, date ("YYYY-MM-DD"), title
-   • Optional:           time, venue, entry, blurb, note, poster, tbc, type
+   • Optional:           time, venue, map, entry, blurb, note, poster, posterSoon, tbc, type
+        map    : Google Maps link (https://…) → shows a "Get directions" button
+        venue  : false → hides the "Where" line altogether
+        posterSoon : false → date card without the "Poster coming soon" line
         poster : path to the image, e.g. "posters/2026/christmas-fair.jpg"
                  (leave "" until you have it — a placeholder is shown)
         tbc    : true  → shows a "Date to be confirmed" tag
@@ -351,9 +371,7 @@
    ===================================================================== */
 const CALENDAR = {
   2026: {
-    undated: [
-      { month: 12, title: "House Carols", blurb: "Carolling in homes across the community. Dates and host families will be shared here soon." }
-    ],
+    undated: [],
     events: [
       {
         id: "mission-visit",
@@ -362,7 +380,28 @@ const CALENDAR = {
         blurb: "A special Christmas outreach as part of our church mission. We will spend time with the residents of St. Ignatius Charity Kendram.",
         time: "Saturday, 11 AM",
         venue: "St. Ignatius Charity Kendram (SICK NGO), Uliyazhathura",
+        map: "https://www.google.com/maps/search/?api=1&query=8.5860882,76.9419861",
         poster: "posters/christmas-outreach.webp"
+      },
+      {
+        id: "street-carols",
+        date: "2026-12-04",
+        title: "Street Carols",
+        time: "Friday, 7 PM",
+        venue: "The Detour Café, Trivandrum",
+        map: "https://www.google.com/maps/search/?api=1&query=8.5114121,76.9054502",
+        poster: "",
+        posterSoon: false
+      },
+      {
+        id: "house-carols",
+        date: "2026-12-06",
+        title: "House Carols",
+        blurb: "Carolling in homes across the community this Christmas season.",
+        time: "Sunday, 6 PM onwards",
+        venue: false,        // never publish host names, addresses or phone numbers
+        poster: "",
+        posterSoon: false
       },
       {
         id: "christmas-fair",
@@ -370,7 +409,8 @@ const CALENDAR = {
         title: "Christmas Fair",
         blurb: "Join us for the Evergreen City Community Christmas Fair: food stalls, arts & crafts, games & activities and live music. Bring family and friends.",
         time: "Friday, 7 PM – 9 PM",
-        venue: "Rooftop, Legacy House, Kazhakootam",
+        venue: "Rooftop, Legacy House (Aramana Bldg 3), opposite Ambrosia, Bypass Junction, Kazhakootam",
+        map: "https://www.google.com/maps/place/Evergreen+City+Community+Church/@8.5659667,76.8735179,17z/data=!3m1!4b1!4m6!3m5!1s0x3b05bfe479fa3b0f:0x58733d28d72bf12!8m2!3d8.5659667!4d76.8735179!16s%2Fg%2F11jt37pdfm",
         entry: "Entry fee ₹100 · Free entry for children below 6",
         poster: "posters/christmas-fair.webp"
       },
@@ -380,7 +420,8 @@ const CALENDAR = {
         title: "Christmas Service",
         blurb: "Rejoice! Experience Christmas at Evergreen. Join us for our Christmas Service.",
         time: "Sunday, 5 PM",
-        venue: "Evergreen Hall",
+        venue: "Evergreen Hall, 3rd Floor, Aramana Bldg 3, opposite Ambrosia, Bypass Junction, Kazhakootam",
+        map: "https://www.google.com/maps/place/Evergreen+City+Community+Church/@8.5659667,76.8735179,17z/data=!3m1!4b1!4m6!3m5!1s0x3b05bfe479fa3b0f:0x58733d28d72bf12!8m2!3d8.5659667!4d76.8735179!16s%2Fg%2F11jt37pdfm",
         poster: "posters/christmas-service.webp"
       },
       {
@@ -642,6 +683,15 @@ function monthsFor(year){
   return [...set].sort((a,b)=>a-b);
 }
 
+/* open on the month of the next upcoming event (else the latest month, e.g. archive years) */
+function defaultMonth(year, months){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const next = CALENDAR[year].events
+    .filter(e=>e.type!=="notice" && parse(e.date)>=today)
+    .sort((a,b)=>a.date.localeCompare(b.date))[0];
+  return next ? parse(next.date).getMonth() : (months[months.length-1] ?? 0);
+}
+
 /* ---------- year tabs ---------- */
 function renderYears(){
   const box = $(".years");
@@ -700,11 +750,16 @@ function eventCard(e){
     ? `<button type="button" class="poster" data-poster="${esc(asset(e.poster))}" data-title="${esc(e.title)}" data-date="${MONTHS[d.getMonth()].slice(0,3)}|${d.getDate()}" aria-label="Enlarge poster for ${esc(e.title)}"><img src="${esc(asset(e.poster))}" alt="Poster for ${esc(e.title)}" loading="lazy"></button>`
     : placeholder(e,d);
 
+  const mapOk = /^https:\/\//.test(e.map||"") && !e.map.includes("PASTE_");
+  const directions = mapOk && e.venue
+    ? `<a class="directions" href="${esc(e.map)}" target="_blank" rel="noopener noreferrer" aria-label="Get directions to ${esc(e.venue)} (opens Google Maps in a new tab)">Get directions <span aria-hidden="true">↗</span></a>`
+    : "";
+
   const rows = [
     ["When", e.time || "Time to be announced"],
-    ["Where", e.venue || "Venue to be announced"],
+    ...(e.venue===false ? [] : [["Where", e.venue || "Venue to be announced", directions]]),
     ...(e.entry ? [["Entry", e.entry]] : [])
-  ].map(([k,v])=>`<li><b>${k}</b><span>${esc(v)}</span></li>`).join("");
+  ].map(([k,v,extra])=>`<li><b>${k}</b><span>${esc(v)}${extra||""}</span></li>`).join("");
 
   return `<article class="event" id="${esc(e.id)}">
     <div class="pin-board"><span class="pin" aria-hidden="true"></span>${poster}</div>
@@ -722,10 +777,11 @@ function eventCard(e){
 }
 
 function placeholder(e,d){
-  return `<div class="poster empty" role="img" aria-label="Poster coming soon for ${esc(e.title)}">
+  const soon = e.posterSoon!==false;
+  return `<div class="poster empty" role="img" aria-label="${soon?"Poster coming soon for ":""}${esc(e.title)}">
     <span class="star" data-art="star"></span><span class="sprig" data-art="sprig"></span>
     <div class="ph-d"><small>${MONTHS[d.getMonth()].slice(0,3)}</small>${d.getDate()}</div>
-    <div class="ph-t">${titleHTML(e.title)}</div><div class="ph-s">Poster coming soon</div></div>`;
+    <div class="ph-t">${titleHTML(e.title)}</div>${soon?'<div class="ph-s">Poster coming soon</div>':""}</div>`;
 }
 
 /* ---------- page ---------- */
@@ -733,7 +789,7 @@ function render(){
   renderYears();
   const data = CALENDAR[state.year];
   const ms = monthsFor(state.year);
-  if(state.month===null || !ms.includes(state.month)) state.month = ms[ms.length-1] ?? 0;
+  if(state.month===null || !ms.includes(state.month)) state.month = defaultMonth(state.year, ms);
   const m = state.month;
 
   const events = data.events.filter(e=>parse(e.date).getMonth()===m).sort((a,b)=>a.date.localeCompare(b.date));
@@ -772,6 +828,9 @@ function render(){
   });
   paintArt();
 }
+
+/* mobile shortcut to the event list */
+$("#jump").onclick=()=>$("#app .events").scrollIntoView({behavior:reduced?"auto":"smooth",block:"start"});
 
 /* lightbox */
 const lb=$("#lb"), lbImg=$("#lbImg");
